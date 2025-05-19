@@ -54,7 +54,7 @@ export const BottomBar = ({ className, ...props }: BottomBarProps) => {
       {...props}
     >
       <ul
-        className={`
+        className={cn(`
         flex w-full justify-between
         supports-[backdrop-filter]:bg-muted/60
         backdrop-blur-xl
@@ -64,8 +64,8 @@ export const BottomBar = ({ className, ...props }: BottomBarProps) => {
         md:rounded-full md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)]
         md:border-[0.5px] md:gap-12
         md:justify-center md:mb-6
-        md:px-8 md:py-1.5 py-2.5
-      `}
+        md:px-8 md:py-1.5 py-1
+      `)}
       >
         {navItems.map((item) => {
           const Icon = item.icon

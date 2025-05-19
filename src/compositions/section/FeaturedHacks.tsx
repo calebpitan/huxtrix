@@ -5,22 +5,28 @@ import { cn } from '@/lib/utils'
 
 export interface FeaturedHacksSectionProps extends HTMLAttributes<HTMLElement> {
   featuredHacks: FeaturedHack[]
-  className?: string
+  innerClassName?: string
 }
 
 export const FeaturedHacksSection = ({
   featuredHacks,
   className,
+  innerClassName,
   ...props
 }: FeaturedHacksSectionProps) => {
   return (
     <section
       data-component="featured-hacks-section"
-      className={cn('space-y-4 -mx-4 sm:-mx-8', className)}
+      className={cn('space-y-4', className)}
       {...props}
     >
-      <h2 className="text-sm font-bold px-4 sm:px-8">Featured</h2>
-      <div className="flex gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-4 px-4 sm:px-8">
+      <h2 className="text-sm font-bold">Featured</h2>
+      <div
+        className={cn(
+          'flex gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-4',
+          innerClassName,
+        )}
+      >
         {featuredHacks.map((hack) => (
           <FeaturedHackCard key={hack.id} hack={hack} />
         ))}

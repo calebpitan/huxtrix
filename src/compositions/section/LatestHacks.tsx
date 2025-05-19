@@ -42,7 +42,10 @@ export const LatestHacksSection = ({
     <section
       data-component="latest-hacks-section"
       aria-describedby={sectionLabelId}
-      className={cn('md:w-full -mx-4 sm:-mx-8 md:mx-0 space-y-4', className)}
+      className={cn(
+        '-mx-4 sm:-mx-8 md:mx-0 space-y-4',
+        className,
+      )}
       {...props}
     >
       <h2 className="text-2xl font-bold sr-only" id={sectionLabelId}>

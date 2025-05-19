@@ -121,8 +121,20 @@
   }
 }
 
-@layer utilities {
-  .no-scrollbar {
-    @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
-  }
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}
+
+@utility fade-x {
+  @apply [mask-image:linear-gradient(to_left,_transparent_0%,_var(--color-background)_10%,_var(--color-background)_90%,_transparent_100%)];
+}
+
+@utility fade-x-* {
+  --fade-x-size: --value(percentage);
+  --fade-x-stop-start-start: 0%;
+  --fade-x-stop-start-end: var(--fade-x-size);
+  --fade-x-stop-end-start: calc(100% - var(--fade-x-size));
+  --fade-x-stop-end-end: 100%;
+
+  @apply [mask-image:linear-gradient(to_left,_transparent_var(--fade-x-stop-start-start),_var(--color-background)_var(--fade-x-stop-start-end),_var(--color-background)_var(--fade-x-stop-end-start),_transparent_var(--fade-x-stop-end-end))];
 }

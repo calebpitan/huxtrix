@@ -1,20 +1,16 @@
 'use client'
 
-import { HTMLAttributes, useId, useState } from 'react'
+import { HTMLAttributes, useState } from 'react'
 
-import { ChevronDown } from 'lucide-react'
-import Image from 'next/image'
+import { Bookmark, ThumbsUp } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { cn } from '@/lib/utils'
+import { Card, CardContent } from '@/components/ui/card'
+import { cn, formatNumber } from '@/lib/utils'
+
+type Interactions = {
+  upvotes: number
+  bookmarks: number
+}
 
 export type FeaturedHack = {
   id: number
@@ -22,6 +18,7 @@ export type FeaturedHack = {
   author: string
   media: string
   type: 'image' | 'video'
+  interactions: Interactions
 }
 
 export interface FeaturedHackCardProps extends HTMLAttributes<HTMLElement> {
@@ -30,58 +27,59 @@ export interface FeaturedHackCardProps extends HTMLAttributes<HTMLElement> {
 
 export const FeaturedHackCard = ({ hack, className, ...props }: FeaturedHackCardProps) => {
   const [imgError, setImgError] = useState(false)
-  const expandId = useId()
-  return (
-    <Card
-      data-component="featured-hack-card"
-      className={cn(
-        'min-w-[320px] max-w-xs h-[420px] flex flex-col justify-between',
-        'snap-center shadow-none border-1 border-muted/90',
-        'bg-white dark:bg-zinc-900 relative',
-        className,
-      )}
-      {...props}
-    >
-      <CardHeader>
-        <CardTitle className="text-lg font-bold line-clamp-2">{hack.title}</CardTitle>
-        <CardDescription className="text-sm">By {hack.author}</CardDescription>
-      </CardHeader>
-      <CardContent className="flex-1 flex items-center justify-center">
-        {hack.type === 'image' ? (
-          !imgError ? (
-            <Image
-              src={hack.media}
-              alt={hack.title}
-              width={220}
-              height={160}
-              className="rounded-lg object-cover w-full h-40"
-              onError={() => setImgError(true)}
-            />
-          ) : (
-            <canvas
-              width={220}
-              height={160}
-              className="rounded-lg w-full h-40 bg-gray-200 dark:bg-zinc-800"
-              style={{ display: 'block' }}
-            />
-          )
-        ) : (
-          <video src={hack.media} controls className="rounded-lg object-cover w-full h-40" />
-        )}
-      </CardContent>
-      <CardFooter className="flex flex-col items-center">
-        <Button variant="ghost" className="w-full flex flex-col items-center group relative">
-          <span id={expandId} className="text-xs text-muted-foreground sr-only">
-            Expand
-          </span>
+  const upvotes = formatNumber(hack.interactions.upvotes)
+  const bookmarks = formatNumber(hack.interactions.bookmarks)
 
-          <ChevronDown
-            className="mt-1 h-6 w-6 text-primary group-hover:scale-125 transition-transform"
-            aria-labelledby={expandId}
-          />
-        </Button>
-      </CardFooter>
-    </Card>
+  return (
+    <article className="bg-black dark:bg-white/70 rounded-4xl p-1.25">
+      <Card
+        data-component="featured-hack-card"
+        className={cn(
+          'min-w-[320px] max-w-xs h-[420px] flex flex-col justify-between',
+          'snap-center shadow-none border-0 border-muted/70',
+          'bg-white dark:bg-zinc-900 relative',
+          'bg-no-repeat bg-cover bg-center',
+          'rounded-[--spacing(6.75)]', // parent radius - parent padding
+          className,
+        )}
+        style={{ backgroundImage: `url('${hack.media}')` }}
+        {...props}
+      >
+        <CardContent className="flex-1 flex items-end justify-center -m-6 overflow-hidden">
+          <div
+            className={cn(
+              'w-full p-6 pt-50 rounded-b-[--spacing(6.75)] text-gray-50/90',
+              'backdrop-blur-md backdrop-brightness-50 supports-[backdrop-filter]:bg-radial-[at_25%_25%]',
+              'from-black/40 to-transparent to-75%',
+              '[mask-image:linear-gradient(to_top,_white_32%,_transparent)]',
+            )}
+          >
+            <div className="flex flex-col gap-2">
+              <div className="text-lg font-bold line-clamp-2 h-[2lh]">{hack.title}</div>
+              <div className="text-sm text-gray-50/70">{hack.author}</div>
+            </div>
+
+            <div className="flex items-center gap-2 text-gray-50/70 mt-4">
+              <span className="flex items-center gap-1">
+                <ThumbsUp
+                  className="w-4 h-4"
+                  aria-label={`Works for ${hack.interactions.upvotes} people`}
+                />
+                <span className="text-xs font-bold">{upvotes}</span>
+              </span>
+
+              <span className="flex items-center gap-1">
+                <Bookmark
+                  className="w-4 h-4"
+                  aria-label={`Bookmarked by ${hack.interactions.bookmarks} people`}
+                />
+                <span className="text-xs font-bold">{bookmarks}</span>
+              </span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </article>
   )
 }
 

@@ -12,6 +12,11 @@ import {
 } from '@/components/ui/sidebar'
 import { cn } from '@/lib/utils'
 
+type Brand = {
+  name: string
+  icon?: React.ReactNode
+}
+
 type SidebarItem = {
   title: string
   icon: React.ReactNode
@@ -24,17 +29,18 @@ export interface AppSidebarProps
     ComponentProps<typeof Sidebar> {
   items: SidebarItem[]
   active?: string | ((item: SidebarItem) => boolean)
+  brand: Brand
 }
 
 function isFn(fn: any): fn is (...args: any[]) => any {
   return typeof fn === 'function'
 }
 
-export const AppSidebar = ({ items, active, ...props }: AppSidebarProps) => {
+export const AppSidebar = ({ items, active, brand, ...props }: AppSidebarProps) => {
   return (
     <Sidebar data-component="app-sidebar" {...props}>
       <SidebarHeader className="px-10 mt-16">
-        <span className="font-bold text-xl tracking-tight">Huxtrix</span>
+        <span className="font-bold text-xl tracking-tight">{brand.name}</span>
       </SidebarHeader>
 
       <SidebarContent className="mt-16">

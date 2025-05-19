@@ -1,6 +1,6 @@
 import { HTMLAttributes } from 'react'
 
-import { Bookmark, Link, Flag, Gift, MoreVertical, Share, ThumbsUp } from 'lucide-react'
+import { Bookmark, Flag, Gift, Link, MoreVertical, Share, ThumbsUp } from 'lucide-react'
 
 import { PostImage } from '@/components/images/PostImage'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -37,7 +37,10 @@ export const PostCard = ({
   return (
     <Card
       data-component="post-card"
-      className={cn('rounded-none shadow-none border-1 border-t-0 border-muted/90', className)}
+      className={cn(
+        'bg-background rounded-none shadow-none border-0 not-[:last-of-type]:border-b-1 border-muted/90',
+        className,
+      )}
       {...props}
     >
       <CardHeader className="pb-2 flex flex-row items-center justify-between gap-2">
@@ -96,14 +99,20 @@ export const PostCard = ({
           variant="ghost"
           size="sm"
           aria-label="Works for me"
-          className="flex items-center gap-1 text-primary"
+          className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
         >
           <ThumbsUp className="w-5 h-5" />
           <span className="text-xs font-medium">Works for me</span>
           {upvotes > 0 && <span className="ml-1 text-xs">{upvotes}</span>}
         </Button>
-        <Button variant="ghost" size="icon" aria-label="Bookmark" className="rounded">
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label="Bookmark"
+          className="flex items-center gap-1 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-100 dark:hover:bg-cyan-900/30"
+        >
           <Bookmark className="w-5 h-5" />
+          <span className="text-xs font-medium">Bookmark</span>
         </Button>
         <Button
           variant="ghost"
@@ -112,7 +121,7 @@ export const PostCard = ({
           className="flex items-center gap-1 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-100 dark:hover:bg-yellow-900/30"
         >
           <Gift className="w-5 h-5" />
-          <span className="text-xs font-medium">Tip</span>
+          <span className="text-xs font-medium">Reward</span>
           {tips > 0 && <span className="ml-1 text-xs">{tips}</span>}
         </Button>
       </CardFooter>
