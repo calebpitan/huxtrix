@@ -1,4 +1,3 @@
-import { SidebarProvider } from '@/components/ui/sidebar'
 import { featuredHacks } from '@/compositions/data/featured-hacks'
 import { latestHacks } from '@/compositions/data/latest-hacks'
 import { sidebarItems } from '@/compositions/data/sidebar-items'
@@ -22,7 +21,6 @@ const categories: PopularCategoriesSectionProps['categories'] = [
 
 export default function Home() {
   return (
-    <SidebarProvider className="w-full">
       <div className="flex flex-col lg:flex-row gap-8 w-full basis-full">
         <aside className="hidden lg:block lg:w-62.5 lg:shrink-0">
           <AppSidebar
@@ -74,6 +72,5 @@ export default function Home() {
           </aside>
         </div>
       </div>
-    </SidebarProvider>
   )
 }

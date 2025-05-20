@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { DM_Sans } from 'next/font/google'
 
+import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppFooter } from '@/compositions/footer/AppFooter'
 import { AppBar } from '@/compositions/header'
 import { BottomBar } from '@/compositions/navbar/BottomBar'
@@ -36,7 +37,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <div className="relative flex min-h-screen flex-col">
             <AppBar className="lg:hidden" name="Huxtrix" />
 
-            <main className="w-full">{children}</main>
+            <main className="w-full">
+              <SidebarProvider className="w-full">{children}</SidebarProvider>
+            </main>
 
             {/* For x-large screens only */}
             <AppFooter className="md:order-1 hidden xl:block" />
