@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactElement, ReactNode } from 'react'
+import { HTMLAttributes, ReactElement } from 'react'
 
 import { sidebarItems } from '@/compositions/data/sidebar-items'
 import { AppSidebar, AppSidebarProps } from '@/compositions/sidebar/AppSidebar'
@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 
 export interface PageLayoutProps extends HTMLAttributes<HTMLDivElement> {
   SidebarProps?: Partial<Pick<AppSidebarProps, 'items' | 'variant' | 'brand'>>
-  children: ReactNode
+  children: [ReactElement, ReactElement]
   QuickActions?: ReactElement
 }
 
@@ -39,10 +39,12 @@ export const PageLayout = ({
           'lg:my-2 px-4 sm:px-8 lg:px-0 lg:pe-8',
         )}
       >
-        <div className="flex flex-col gap-8 xl:shrink w-full min-w-0 items-center">{children}</div>
+        <div className="flex flex-col gap-8 xl:shrink w-full min-w-0 items-center">
+          {children[0]}
+        </div>
 
         <aside className="sticky top-0 max-h-screen hidden xl:block grow [&>:first-child]:w-62.5 [&>:first-child]:ms-auto">
-          {QuickActions}
+          {children[1] ? children[1] : QuickActions}
         </aside>
       </div>
     </div>

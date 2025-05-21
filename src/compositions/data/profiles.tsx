@@ -14,7 +14,7 @@ export const profiles = [
   {
     name: 'Caleb Adepitan',
     username: 'caleb',
-    image: 'https://github.com/calebpitan.png',
+    image: 'https://avatars.githubusercontent.com/u/36812893?v=4',
     bio: 'I am a software engineer. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
   },
 ]

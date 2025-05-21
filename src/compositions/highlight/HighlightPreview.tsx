@@ -1,5 +1,7 @@
 import { HTMLAttributes } from 'react'
 
+import Image from 'next/image'
+
 import { cn } from '@/lib/utils'
 
 export interface HighlightPreviewProps extends HTMLAttributes<HTMLButtonElement> {
@@ -27,9 +29,9 @@ export function HighlightPreview({
       className={cn('flex flex-col items-center focus:outline-none group', className)}
       {...props}
     >
-      <span className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary group-focus:ring-2 group-focus:ring-primary/50 transition-all">
+      <span className="relative w-16 h-16 rounded-full overflow-hidden border-3 border-primary group-focus:ring-2 group-focus:ring-primary/50 transition-all">
         {type === 'image' ? (
-          <img src={src} alt={label} className="w-full h-full object-cover" loading="lazy" />
+          <Image src={src} alt={label} className="w-full h-full object-cover" loading="lazy" fill />
         ) : (
           <video
             src={src}

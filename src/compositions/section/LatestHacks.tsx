@@ -1,4 +1,4 @@
-import { Fragment, HTMLAttributes, memo, useId } from 'react'
+import { Fragment, HTMLAttributes, RefObject, memo, useId } from 'react'
 
 import { PostCard } from '@/compositions/card/Post'
 import { cn } from '@/lib/utils'
@@ -38,6 +38,7 @@ export interface LatestHack {
 export interface LatestHacksSectionProps extends HTMLAttributes<HTMLElement> {
   latestHacks: LatestHack[]
   className?: string
+  ref?: RefObject<HTMLDivElement | null>
 }
 
 export const LatestHacksSection = memo(

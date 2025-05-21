@@ -1,6 +1,4 @@
-'use client'
-
-import { HTMLAttributes, useState } from 'react'
+import { HTMLAttributes } from 'react'
 
 import { Bookmark, ThumbsUp } from 'lucide-react'
 
@@ -26,7 +24,6 @@ export interface FeaturedHackCardProps extends HTMLAttributes<HTMLElement> {
 }
 
 export const FeaturedHackCard = ({ hack, className, ...props }: FeaturedHackCardProps) => {
-  const [imgError, setImgError] = useState(false)
   const upvotes = formatNumber(hack.interactions.upvotes)
   const bookmarks = formatNumber(hack.interactions.bookmarks)
 

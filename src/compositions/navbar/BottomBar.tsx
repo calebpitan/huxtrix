@@ -1,44 +1,9 @@
-'use client'
-
 import { HTMLAttributes } from 'react'
 
-import { Compass, Home, PlusCircle, Search, User } from 'lucide-react'
 import Link from 'next/link'
 
+import { navItems } from '@/compositions/data/nav-items'
 import { cn } from '@/lib/utils'
-
-const navItems = [
-  {
-    href: '/',
-    label: 'Home',
-    icon: Home,
-    aria: 'Home',
-  },
-  {
-    href: '/explore',
-    label: 'Explore',
-    icon: Compass,
-    aria: 'Explore',
-  },
-  {
-    href: '/submit',
-    label: 'Create',
-    icon: PlusCircle,
-    aria: 'Create new hack',
-  },
-  {
-    href: '/search',
-    label: 'Search',
-    icon: Search,
-    aria: 'Search',
-  },
-  {
-    href: '/profile',
-    label: 'Profile',
-    icon: User,
-    aria: 'Profile',
-  },
-]
 
 export interface BottomBarProps extends HTMLAttributes<HTMLElement> {
   className?: string

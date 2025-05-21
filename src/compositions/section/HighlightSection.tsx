@@ -2,7 +2,9 @@
 
 import { HTMLAttributes, useState } from 'react'
 
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import Image from 'next/image'
+
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { highlights } from '@/compositions/data/highlight'
 import { HighlightPreview } from '@/compositions/highlight/HighlightPreview'
 import { cn } from '@/lib/utils'
@@ -42,14 +44,18 @@ export function HighlightSection({ className, innerClassName, ...props }: Highli
         ))}
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTitle className="sr-only">Highlight</DialogTitle>
         <DialogContent className="max-w-md flex flex-col items-center">
           {active && (
             <>
               {active.type === 'image' ? (
-                <img
+                <Image
                   src={active.src}
                   alt={active.label}
                   className="w-full max-h-[60vh] rounded-lg object-contain"
+                  width={1000}
+                  height={3000}
+                  objectFit="contain"
                 />
               ) : (
                 <video

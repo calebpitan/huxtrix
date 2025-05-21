@@ -2,10 +2,10 @@
 
 import { ComponentProps, forwardRef } from 'react'
 
-import { AnimatePresence, HTMLMotionProps, motion } from 'motion/react'
+import { HTMLMotionProps, motion } from 'motion/react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { cn } from '@/lib/utils'
+import { cn, quarticEase } from '@/lib/utils'
 
 export type Profile = {
   name: string
@@ -17,23 +17,12 @@ export type Profile = {
 export interface ProfileHeaderProps extends HTMLMotionProps<'div'> {
   profile: Profile
   AvatarProps?: Pick<ComponentProps<typeof Avatar>, 'className'>
-  animation?: number
-  position?: 'primary' | 'alternate'
+  animationProgress?: number
+  mode?: 'primary' | 'alternate'
 }
 
 export const ProfileHeader = forwardRef<HTMLDivElement, ProfileHeaderProps>(
-  ({ className, profile, position = 'primary', animation = 0, AvatarProps, ...props }, ref) => {
-    const bioTransform = `-${animation * 100}%`
-    let bioOpacity = Math.min(1 * (1 - animation), 1)
-    bioOpacity = isNaN(bioOpacity) ? 1 : bioOpacity
-
-    const alternateBioProps = {
-      initial: { y: '0', opacity: 1 },
-      animate: { y: '-100%', opacity: 0 },
-    //   exit: { y: '-100%', opacity: 0 },
-    }
-    const primaryBioProps = { whileInView: { opacity: bioOpacity, y: bioTransform } }
-
+  ({ className, profile, animationProgress = 0, AvatarProps, ...props }, ref) => {
     return (
       <motion.div data-component="profile-header" className={cn(className)} {...props} ref={ref}>
         <div className="flex flex-col gap-4 items-center">
@@ -43,7 +32,7 @@ export const ProfileHeader = forwardRef<HTMLDivElement, ProfileHeaderProps>(
           </Avatar>
 
           <div className="flex flex-col gap-1 justify-center items-center">
-            <div className="w-full flex flex-col gap-1 text-center bg-background z-10">
+            <div className="flex flex-col gap-1 text-center">
               <h1 className="text-2xl font-bold tracking-tighter">{profile.name}</h1>
               <p className="text-sm text-muted-foreground">
                 <span className="text-primary">@</span>
@@ -51,12 +40,12 @@ export const ProfileHeader = forwardRef<HTMLDivElement, ProfileHeaderProps>(
               </p>
             </div>
 
-            <motion.div
+            <div
               className={cn('h-[3lh] max-w-62.5 text-center text-sm text-muted-foreground')}
-              {...(position === 'primary' ? primaryBioProps : alternateBioProps)}
+              style={{ opacity: quarticEase(0.5 - animationProgress) }}
             >
               <span className="text-foreground">{profile.bio}</span>
-            </motion.div>
+            </div>
           </div>
         </div>
       </motion.div>
