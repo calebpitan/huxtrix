@@ -26,7 +26,7 @@ export const navItems = [
     aria: 'Search',
   },
   {
-    href: '/profile',
+    href: '/signin',
     label: 'Profile',
     icon: User,
     aria: 'Profile',

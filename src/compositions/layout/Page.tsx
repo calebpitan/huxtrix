@@ -15,7 +15,7 @@ export const PageLayout = ({ children, className, SidebarProps, ...props }: Page
   return (
     <div
       data-component="page-layout"
-      className={cn('flex flex-col lg:flex-row gap-8 w-full basis-full', className)}
+      className={cn('flex w-full basis-full flex-col gap-8 lg:flex-row', className)}
       {...props}
     >
       <aside className="hidden lg:block lg:w-62.5 lg:shrink-0">
@@ -30,11 +30,11 @@ export const PageLayout = ({ children, className, SidebarProps, ...props }: Page
 
       <div
         className={cn(
-          'flex flex-row gap-8 justify-center w-full min-w-0',
-          'lg:my-2 px-4 sm:px-8 lg:px-0 lg:pe-8',
+          'flex w-full min-w-0 flex-row justify-center gap-8',
+          'px-4 sm:px-8 lg:my-2 lg:px-0 lg:pe-8',
         )}
       >
-        <div className="flex flex-col gap-8 xl:shrink w-full min-w-0 items-center">
+        <div className="flex w-full min-w-0 flex-col items-center gap-8 xl:shrink">
           {children[0]}
           {/* For all screens except x-large */}
           <AppFooter className="md:order-1 lg:block xl:hidden" />
@@ -42,7 +42,7 @@ export const PageLayout = ({ children, className, SidebarProps, ...props }: Page
           <BottomBar className="hidden lg:block xl:hidden" />
         </div>
 
-        <aside className="sticky top-0 max-h-screen hidden xl:block grow [&>:first-child]:w-62.5 [&>:first-child]:ms-auto">
+        <aside className="sticky top-0 hidden max-h-screen grow xl:block [&>:first-child]:ms-auto [&>:first-child]:w-62.5">
           {children[1]}
         </aside>
       </div>

@@ -4,7 +4,9 @@ import { AppBar } from '@/compositions/header'
 import { BottomBar } from '@/compositions/navbar/BottomBar'
 import { ThemeProvider } from '@/compositions/providers'
 
-type RootLayoutProps = Readonly<{ children: React.ReactNode }>
+type RootLayoutProps = Readonly<{
+  children: React.ReactNode
+}>
 
 export const RootLayout = ({ children }: RootLayoutProps) => {
   return (
@@ -17,7 +19,7 @@ export const RootLayout = ({ children }: RootLayoutProps) => {
         </main>
 
         {/* For x-large screens only */}
-        <AppFooter className="md:order-1 hidden xl:block" />
+        <AppFooter className="hidden md:order-1 xl:block" />
         {/* For all screens except large */}
         <BottomBar className="md:order-0 lg:hidden xl:block" />
       </div>
