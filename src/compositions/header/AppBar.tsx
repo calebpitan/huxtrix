@@ -22,3 +22,5 @@ export const AppBar = ({ className, name, ...props }: AppBarProps) => {
     </header>
   )
 }
+
+AppBar.displayName = 'AppBar'

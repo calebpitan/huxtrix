@@ -2,7 +2,9 @@ import { HTMLAttributes } from 'react'
 
 import { cn } from '@/lib/utils'
 
-export interface AppFooterProps extends HTMLAttributes<HTMLDivElement> {}
+export interface AppFooterProps extends HTMLAttributes<HTMLDivElement> {
+  className?: string
+}
 
 export const AppFooter = ({ className, ...props }: AppFooterProps) => {
   return (
@@ -19,3 +21,5 @@ export const AppFooter = ({ className, ...props }: AppFooterProps) => {
     </div>
   )
 }
+
+AppFooter.displayName = 'AppFooter'

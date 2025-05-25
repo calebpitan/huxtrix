@@ -116,6 +116,12 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  html,
+  body {
+    @apply scroll-smooth relative;
+  }
+
   body {
     @apply bg-background text-foreground;
   }

@@ -8,18 +8,19 @@ export type Category = { name: string; icon: string }
 export interface PopularCategoriesSectionProps extends HTMLAttributes<HTMLElement> {
   categories: Category[]
   className?: string
-  innerClassName?: string
+  ListProps?: HTMLAttributes<HTMLDivElement>
   axis?: 'horizontal' | 'vertical'
 }
 
 export const PopularCategoriesSection = ({
   categories,
   className,
-  innerClassName,
   axis = 'horizontal',
+  ListProps = {},
   ...props
 }: PopularCategoriesSectionProps) => {
   const layout = axis
+  const { className: listClassName, ...listProps } = ListProps
 
   return (
     <section
@@ -27,8 +28,11 @@ export const PopularCategoriesSection = ({
       className={cn('space-y-4', className)}
       {...props}
     >
-      <h2 className="text-sm font-bold px-4 sm:px-8 xl:px-0">Popular</h2>
-      <div className={cn(categoryVariants({ component: 'list', layout }), innerClassName)}>
+      <h2 className="px-4 text-sm font-bold sm:px-8 xl:px-0">Popular</h2>
+      <div
+        className={cn(categoryVariants({ component: 'list', layout }), listClassName)}
+        {...listProps}
+      >
         {categories.map((cat) => (
           <div key={cat.name} className={categoryVariants({ component: 'item', layout })}>
             <span className={categoryVariants({ component: 'icon', layout })}>{cat.icon}</span>
