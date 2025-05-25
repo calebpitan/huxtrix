@@ -11,12 +11,12 @@ const demoImages = [
   '/images/Danny Greenberg Unsplash.jpg',
 ]
 
-function getRandomImages(id: number) {
+function getRandomImages(id: number, getSerialized: (id: number) => string | undefined) {
   const count = Math.floor(Math.random() * 4) // 0-3 images
   const shuffled = demoImages.sort(() => 0.5 - Math.random())
 
   if (typeof window !== 'undefined') {
-    const serialized = document.getElementById(`latest-hack-${id}`)?.dataset.media
+    const serialized = getSerialized(id)
 
     if (serialized !== undefined) {
       return serialized.trim() === '' ? [] : serialized.split(',')
@@ -44,6 +44,8 @@ export interface LatestHacksSectionProps extends HTMLAttributes<HTMLElement> {
 export const LatestHacksSection = memo(
   ({ latestHacks, className, ...props }: LatestHacksSectionProps) => {
     const sectionLabelId = useId()
+    const getSerialized = (id: number) =>
+      document.getElementById(`latest-hack-${id}`)?.dataset.media
 
     return (
       <section
@@ -58,7 +60,7 @@ export const LatestHacksSection = memo(
         <div className="w-full max-w-[470px] mx-auto">
           <div className="flex flex-col">
             {latestHacks.map((hack) => {
-              const media = getRandomImages(hack.id)
+              const media = getRandomImages(hack.id, getSerialized)
 
               return (
                 <Fragment key={hack.id}>

@@ -1,22 +1,17 @@
 import { HTMLAttributes, ReactElement } from 'react'
 
 import { sidebarItems } from '@/compositions/data/sidebar-items'
+import { AppFooter } from '@/compositions/footer/AppFooter'
+import { BottomBar } from '@/compositions/navbar/BottomBar'
 import { AppSidebar, AppSidebarProps } from '@/compositions/sidebar/AppSidebar'
 import { cn } from '@/lib/utils'
 
 export interface PageLayoutProps extends HTMLAttributes<HTMLDivElement> {
   SidebarProps?: Partial<Pick<AppSidebarProps, 'items' | 'variant' | 'brand'>>
   children: [ReactElement, ReactElement]
-  QuickActions?: ReactElement
 }
 
-export const PageLayout = ({
-  children,
-  className,
-  SidebarProps,
-  QuickActions,
-  ...props
-}: PageLayoutProps) => {
+export const PageLayout = ({ children, className, SidebarProps, ...props }: PageLayoutProps) => {
   return (
     <div
       data-component="page-layout"
@@ -41,10 +36,14 @@ export const PageLayout = ({
       >
         <div className="flex flex-col gap-8 xl:shrink w-full min-w-0 items-center">
           {children[0]}
+          {/* For all screens except x-large */}
+          <AppFooter className="md:order-1 lg:block xl:hidden" />
+          {/* For large screens only */}
+          <BottomBar className="hidden lg:block xl:hidden" />
         </div>
 
         <aside className="sticky top-0 max-h-screen hidden xl:block grow [&>:first-child]:w-62.5 [&>:first-child]:ms-auto">
-          {children[1] ? children[1] : QuickActions}
+          {children[1]}
         </aside>
       </div>
     </div>
