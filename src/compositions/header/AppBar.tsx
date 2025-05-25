@@ -11,13 +11,13 @@ export const AppBar = ({ className, name, ...props }: AppBarProps) => {
     <header
       data-component="app-bar"
       className={cn(
-        'sticky md:relative top-0 z-50 w-full bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-muted/60',
+        'bg-background/95 supports-[backdrop-filter]:bg-muted/60 sticky top-0 z-50 w-full backdrop-blur-xl md:relative',
         className,
       )}
       {...props}
     >
       <div className="flex h-15 items-center justify-center">
-        <span className="font-bold text-xl tracking-tight">{name}</span>
+        <span className="text-xl font-bold tracking-tight">{name}</span>
       </div>
     </header>
   )

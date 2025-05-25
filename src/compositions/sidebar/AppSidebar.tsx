@@ -20,8 +20,8 @@ export interface AppSidebarProps
 export const AppSidebar = ({ items, active, brand, ...props }: AppSidebarProps) => {
   return (
     <Sidebar data-component="app-sidebar" {...props}>
-      <SidebarHeader className="px-10 mt-16">
-        <span className="font-bold text-xl tracking-tight">{brand.name}</span>
+      <SidebarHeader className="mt-16 px-10">
+        <span className="text-xl font-bold tracking-tight">{brand.name}</span>
       </SidebarHeader>
 
       <SidebarContent className="mt-16">
@@ -32,11 +32,11 @@ export const AppSidebar = ({ items, active, brand, ...props }: AppSidebarProps) 
 
             return (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton size="lg" className="rounded-none px-10 text-foreground/80">
-                  <Link href={item.link} className="inline-flex gap-6 rounded-none w-full">
+                <SidebarMenuButton size="lg" className="text-foreground/80 rounded-none px-10">
+                  <Link href={item.link} className="inline-flex w-full gap-6 rounded-none">
                     <span>{item.icon}</span>
 
-                    <span className={cn('font-semibold md:font-bold text-sm md:text-base grow')}>
+                    <span className={cn('grow text-sm font-semibold md:text-base md:font-bold')}>
                       {item.label}
                     </span>
                   </Link>

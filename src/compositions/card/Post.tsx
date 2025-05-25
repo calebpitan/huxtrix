@@ -38,44 +38,44 @@ export const PostCard = ({
     <Card
       data-component="post-card"
       className={cn(
-        'bg-background rounded-none shadow-none border-0 not-[:last-of-type]:border-b-1 border-muted/90',
+        'bg-background border-muted/90 rounded-none border-0 shadow-none not-[:last-of-type]:border-b-1',
         className,
       )}
       {...props}
     >
-      <CardHeader className="pb-2 flex flex-row items-center justify-between gap-2">
+      <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
         <div className="flex items-center gap-3">
-          <Avatar className="w-10 h-10">
+          <Avatar className="h-10 w-10">
             <AvatarImage src={author.avatarUrl} alt={author.name} />
             <AvatarFallback>{author.name.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
-          <span className="font-semibold text-base">{author.name}</span>
+          <span className="text-base font-semibold">{author.name}</span>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" aria-label="More options" className="rounded-full">
-              <MoreVertical className="w-5 h-5" />
+              <MoreVertical className="h-5 w-5" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-muted/80 backdrop-blur-sm">
             <DropdownMenuItem>
-              <Share className="w-4 h-4 mr-2" />
+              <Share className="mr-2 h-4 w-4" />
               Share
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link className="w-4 h-4 mr-2" />
+              <Link className="mr-2 h-4 w-4" />
               Copy link
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Flag className="w-4 h-4 mr-2" />
+              <Flag className="mr-2 h-4 w-4" />
               Report
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </CardHeader>
-      <CardContent className="pb-2 max-h-[585px]">
-        <CardTitle className="font-medium text-lg mb-4">{title}</CardTitle>
-        <CardDescription className="text-foreground/80 text-sm mb-2">
+      <CardContent className="max-h-[585px] pb-2">
+        <CardTitle className="mb-4 text-lg font-medium">{title}</CardTitle>
+        <CardDescription className="text-foreground/80 mb-2 text-sm">
           {summary} Lorem ipsum dolor sit, amet consectetur adipisicing elit. Optio quod magni in
           dolorum molestiae modi reiciendis mollitia officiis, exercitationem distinctio inventore
           eaque beatae voluptatem. Explicabo expedita ullam debitis eveniet! Illum?
@@ -94,14 +94,14 @@ export const PostCard = ({
           </div>
         )}
       </CardContent>
-      <CardFooter className="flex items-center gap-4 mt-2">
+      <CardFooter className="mt-2 flex items-center gap-4">
         <Button
           variant="ghost"
           size="sm"
           aria-label="Works for me"
-          className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
+          className="flex items-center gap-1 text-emerald-600 hover:bg-emerald-100 dark:text-emerald-400 dark:hover:bg-emerald-900/30"
         >
-          <ThumbsUp className="w-5 h-5" />
+          <ThumbsUp className="h-5 w-5" />
           <span className="text-xs font-medium">Works for me</span>
           {upvotes > 0 && <span className="ml-1 text-xs">{upvotes}</span>}
         </Button>
@@ -109,18 +109,18 @@ export const PostCard = ({
           variant="ghost"
           size="sm"
           aria-label="Bookmark"
-          className="flex items-center gap-1 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-100 dark:hover:bg-cyan-900/30"
+          className="flex items-center gap-1 text-cyan-600 hover:bg-cyan-100 dark:text-cyan-400 dark:hover:bg-cyan-900/30"
         >
-          <Bookmark className="w-5 h-5" />
+          <Bookmark className="h-5 w-5" />
           <span className="text-xs font-medium">Bookmark</span>
         </Button>
         <Button
           variant="ghost"
           size="sm"
           aria-label="Tip the author"
-          className="flex items-center gap-1 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-100 dark:hover:bg-yellow-900/30"
+          className="flex items-center gap-1 text-yellow-600 hover:bg-yellow-100 dark:text-yellow-400 dark:hover:bg-yellow-900/30"
         >
-          <Gift className="w-5 h-5" />
+          <Gift className="h-5 w-5" />
           <span className="text-xs font-medium">Reward</span>
           {tips > 0 && <span className="ml-1 text-xs">{tips}</span>}
         </Button>

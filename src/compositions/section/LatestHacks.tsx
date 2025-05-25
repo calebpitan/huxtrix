@@ -51,13 +51,13 @@ export const LatestHacksSection = memo(
       <section
         data-component="latest-hacks-section"
         aria-describedby={sectionLabelId}
-        className={cn('-mx-4 sm:-mx-8 md:mx-0 space-y-4', className)}
+        className={cn('-mx-4 space-y-4 sm:-mx-8 md:mx-0', className)}
         {...props}
       >
-        <h2 className="text-2xl font-bold sr-only" id={sectionLabelId}>
+        <h2 className="sr-only text-2xl font-bold" id={sectionLabelId}>
           Latest
         </h2>
-        <div className="w-full max-w-[470px] mx-auto">
+        <div className="mx-auto w-full max-w-[470px]">
           <div className="flex flex-col">
             {latestHacks.map((hack) => {
               const media = getRandomImages(hack.id, getSerialized)

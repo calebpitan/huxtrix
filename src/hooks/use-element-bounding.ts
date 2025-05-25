@@ -69,7 +69,7 @@ export function useElementBounding(target?: RefObject<HTMLElement | null>): Elem
 
     // Update on scroll
     window.addEventListener('scroll', updateBounding, { passive: true })
-    
+
     // Update on resize
     window.addEventListener('resize', updateBounding, { passive: true })
 

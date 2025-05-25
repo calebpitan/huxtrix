@@ -119,7 +119,7 @@
 
   html,
   body {
-    @apply scroll-smooth relative;
+    @apply relative scroll-smooth;
   }
 
   body {

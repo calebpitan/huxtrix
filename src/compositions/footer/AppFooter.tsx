@@ -14,7 +14,7 @@ export const AppFooter = ({ className, ...props }: AppFooterProps) => {
       {...props}
     >
       <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-        <p className="w-full text-center text-sm leading-loose text-muted-foreground">
+        <p className="text-muted-foreground w-full text-center text-sm leading-loose">
           <span>&copy;</span> 2025 HUXTRIX
         </p>
       </div>

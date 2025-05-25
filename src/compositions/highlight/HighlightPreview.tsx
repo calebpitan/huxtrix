@@ -26,16 +26,16 @@ export function HighlightPreview({
       tabIndex={0}
       aria-label={label}
       onClick={onClick}
-      className={cn('flex flex-col items-center focus:outline-none group', className)}
+      className={cn('group flex flex-col items-center focus:outline-none', className)}
       {...props}
     >
-      <span className="relative w-16 h-16 rounded-full overflow-hidden border-3 border-primary group-focus:ring-2 group-focus:ring-primary/50 transition-all">
+      <span className="border-primary group-focus:ring-primary/50 relative h-16 w-16 overflow-hidden rounded-full border-3 transition-all group-focus:ring-2">
         {type === 'image' ? (
-          <Image src={src} alt={label} className="w-full h-full object-cover" loading="lazy" fill />
+          <Image src={src} alt={label} className="h-full w-full object-cover" loading="lazy" fill />
         ) : (
           <video
             src={src}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
             aria-label={label}
             tabIndex={-1}
             muted
@@ -44,7 +44,7 @@ export function HighlightPreview({
           />
         )}
       </span>
-      <span className="mt-1 text-xs text-center max-w-[4.5rem] truncate">{label}</span>
+      <span className="mt-1 max-w-[4.5rem] truncate text-center text-xs">{label}</span>
     </button>
   )
 }
