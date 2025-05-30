@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, RefObject, createContext, useCallback, useContext, useEffect } from 'react'
+import { ReactNode, RefObject, createContext, use, useCallback, useEffect } from 'react'
 import { useMemo, useRef, useState } from 'react'
 
 import { MotionValue, motionValue, useMotionValueEvent, useScroll } from 'motion/react'
@@ -71,7 +71,7 @@ type UseAnimatedProfileMotionParams = {
 }
 
 interface AnimatedProfileContextType {
-  profile: Profile | null | undefined
+  profile?: Profile | null
   initialSizes: InitialSizes
   mode: 'primary' | 'alternate'
   motion: AnimatedProfileMotion
@@ -92,38 +92,13 @@ export interface AnimatedProfileProviderProps extends Pick<AnimatedProfileContex
 
 const meter = (x: number) => Math.ceil(x % 1)
 
-export const AnimatedProfileContext = createContext<AnimatedProfileContextType>({
-  profile: null,
-  mode: 'primary',
-  motion: {
-    x: motionValue(0),
-    y: motionValue(0),
-    signal: motionValue(0),
-    header: { x: motionValue(0), y: motionValue(0) },
-    anchor: { x: motionValue(0), y: motionValue(0) },
-    scroll: {
-      x: motionValue(0),
-      y: motionValue(0),
-      bounded: motionValue(0),
-      direction: 'down',
-      progress: motionValue(0),
-    },
-  },
-  updateProfile: () => {},
-  updateRefs: () => {},
-  initialSizes: {
-    container: createDomRect(),
-    header: createDomRect(),
-    anchor: createDomRect(),
-    sidebar: createDomRect(),
-  },
-})
+export const AnimatedProfileContext = createContext<AnimatedProfileContextType | null>(null)
 
 export const useAnimatedProfile = () => {
-  const context = useContext(AnimatedProfileContext)
+  const context = use(AnimatedProfileContext)
 
   if (!context) {
-    throw new Error('useAnimatedProfile must be used within an AnimatedProfileProvider')
+    throw new Error('useAnimatedProfile must be used within an <AnimatedProfileProvider />')
   }
 
   return context
@@ -165,11 +140,11 @@ export const useAnimatedProfileMotion = (params: UseAnimatedProfileMotionParams)
   )
 }
 
-export const AnimatedProfileProvider = ({
+export function AnimatedProfileProvider({
   children,
-  profile: defaultProfile,
-}: AnimatedProfileProviderProps) => {
-  const [profile, setProfile] = useState<Profile | null | undefined>(() => defaultProfile)
+  profile: defaultProfile = null,
+}: AnimatedProfileProviderProps) {
+  const [profile, setProfile] = useState<Profile | null>(() => defaultProfile)
   const [refs, setRefs] = useState<Partial<AnimatedProfileRefs>>({})
 
   const [mode, setMode] = useState<'primary' | 'alternate'>('primary')
@@ -312,9 +287,5 @@ export const AnimatedProfileProvider = ({
     setInitialSizes(sizes)
   }, [refs])
 
-  return (
-    <AnimatedProfileContext.Provider value={contextValue}>
-      {children}
-    </AnimatedProfileContext.Provider>
-  )
+  return <AnimatedProfileContext value={contextValue}>{children}</AnimatedProfileContext>
 }

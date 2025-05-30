@@ -7,11 +7,11 @@ import { AnimatePresence, HTMLMotionProps, MotionValue, Transition, motion } fro
 import { cubicBezier, useSpring, useTransform } from 'motion/react'
 
 import { Button } from '@/components/ui/button'
-import { ProfileHeader } from '@/compositions/header'
 import { useForkRef } from '@/hooks/use-fork-ref'
 import { cn } from '@/lib/utils'
 
 import { useAnimatedProfile } from './AnimatedProvider'
+import { ProfileHeader } from './ProfileHeader'
 import { SocialProfiles } from './Socials'
 
 export interface AnimatedProfileSidebarProps extends ComponentProps<'div'> {
