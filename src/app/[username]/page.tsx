@@ -5,7 +5,7 @@ import { Metadata } from 'next'
 import * as AnimatedProfile from '@/compositions/profile/Animated'
 import { latestHacks } from '@/compositions/data/latest-hacks'
 import { profiles } from '@/compositions/data/profiles'
-import { PageLayout } from '@/compositions/layout'
+import { PageAppBar, PageLayout } from '@/compositions/layout'
 import { AnimatedProfileProvider } from '@/compositions/profile/AnimatedProvider'
 import { LatestHacksSection } from '@/compositions/section/LatestHacks'
 
@@ -39,6 +39,7 @@ export default function ProfilePage({ params: paramsPromise }: ProfilePageProps)
 
   return (
     <AnimatedProfileProvider profile={profile}>
+      <PageAppBar />
       <PageLayout>
         <AnimatedProfile.Root>
           <AnimatedProfile.Anchor>
@@ -51,4 +52,3 @@ export default function ProfilePage({ params: paramsPromise }: ProfilePageProps)
     </AnimatedProfileProvider>
   )
 }
-// x, ig, yt, tk, substack

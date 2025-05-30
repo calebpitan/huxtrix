@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 
 import { featuredHacks } from '@/compositions/data/featured-hacks'
 import { latestHacks } from '@/compositions/data/latest-hacks'
-import { PageLayout } from '@/compositions/layout'
+import { PageAppBar, PageLayout } from '@/compositions/layout'
 import { FeaturedHacksSection } from '@/compositions/section/FeaturedHacks'
 import { HighlightSection } from '@/compositions/section/HighlightSection'
 import { LatestHacksSection } from '@/compositions/section/LatestHacks'
@@ -22,6 +22,7 @@ export default function Home() {
   return (
     <PageLayout>
       <Fragment>
+        <PageAppBar />
         <HighlightSection className="fade-x -mx-4 mt-8 w-dvw sm:-mx-8 md:w-full xl:mx-0 [&>*]:px-4 [&>*]:sm:px-8" />
 
         <LatestHacksSection
