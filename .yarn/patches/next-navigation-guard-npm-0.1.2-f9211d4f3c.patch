@@ -1,0 +1,26 @@
+diff --git a/dist/utils/historyAugmentation.js b/dist/utils/historyAugmentation.js
+index cf2f78cbb6f715a9c4287679429ada12ebd37ee8..30309e518c6618b0d6a4562ef0e2135b6bea2658 100644
+--- a/dist/utils/historyAugmentation.js
++++ b/dist/utils/historyAugmentation.js
+@@ -7,7 +7,7 @@ const debug_1 = require("./debug");
+ let setupDone = false;
+ let writeState = () => { };
+ function newToken() {
+-    return crypto.randomUUID().substring(0, 8);
++    return Math.random().toString(36).substring(2, 10);
+ }
+ // Next.js also modifies history.pushState and history.replaceState in useEffect.
+ // And it's order seems to be not guaranteed.
+diff --git a/dist/utils/setupHistoryAugmentationOnce.js b/dist/utils/setupHistoryAugmentationOnce.js
+index 4afaab97293ba3b3f93e455ff24d05e5b5257288..da9e5e1e46d4c9cbfcf2069f072b1bbddd810a9f 100644
+--- a/dist/utils/setupHistoryAugmentationOnce.js
++++ b/dist/utils/setupHistoryAugmentationOnce.js
+@@ -6,7 +6,7 @@ exports.setupHistoryAugmentationOnce = setupHistoryAugmentationOnce;
+ const debug_1 = require("./debug");
+ let setupDone = false;
+ function newToken() {
+-    return crypto.randomUUID().substring(0, 8);
++    return Math.random().toString(36).substring(2, 10);
+ }
+ // Next.js also modifies history.pushState and history.replaceState in useEffect.
+ // And it's order seems to be not guaranteed.
