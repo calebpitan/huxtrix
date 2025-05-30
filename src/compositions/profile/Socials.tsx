@@ -9,7 +9,7 @@ import Tiktok from '@/public/icons/tiktok.svg'
 import X from '@/public/icons/x.svg'
 import Youtube from '@/public/icons/youtube.svg'
 
-export type SocialProfile = { name: 'x' | 'ig' | 'yt' | 'tiktok' | 'substack'; url: string }
+export type SocialProfile = { name: 'x' | 'ig' | 'yt' | 'tiktok' | 'substack'; url: string | null }
 
 export interface SocialProfilesProps extends HTMLMotionProps<'div'> {
   profiles: SocialProfile[]
@@ -31,7 +31,10 @@ export const SocialProfiles = ({ className, profiles, ...props }: SocialProfiles
       {...props}
     >
       {profiles.map((profile) => {
+        if (!profile.url) return null
+
         const BrandIcon = icons[profile.name]
+
         return (
           <a href={profile.url} key={profile.name}>
             <BrandIcon className="fill-muted-foreground h-6 w-6" />

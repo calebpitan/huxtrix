@@ -8,5 +8,5 @@ export interface User {
 
 export interface SocialProfile {
   name: 'x' | 'ig' | 'yt' | 'tiktok' | 'substack'
-  url: string
+  url: string | null
 }
