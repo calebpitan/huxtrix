@@ -1,0 +1,78 @@
+@reference '../../app/globals.css';
+
+.w-md-editor {
+  @apply relative h-full! rounded-lg border-0 shadow-sm;
+
+  --color-fg-default: var(--color-foreground);
+  --md-editor-background-color: var(--color-background);
+  --md-editor-font-family: var(--font-geist-mono);
+  --md-editor-box-shadow-color: var(--color-border);
+}
+
+.w-md-editor-toolbar {
+  border: 0;
+  /* toolbar height and toolbar bottom margin */
+  @apply mb-2 h-12;
+  @apply border-0 border-b-0;
+  @apply border-border sticky top-0 z-10 rounded-lg p-3;
+}
+
+.w-md-editor-content {
+  /* content top margin */
+  @apply mt-2;
+  @apply static rounded-lg border-0;
+  @apply flex;
+}
+
+.w-md-editor-input:has(+ .w-md-editor-preview) {
+  @apply border-r-1;
+}
+
+.w-md-editor-preview {
+  /* toolbar height + toolbar bottom margin + content top margin */
+  @apply shadow-none flex-1;
+  @apply relative;
+}
+
+.w-md-editor-area.w-md-editor-input,
+.w-md-editor-preview {
+  @apply h-fit rounded-none;
+}
+
+.wmde-markdown {
+  --color-canvas-default: var(--color-background);
+  @apply font-sans;
+}
+
+.w-md-editor-text-input,
+.w-md-editor-text-pre {
+  @apply text-base;
+
+  & > code {
+    @apply text-base!;
+  }
+}
+
+.wmde-markdown-color .token.code {
+  font-family: var(--font-geist-mono);
+}
+
+.w-md-editor-bar {
+  @apply text-muted-foreground m-2 size-3.5;
+}
+
+code[class*='language-'] {
+  @apply font-mono;
+}
+
+.wmde-markdown {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    border-bottom: 0;
+    @apply text-lg font-medium p-0;
+  }
+}

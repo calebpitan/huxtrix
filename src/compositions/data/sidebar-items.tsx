@@ -1,8 +1,14 @@
-import { Bell, Bookmark, Gift, Settings } from 'lucide-react'
+import { Bell, Bookmark, Gift, Home, Settings } from 'lucide-react'
 
 import { AppSidebarProps } from '../sidebar/AppSidebar'
 
 export const sidebarItems: AppSidebarProps['items'] = [
+  {
+    icon: <Home />,
+    label: 'Home',
+    title: 'Home',
+    link: '/',
+  },
   {
     icon: <Bookmark />,
     label: 'Bookmarks',

@@ -1,4 +1,9 @@
-@import 'tailwindcss';
+@layer theme, base, components, silk, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import '@silk-hq/components/unlayered-styles' layer(silk);
+@import 'tailwindcss/utilities.css' layer(utilities);
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
@@ -115,6 +120,14 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+
+  html {
+    --appbar-size-xs: --spacing(10);
+    --appbar-size-sm: --spacing(12);
+    --appbar-size-base: --spacing(13);
+    --appbar-size-md: --spacing(14);
+    --appbar-size-lg: --spacing(16);
   }
 
   html,

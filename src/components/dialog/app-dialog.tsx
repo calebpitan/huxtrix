@@ -169,7 +169,7 @@ function AppFloatDialog({
 
   return (
     <Dialog {...rest}>
-      <DialogContent className={cn('rounded-4xl', contentClassName)} {...contentProps}>
+      <DialogContent className={cn('rounded-4xl gap-6', contentClassName)} {...contentProps}>
         {(titleElement !== undefined || descriptionElement !== undefined) && (
           <DialogHeader>
             {titleElement}
