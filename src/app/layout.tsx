@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { DM_Sans, Geist_Mono } from 'next/font/google'
 
 import { RootLayout } from '@/compositions/layout'
@@ -14,6 +14,11 @@ export const metadata: Metadata = {
   description: 'A place for sharing useful hacks, tips, and tricks',
 }
 
+export const viewport: Viewport = {
+  viewportFit: 'cover',
+  interactiveWidget: 'resizes-content'
+}
+
 type RootLayoutProps = Readonly<{ children: React.ReactNode }>
 
 export default function Root({ children }: RootLayoutProps) {
@@ -21,7 +26,7 @@ export default function Root({ children }: RootLayoutProps) {
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          'min-h-screen w-full max-w-full',
+          'min-h-svh w-full max-w-full',
           'bg-background font-sans antialiased',
           dmSans.variable,
           geistMono.variable,

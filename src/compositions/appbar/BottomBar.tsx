@@ -72,13 +72,7 @@ const variants = cva('', {
   ],
 })
 
-export async function BottomBar({
-  className,
-  children,
-  breakpoint,
-  strategy,
-  ...props
-}: BottomBarProps) {
+export function BottomBar({ className, children, breakpoint, strategy, ...props }: BottomBarProps) {
   return (
     <nav
       data-component="bottom-bar"
@@ -91,5 +85,3 @@ export async function BottomBar({
     </nav>
   )
 }
-
-BottomBar.displayName = 'BottomBar'

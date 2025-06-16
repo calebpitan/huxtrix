@@ -6,15 +6,16 @@ import { useNavigationGuard } from 'next-navigation-guard'
 
 import * as AppDialog from '@/components/dialog/app-dialog'
 import { Button } from '@/components/ui/button'
-import { TextEditor, useTextEditor } from '@/compositions/editor'
+import { useTextEditor } from '@/compositions/editor'
+import { ArticleEditor } from '@/compositions/editor/ArticleEditor'
 import { useCurrentBreakpoint } from '@/hooks/use-breakpoint'
 import { cn } from '@/lib/utils'
 
-import { CreatorPageAppBar } from './appbar'
-
 export function PostCreator() {
   const editor = useTextEditor()
-  const guard = useNavigationGuard({ enabled: editor.state.content.length > 0 })
+  const guard = useNavigationGuard({
+    enabled: (p) => p.type !== 'beforeunload' && editor.state.content.length > 0,
+  })
 
   const [isPresented, setIsPresented] = useState(() => guard.active)
 
@@ -56,15 +57,17 @@ export function PostCreator() {
 
   return (
     <Fragment>
-      <CreatorPageAppBar onPost={() => makePost()} />
-
-      <TextEditor
+      {/* <TextEditor
         className="w-full"
         placeholder="Share a useful hack or trick..."
         content={editor.state.content}
         mode={editor.state.mode}
         onChange={(content) => editor.setContent(content)}
-      />
+      /> */}
+
+      <div>
+        <ArticleEditor onChange={(value) => editor.setContent(value)} />
+      </div>
 
       <AppDialog.Root
         type={dialogType}

@@ -2,13 +2,8 @@
 
 import { Button } from '@/components/ui/button'
 import { useTextEditor } from '@/compositions/editor'
-import { cn } from '@/lib/utils'
 
-export interface PostCreatorSidebarProps {
-  className?: string
-}
-
-export function PostCreatorSidebar({ className }: PostCreatorSidebarProps) {
+export default function PostCreatorSidebar() {
   const { controller, state, toggleMode } = useTextEditor()
 
   function onSaveDraft() {
@@ -20,7 +15,7 @@ export function PostCreatorSidebar({ className }: PostCreatorSidebarProps) {
   }
 
   return (
-    <div className={cn(className)}>
+    <div className="sticky top-0 py-1">
       <div className="flex items-center justify-end gap-2">
         <Button variant="link" size="sm" onClick={toggleMode}>
           {state.mode === 'edit' ? 'Preview' : 'Edit'}
@@ -29,7 +24,7 @@ export function PostCreatorSidebar({ className }: PostCreatorSidebarProps) {
           Save draft
         </Button>
         <Button className="rounded-full px-5" size="sm" onClick={onPost}>
-          Post
+          Next
         </Button>
       </div>
     </div>

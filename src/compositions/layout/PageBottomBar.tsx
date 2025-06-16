@@ -1,23 +1,15 @@
-'use client'
+import { ComponentProps } from 'react'
 
-import { ComponentProps, Fragment, useEffect, useMemo } from 'react'
-
-import { BottomBarItems, useAppBar } from '@/compositions/appbar'
+import { AppBarPortal, BottomBarItems } from '@/compositions/appbar'
 
 export interface PageBottomBarProps {
   items: ComponentProps<typeof BottomBarItems>['items']
 }
 
 export function PageBottomBar({ items }: PageBottomBarProps) {
-  const { content, setContent } = useAppBar()
-
-  const bottombar = useMemo(() => <BottomBarItems items={items} />, [items])
-
-  useEffect(() => {
-    if (content.bottombar !== bottombar) {
-      setContent({ bottombar })
-    }
-  }, [content.bottombar, setContent, bottombar])
-
-  return <Fragment />
+  return (
+    <AppBarPortal slots={['bottombar', 'bottombar-lg']}>
+      <BottomBarItems items={items} />
+    </AppBarPortal>
+  )
 }

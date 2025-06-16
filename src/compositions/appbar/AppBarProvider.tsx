@@ -1,17 +1,19 @@
 'use client'
 
-import { ReactElement, ReactNode, createContext, use, useCallback, useMemo, useState } from 'react'
+import { ReactNode, RefObject, createContext, use } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 
-type AppBarContent = { topbar: ReactElement | null; bottombar: ReactElement | null }
-type Setter = (prev: AppBarContent) => AppBarContent
+import { ElementSize, useElementSize } from '@/hooks/use-element-size'
 
-interface SetAppBarContent {
-  (contents: Partial<AppBarContent>): void
-  <K extends keyof AppBarContent, C extends AppBarContent[K]>(type: K, content: C): void
-  (setter: Setter): void
+type AppBarRefs = {
+  topbar: RefObject<HTMLElement | null>
+  bottombar: RefObject<HTMLElement | null>
 }
+type AppBarSizes = { topbar: ElementSize; bottombar: ElementSize }
 
-export type AppBarContextType = { content: AppBarContent; setContent: SetAppBarContent }
+export type AppBarContextType = {
+  refs: AppBarRefs
+}
 
 export interface AppBarProviderProps {
   children: ReactNode
@@ -27,30 +29,35 @@ export function useAppBar() {
   return context
 }
 
+export function useAppBarGeometry(): AppBarSizes {
+  const appbar = useAppBar()
+  const topbarSize = useElementSize(appbar.refs.topbar)
+  const bottombarSize = useElementSize(appbar.refs.bottombar)
+
+  return { bottombar: bottombarSize, topbar: topbarSize }
+}
+
+export function useRegisterAppBarGeomImperatively() {
+  const geom = useAppBarGeometry()
+  useEffect(() => {
+    document.documentElement.style.setProperty(`--topbar-height`, geom.topbar.height + 'px')
+    document.documentElement.style.setProperty(`--bottombar-height`, geom.bottombar.height + 'px')
+  }, [geom.bottombar.height, geom.topbar.height])
+}
+
 export function AppBarProvider({ children }: AppBarProviderProps) {
-  const [bars, setBars] = useState<AppBarContent>({ topbar: null, bottombar: null })
+  const topbarRef = useRef<HTMLElement>(null)
+  const bottombarRef = useRef<HTMLElement>(null)
 
-  type Args = [
-    Partial<AppBarContent> | keyof AppBarContent | Setter,
-    AppBarContent[keyof AppBarContent],
-  ]
-  const setContent = useCallback<SetAppBarContent>((typeOrContents: Args[0], content?: Args[1]) => {
-    const { type, contents, setter } = {
-      type: typeof typeOrContents === 'string' ? typeOrContents : undefined,
-      contents: typeof typeOrContents === 'object' ? typeOrContents : undefined,
-      setter: typeof typeOrContents === 'function' ? typeOrContents : undefined,
-    }
-
-    if (type !== undefined) {
-      setBars((prev) => ({ ...prev, ...contents, [type]: content }))
-    } else if (contents !== undefined) {
-      setBars((prev) => ({ ...prev, ...contents }))
-    } else if (setter !== undefined) {
-      setBars(setter)
-    }
-  }, [])
-
-  const contextValue = useMemo(() => ({ content: bars, setContent }), [bars, setContent])
+  const contextValue = useMemo<AppBarContextType>(
+    () => ({
+      refs: {
+        topbar: topbarRef,
+        bottombar: bottombarRef,
+      },
+    }),
+    [],
+  )
 
   return <AppBarContext value={contextValue}>{children}</AppBarContext>
 }

@@ -1,11 +1,13 @@
-import { ComponentProps, cloneElement, isValidElement, useMemo } from 'react'
+import { ComponentProps } from 'react'
 
 import { VariantProps, cva } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
 
-export interface TopBarProps
-  extends ComponentProps<'header'>,
+export type TopBarProps = ComponentProps<'header'>
+
+export interface TopBarContentProps
+  extends ComponentProps<'div'>,
     Pick<VariantProps<typeof variants>, 'size'> {
   name: string
 }
@@ -26,28 +28,22 @@ const variants = cva('', {
   },
 })
 
-export function TopBar({ children, className, name, size = 'base', ...props }: TopBarProps) {
-  const content = useMemo(() => {
-    return isValidElement<Record<string, unknown>>(children)
-      ? cloneElement(children, {
-          className: cn(children.props.className as string, variants({ size })),
-        })
-      : children
-  }, [children, size])
-
+export function TopBar({ children, className, ...props }: TopBarProps) {
   return (
     <header
       data-component="top-bar"
       className={cn(variants({ components: 'root' }), className)}
       {...props}
     >
-      {content ? (
-        content
-      ) : (
-        <div className={variants({ components: 'content', size })}>
-          <span className="font-bold tracking-tight">{name}</span>
-        </div>
-      )}
+      {children}
     </header>
+  )
+}
+
+export function TopBarContent({ children, className, name, size, ...props }: TopBarContentProps) {
+  return (
+    <div className={cn(variants({ components: 'content', size }), className)} {...props}>
+      {children ? children : <span className="font-bold tracking-tight">{name}</span>}
+    </div>
   )
 }

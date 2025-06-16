@@ -5,6 +5,19 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export type TryCatch<R, E> = { trial: () => R; error?: (e: E) => R }
+export function result<R>(r: () => R): R | undefined
+export function result<R, E = Error>(r: () => R, e: (e: E) => R): R
+export function result<R, E = Error>(tc: TryCatch<R, E>): R
+export function result<R, E = Error>(tr: TryCatch<R, E> | (() => R), te?: (e: E) => R) {
+  const { r, e } = isFn(tr) ? { r: tr, e: te } : { r: tr.trial, e: tr.error }
+  try {
+    return r()
+  } catch (err) {
+    return e?.(err as E)
+  }
+}
+
 export const _formatNumber = (num: number): string => {
   const lookup = [
     { value: 1e15, symbol: 'P' },
@@ -46,7 +59,7 @@ export const createDomRect = (rect: Partial<DOMRect> = {}): DOMRect => ({
   x: rect.x ?? 0,
   y: rect.y ?? 0,
   toJSON() {
-    return this
+    return rect.toJSON?.() || this
   },
 })
 
@@ -95,4 +108,46 @@ export const quadraticEase = (x: number) => {
  */
 export const quarticEase = (x: number) => {
   return 16 * x ** 2 * (1 - x) ** 2
+}
+
+/**
+ * Loosely validate a URL `string`
+ *
+ * @param string - The string to validate
+ * @returns boolean
+ */
+export function isUrl(string: string) {
+  /**
+   * RegExps.
+   * A URL must match #1 and then at least one of #2/#3.
+   * Use two levels of REs to avoid REDOS.
+   */
+
+  const protocolAndDomainRE = /^(?:\w+:)?\/\/(\S+)$/
+
+  const localhostDomainRE = /^localhost[\:?\d]*(?:[^\:?\d]\S*)?$/
+  const nonLocalhostDomainRE = /^[^\s\.]+\.\S{2,}$/
+
+  if (typeof string !== 'string') {
+    return false
+  }
+
+  const match = string.match(protocolAndDomainRE)
+  if (!match) {
+    return false
+  }
+
+  const everythingAfterProtocol = match[1]
+  if (!everythingAfterProtocol) {
+    return false
+  }
+
+  if (
+    localhostDomainRE.test(everythingAfterProtocol) ||
+    nonLocalhostDomainRE.test(everythingAfterProtocol)
+  ) {
+    return true
+  }
+
+  return false
 }

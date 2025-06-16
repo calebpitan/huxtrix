@@ -99,8 +99,12 @@ function AnimatedProfileSidebar({
         style={{ y: mode === 'primary' ? y : 0 }}
       >
         <div className="flex w-full flex-row justify-center gap-4">
-          <Button variant="secondary">Edit Profile</Button>
-          <Button variant="default">Subscribers</Button>
+          <Button variant="secondary" size="sm" className="rounded-full">
+            Edit Profile
+          </Button>
+          <Button variant="default" size="sm" className="rounded-full">
+            Subscribers
+          </Button>
         </div>
       </motion.div>
     </AnimatePresence>

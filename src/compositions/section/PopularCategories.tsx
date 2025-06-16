@@ -2,6 +2,7 @@ import { HTMLAttributes } from 'react'
 
 import { cva } from 'class-variance-authority'
 
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 export type Category = { name: string; icon: string }
@@ -36,7 +37,16 @@ export const PopularCategoriesSection = ({
         {categories.map((cat) => (
           <div key={cat.name} className={categoryVariants({ component: 'item', layout })}>
             <span className={categoryVariants({ component: 'icon', layout })}>{cat.icon}</span>
-            <span className={categoryVariants({ component: 'text', layout })}>{cat.name}</span>
+            <div className="flex flex-col">
+              <span className={categoryVariants({ component: 'text', layout })}>{cat.name}</span>
+              <span className={'text-foreground/60 text-xs'}>289k members</span>
+            </div>
+            <Button
+              className="ms-auto h-6 rounded-full bg-amber-500 text-black hover:bg-amber-500/80 active:scale-95"
+              size="sm"
+            >
+              Join
+            </Button>
           </div>
         ))}
       </div>
@@ -50,9 +60,9 @@ const categoryVariants = cva('', {
   variants: {
     component: {
       list: 'flex gap-4 cursor-pointer snap-x snap-mandatory overflow-x-auto no-scrollbar',
-      item: 'w-full bg-muted/70 dark:bg-muted/60 border-primary/20 snap-center transition-shadow cursor-pointer rounded-lg',
-      icon: '',
-      text: 'font-semibold',
+      item: 'w-full bg-muted/70 dark:bg-muted/60 border-primary/20 snap-center transition-shadow cursor-pointer rounded-2xl',
+      icon: 'rounded-full bg-amber-500/70 size-8 inline-flex items-center justify-center',
+      text: 'font-medium text-sm',
     },
     layout: { vertical: '', horizontal: '' },
   },
@@ -80,12 +90,12 @@ const categoryVariants = cva('', {
     {
       component: 'icon',
       layout: 'vertical',
-      className: 'text-2xl',
+      className: 'text-xl',
     },
     {
       component: 'icon',
       layout: 'horizontal',
-      className: 'text-3xl mb-2',
+      className: 'text-2xl mb-2',
     },
     {
       component: 'text',

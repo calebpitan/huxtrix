@@ -18,10 +18,9 @@ const variants = cva('', {
   variants: {
     component: {
       content: 'no-scrollbar flex snap-x snap-mandatory gap-8 overflow-x-auto',
-      dialog: `flex flex-col justify-center items-center max-w-screen! h-screen \
-        supports-[backdrop-filter]:bg-muted/80 bg-muted/70 backdrop-blur-xs p-6 \
-        border-0 rounded-none`,
-      media: 'w-[calc((100dvh_-_--spacing(12))_*_0.56219865)] h-full rounded-lg object-cover',
+      dialog:
+        'flex flex-col justify-center items-center max-w-screen! h-screen supports-[backdrop-filter]:bg-muted/80 bg-muted/70 backdrop-blur-xs p-6 safe-area-6 border-0 rounded-none',
+      media: 'h-full rounded-lg object-cover',
     },
   },
 })
@@ -69,14 +68,20 @@ export function HighlightSection({
                   src={active.src}
                   alt={active.label}
                   draggable={false}
-                  className={variants({ component: 'media' })}
+                  className={variants({
+                    component: 'media',
+                    className: 'w-[calc((100dvh_-_--spacing(12))_*_0.56219865)]',
+                  })}
                 />
               ) : (
                 <video
                   src={active.src}
                   controls
                   autoPlay
-                  className={variants({ component: 'media' })}
+                  className={variants({
+                    component: 'media',
+                    className: 'w-[calc((100dvh_-_--spacing(12))_*_0.56219865)]',
+                  })}
                 />
               )}
               {/* <div className="my-2 text-center text-base font-medium">{active.label}</div> */}

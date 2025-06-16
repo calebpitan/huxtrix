@@ -22,7 +22,7 @@ const variants = cva('', {
   variants: {
     component: {
       list: `supports-[backdrop-filter]:bg-muted/60 border-border/50 flex w-full \
-        justify-between border-t py-1 backdrop-blur-xl md:mx-auto md:mb-6 md:w-auto \
+        justify-between border-t py-1 safe-area-b-1 backdrop-blur-xl md:mx-auto md:mb-6 md:w-auto \
         md:max-w-2xl md:justify-center md:gap-12 md:rounded-full md:border-[0.5px] \
         md:px-8 md:py-1.5 md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] \
       `,

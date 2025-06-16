@@ -1,3 +1,5 @@
+export * from './AppBarPassthrough'
+export * from './AppBarPortal'
 export * from './AppBarProvider'
 export * from './AppBarSlot'
 export * from './BottomBar'

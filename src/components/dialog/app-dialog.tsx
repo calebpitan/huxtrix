@@ -4,11 +4,16 @@ import { ComponentProps, ReactElement, ReactNode } from 'react'
 
 import { Sheet } from '@silk-hq/components'
 
-import { Dialog, DialogContent, DialogDescription, DialogFooter } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Discriminate } from '@/lib/types'
 import { cn } from '@/lib/utils'
-
-type Discriminate<T extends string> = { type: T }
 
 type DialogType = 'swipe' | 'float'
 type FloatDialogOmittedProps = 'open' | 'onOpenChange'
@@ -24,14 +29,15 @@ type SwipeDialogOmittedProps =
 interface AppDialogBaseProps {
   title?: ReactElement<ComponentProps<typeof AppDialogTitle>> | string
   description?: ReactElement<ComponentProps<typeof AppDialogDescription>> | string
-  open: boolean
-  onOpenChange(open: boolean): void
+  open?: boolean
+  onOpenChange?(open: boolean): void
 }
 
 interface AppSwipeDialogProps
   extends AppDialogBaseProps,
     Omit<ComponentProps<typeof Sheet.Root>, SwipeDialogOmittedProps> {
   children: ReactNode
+  Trigger?: ReactElement<ComponentProps<typeof Sheet.Trigger>>
   SwipeContentProps?: ComponentProps<typeof Sheet.Content>
 }
 
@@ -39,7 +45,8 @@ interface AppFloatDialogProps
   extends AppDialogBaseProps,
     Omit<ComponentProps<typeof Dialog>, FloatDialogOmittedProps> {
   children: ReactNode
-  footer?: ReactElement<ComponentProps<typeof DialogFooter>>
+  Footer?: ReactElement<ComponentProps<typeof DialogFooter>>
+  Trigger?: ReactElement<ComponentProps<typeof DialogTrigger>>
   FloatContentProps?: ComponentProps<typeof DialogContent>
 }
 
@@ -54,15 +61,37 @@ export type AppDialogProps<T extends DialogType = DialogType> = {
 
 export type AppDialogTitleProps = ComponentProps<typeof DialogTitle> & Discriminator
 export type AppDialogDescriptionProps = ComponentProps<typeof DialogDescription> & Discriminator
+export type AppDialogTriggerProps<T extends DialogType> = {
+  float: ComponentProps<typeof DialogTrigger> & Discriminate<'float', 'variant'>
+  swipe: ComponentProps<typeof Sheet.Trigger> & Discriminate<'swipe', 'variant'>
+}[T]
 
 export function AppDialogRoot<T extends DialogType>(props: AppDialogProps<T>) {
   if (props.type === 'float') {
-    const { type: _, ...rest } = props
-    return <AppFloatDialog {...rest} />
+    const { type: _, Trigger, ...rest } = props
+    return <AppFloatDialog Trigger={Trigger as AppFloatDialogProps['Trigger']} {...rest} />
   }
 
-  const { type: _, ...rest } = props
-  return <AppSwipeDialog {...rest} />
+  const { type: _, Trigger, ...rest } = props
+  return <AppSwipeDialog Trigger={Trigger as AppSwipeDialogProps['Trigger']} {...rest} />
+}
+
+export function AppDialogTrigger<T extends DialogType>(props: AppDialogTriggerProps<T>) {
+  if (props.variant === 'float') {
+    const { variant: _, children, ref, ...rest } = props
+    return (
+      <DialogTrigger ref={ref} {...rest}>
+        {children}
+      </DialogTrigger>
+    )
+  }
+
+  const { variant: _, children, onClick, ...rest } = props
+  return (
+    <Sheet.Trigger onClick={onClick} {...rest}>
+      {children}
+    </Sheet.Trigger>
+  )
 }
 
 export function AppDialogTitle({ children, className, type, ...rest }: AppDialogTitleProps) {
@@ -108,6 +137,7 @@ function AppSwipeDialog({
   children,
   open,
   onOpenChange,
+  Trigger: trigger,
   SwipeContentProps: { className: contentClassName, ...contentProps } = {},
   ...rest
 }: AppSwipeDialogProps) {
@@ -121,22 +151,31 @@ function AppSwipeDialog({
     )
 
   return (
-    <Sheet.Root license="commercial" presented={open} onPresentedChange={onOpenChange} {...rest}>
+    <Sheet.Root
+      className="Sheet-root"
+      license="commercial"
+      presented={open}
+      onPresentedChange={onOpenChange}
+      {...rest}
+    >
+      {trigger}
       <Sheet.Portal>
-        <Sheet.View>
-          <Sheet.Backdrop className="dark:bg-muted" />
+        <Sheet.View className="Sheet-view z-50" nativeFocusScrollPrevention={false}>
+          <Sheet.Backdrop className="Sheet-backdrop dark:bg-muted" />
           <Sheet.Content
-            className={cn('bg-background h-fit rounded-t-4xl', contentClassName)}
+            className={cn(
+              'Sheet-content safe-area grid h-auto justify-items-center',
+              contentClassName,
+            )}
             {...contentProps}
           >
-            <div className="flex h-full flex-col">
-              <div className="flex items-center justify-center py-2">
-                <Sheet.Handle className="dark:bg-muted rounded-full" />
-              </div>
+            <Sheet.BleedingBackground className="Sheet-bleedingBackground bg-background rounded-t-4xl" />
+            <Sheet.Handle className="Sheet-handle dark:bg-muted mt-2 rounded-full" />
 
-              <div data-component="content" className="flex flex-1 flex-col gap-4 p-4">
+            <div className="mt-12 flex h-fit max-h-dvh flex-col overflow-auto">
+              <div data-component="content" className="flex flex-col gap-4 p-4">
                 {(titleElement !== undefined || descriptionElement !== undefined) && (
-                  <div data-component="header" className="mb-auto block flex-1 space-y-3">
+                  <div data-component="header" className="block flex-1 space-y-3">
                     {titleElement}
                     {descriptionElement}
                   </div>
@@ -155,7 +194,8 @@ function AppFloatDialog({
   title,
   description,
   children,
-  footer,
+  Footer: footer,
+  Trigger: trigger,
   FloatContentProps: { className: contentClassName, ...contentProps } = {},
   ...rest
 }: AppFloatDialogProps) {
@@ -169,7 +209,8 @@ function AppFloatDialog({
 
   return (
     <Dialog {...rest}>
-      <DialogContent className={cn('rounded-4xl gap-6', contentClassName)} {...contentProps}>
+      {trigger}
+      <DialogContent className={cn('gap-6 rounded-4xl', contentClassName)} {...contentProps}>
         {(titleElement !== undefined || descriptionElement !== undefined) && (
           <DialogHeader>
             {titleElement}
@@ -183,4 +224,9 @@ function AppFloatDialog({
   )
 }
 
-export { AppDialogRoot as Root, AppDialogTitle as Title, AppDialogDescription as Description }
+export {
+  AppDialogRoot as Root,
+  AppDialogTrigger as Trigger,
+  AppDialogTitle as Title,
+  AppDialogDescription as Description,
+}

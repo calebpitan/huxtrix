@@ -1,16 +1,17 @@
 'use client'
 
-import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export interface ElementSize {
   width: number
   height: number
   stop(): void
+  refresh(): void
 }
 
 export function useElementSize(target?: RefObject<HTMLElement | null>): ElementSize {
   const observer = useRef<ResizeObserver | null>(null)
-  const [size, setSize] = useState<Omit<ElementSize, 'stop'>>({
+  const [size, setSize] = useState<Omit<ElementSize, 'stop' | 'refresh'>>({
     width: 0,
     height: 0,
   })
@@ -43,11 +44,15 @@ export function useElementSize(target?: RefObject<HTMLElement | null>): ElementS
     }
   }, [target, updateSize])
 
-  return {
-    ...size,
-    stop: () => {
-      observer.current?.disconnect()
-      observer.current = null
-    },
-  }
+  return useMemo(() => {
+    return {
+      width: size.width,
+      height: size.height,
+      stop: () => {
+        observer.current?.disconnect()
+        observer.current = null
+      },
+      refresh: () => updateSize(),
+    }
+  }, [size.height, size.width, updateSize])
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-type Breakpoint = 'base' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+export type Breakpoint = 'base' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 
 const breakpoints = {
   base: 0,

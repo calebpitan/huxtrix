@@ -1,6 +1,6 @@
 import { HTMLAttributes, ReactElement } from 'react'
 
-import { AppBarSlot, BottomBar } from '@/compositions/appbar'
+import { AppBarPassthrough, AppBarSlot } from '@/compositions/appbar'
 import { sidebarItems } from '@/compositions/data/sidebar-items'
 import { AppFooter } from '@/compositions/footer/AppFooter'
 import { AppSidebar, AppSidebarProps } from '@/compositions/sidebar/AppSidebar'
@@ -35,16 +35,20 @@ export function PageLayout({ children, className, SidebarProps, ...props }: Page
         )}
       >
         <div className="flex h-full w-full min-w-0 flex-col items-center gap-8 xl:shrink">
+          {/* <main className="grid grid-flow-row h-full gap-8">{children[0]}</main> */}
           <main className="flex h-full w-full flex-col items-center gap-8">{children[0]}</main>
 
-          <BottomBar
-            data-breakpoint-included="lg"
-            breakpoint="lg"
-            strategy="include"
-            className="lg:mb-0"
-          >
-            <AppBarSlot slot="bottombar">{null}</AppBarSlot>
-          </BottomBar>
+          <AppBarPassthrough slot="bottombar">
+            {/* <BreakpointPassthrough breakpoints="lg" strategy="include"> */}
+            <AppBarSlot
+              slot="bottombar-lg"
+              data-breakpoint-included="lg"
+              breakpoint="lg"
+              strategy="include"
+              className="lg:mb-0"
+            />
+            {/* </BreakpointPassthrough> */}
+          </AppBarPassthrough>
 
           <AppFooter data-breakpoint-excluded="xl" breakpoint="xl" strategy="exclude" />
         </div>
