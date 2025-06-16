@@ -46,21 +46,24 @@ const TOOLBAR_COMMANDS = [
       url,
       text: children ? CustomElement.texts(children) : CustomEditor.getSelectedText(editor),
     }
-
+    
     return (
       <LinkPrompt
-        data={data}
-        onConfirm={({ text, url, og }) => {
-          commands.link.execute(editor, { text, url, og })
-          onConfirm()
-        }}
-        {...props}
+      data={data}
+      onConfirm={({ text, url, og }) => {
+        commands.link.execute(editor, { text, url, og })
+        onConfirm()
+      }}
+      {...props}
       />
     )
   }),
+  commands.media,
   commands.divider,
   commands.ul,
   commands.ol,
+  commands.indent,
+  commands.outdent,
 ]
 
 const initialValue: Descendant[] = [{ type: 'paragraph', children: [{ text: '' }] }]

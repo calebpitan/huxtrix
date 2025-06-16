@@ -60,7 +60,7 @@ export function Leaf(props: RenderLeafProps) {
   const { attributes, leaf } = props
 
   if (leaf.bold) children = <strong>{children}</strong>
-  if (leaf.code) children = <code className="bg-muted rounded-md p-0.5 font-mono">{children}</code>
+  if (leaf.code) children = <code className="bg-muted rounded-md p-0.5 font-mono text-sm">{children}</code>
   if (leaf.italic) children = <em>{children}</em>
   if (leaf.strikethrough) children = <s>{children}</s>
   // if (leaf.underline) children = <u>{children}</u>

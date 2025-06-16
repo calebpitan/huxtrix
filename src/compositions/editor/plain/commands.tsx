@@ -1,8 +1,8 @@
 import { Fragment, JSX } from 'react'
 
-import { Bold, Code, Heading1, Heading2, Heading3, Redo, Undo } from 'lucide-react'
-import { Heading4, Heading5, Heading6, Italic, Link, Pilcrow, Strikethrough } from 'lucide-react'
-import { List, ListOrdered } from 'lucide-react'
+import { Bold, Code, Film, Heading1, Heading2, Heading3, Heading4, Heading5 } from 'lucide-react'
+import { Heading6, IndentDecrease, IndentIncrease, Italic, Link } from 'lucide-react'
+import { List, ListOrdered, Pilcrow, Redo, Strikethrough, Undo } from 'lucide-react'
 import { Editor } from 'slate'
 
 import { CustomEditor, CustomElement, El } from './customization'
@@ -15,17 +15,19 @@ type ExecuteOptions<T extends CustomElement['type'] = never> = Partial<El.Props<
 
 type HistoryCommands = typeof historyCommands
 type TypographyCommands = typeof typographyCommands
-type LinkCommands = typeof linkCommands
+type ResourceCommands = typeof resourceCommands
 type ListCommands = typeof listCommands
 type FormatCommands = typeof formattingCommands
+type ModifierCommands = typeof modifierCommands
 type VoidCommands = typeof voidCommands
 
 interface Commands
   extends HistoryCommands,
     TypographyCommands,
-    LinkCommands,
+    ResourceCommands,
     ListCommands,
     FormatCommands,
+    ModifierCommands,
     VoidCommands {
   divider: CommandDivider
   group(name: string, commands: Array<Command>): CommandGroup
@@ -93,7 +95,7 @@ export const historyCommands = {
     flow: 'history',
     void: undefined,
     icon: <Undo />,
-    active: (_editor: CustomEditor) => false,
+    active: (_: CustomEditor) => false,
     disabled: (editor: CustomEditor) => editor.history.undos.length === 0,
     execute: (editor: CustomEditor, _opts?: ExecuteOptions) => editor.undo(),
   },
@@ -103,7 +105,7 @@ export const historyCommands = {
     flow: 'history',
     void: undefined,
     icon: <Redo />,
-    active: (_editor: CustomEditor) => false,
+    active: (_: CustomEditor) => false,
     disabled: (editor: CustomEditor) => editor.history.redos.length === 0,
     execute: (editor: CustomEditor, _opts?: ExecuteOptions) => editor.redo(),
   },
@@ -121,7 +123,7 @@ export const typographyCommands = {
         return el.type === 'paragraph'
       })
     },
-    disabled: (_editor: CustomEditor) => false,
+    disabled: (_: CustomEditor) => false,
     execute(editor: CustomEditor, opts?: ExecuteOptions<'paragraph'>) {
       const block = this.name
       CustomEditor.toggleBlock(editor, block, { ...opts })
@@ -138,7 +140,7 @@ export const typographyCommands = {
         return el.type === 'heading' && el.level === '1'
       })
     },
-    disabled: (_editor: CustomEditor) => false,
+    disabled: (_: CustomEditor) => false,
     execute(editor: CustomEditor, opts?: ExecuteOptions<'heading'>) {
       const block = 'heading'
       CustomEditor.toggleBlock(editor, block, { ...opts, level: '1' })
@@ -155,7 +157,7 @@ export const typographyCommands = {
         return el.type === 'heading' && el.level === '2'
       })
     },
-    disabled: (_editor: CustomEditor) => false,
+    disabled: (_: CustomEditor) => false,
     execute(editor: CustomEditor, opts?: ExecuteOptions<'heading'>) {
       const block = 'heading'
       CustomEditor.toggleBlock(editor, block, { ...opts, level: '2' })
@@ -172,7 +174,7 @@ export const typographyCommands = {
         return el.type === 'heading' && el.level === '3'
       })
     },
-    disabled: (_editor: CustomEditor) => false,
+    disabled: (_: CustomEditor) => false,
     execute(editor: CustomEditor, opts?: ExecuteOptions<'heading'>) {
       const block = 'heading'
       CustomEditor.toggleBlock(editor, block, { ...opts, level: '3' })
@@ -189,7 +191,7 @@ export const typographyCommands = {
         return el.type === 'heading' && el.level === '4'
       })
     },
-    disabled: (_editor: CustomEditor) => false,
+    disabled: (_: CustomEditor) => false,
     execute(editor: CustomEditor, opts?: ExecuteOptions<'heading'>) {
       const block = 'heading'
       CustomEditor.toggleBlock(editor, block, { ...opts, level: '4' })
@@ -206,7 +208,7 @@ export const typographyCommands = {
         return el.type === 'heading' && el.level === '5'
       })
     },
-    disabled: (_editor: CustomEditor) => false,
+    disabled: (_: CustomEditor) => false,
     execute(editor: CustomEditor, opts?: ExecuteOptions<'heading'>) {
       const block = 'heading'
       CustomEditor.toggleBlock(editor, block, { ...opts, level: '5' })
@@ -223,7 +225,7 @@ export const typographyCommands = {
         return el.type === 'heading' && el.level === '6'
       })
     },
-    disabled: (_editor: CustomEditor) => false,
+    disabled: (_: CustomEditor) => false,
     execute(editor: CustomEditor, opts?: ExecuteOptions<'heading'>) {
       const block = 'heading'
       CustomEditor.toggleBlock(editor, block, { ...opts, level: '6' })
@@ -231,7 +233,7 @@ export const typographyCommands = {
   },
 } as const
 
-const linkCommands = {
+const resourceCommands = {
   link: {
     name: 'link',
     label: 'Link',
@@ -243,11 +245,21 @@ const linkCommands = {
         return el.type === 'link'
       })
     },
-    disabled: (_editor: CustomEditor) => false,
+    disabled: (_: CustomEditor) => false,
     execute(editor: CustomEditor, opts: ExecuteOptions<'link'> = {}) {
       const { og = false, text = '', url = '' } = opts
       CustomEditor.insertLink(editor, { og, text, url })
     },
+  },
+  media: {
+    name: 'media',
+    label: 'Media',
+    flow: 'block',
+    void: true,
+    icon: <Film />,
+    active: (_: CustomEditor) => false,
+    disabled: (_: CustomEditor) => false,
+    execute(_: CustomEditor, _opts?: ExecuteOptions) {},
   },
 } as const
 
@@ -301,13 +313,13 @@ const listCommands = {
     flow: 'block',
     void: false,
     icon: <Fragment />,
-    active(_editor: CustomEditor) {
+    active(_: CustomEditor) {
       return false
     },
-    disabled(_editor: CustomEditor) {
+    disabled(_: CustomEditor) {
       return false
     },
-    execute(_editor: CustomEditor, _opts?: ExecuteOptions<'list-item'>) {},
+    execute(_: CustomEditor, _opts?: ExecuteOptions<'list-item'>) {},
   },
 } as const
 
@@ -364,7 +376,7 @@ export const formattingCommands = {
     void: false,
     icon: <Code />,
     active: (editor: CustomEditor) => CustomEditor.hasMark(editor, 'code'),
-    disabled: (_editor: CustomEditor) => false,
+    disabled: (_: CustomEditor) => false,
     execute(editor: CustomEditor, _opts?: ExecuteOptions) {
       const mark = this.name
       const incompatibleMarks = ['bold', 'italic', 'strikethrough'] as const
@@ -379,6 +391,29 @@ export const formattingCommands = {
   },
 } as const
 
+export const modifierCommands = {
+  indent: {
+    name: 'indent',
+    label: 'Indent',
+    flow: 'modifier',
+    void: undefined,
+    icon: <IndentIncrease />,
+    active: (_: CustomEditor) => false,
+    disabled: (_: CustomEditor) => false,
+    execute(_: CustomEditor, _opts?: ExecuteOptions) {},
+  },
+  outdent: {
+    name: 'outdent',
+    label: 'Outdent',
+    flow: 'modifier',
+    void: undefined,
+    icon: <IndentDecrease />,
+    active: (_: CustomEditor) => false,
+    disabled: (_: CustomEditor) => false,
+    execute(_: CustomEditor, _opts?: ExecuteOptions) {},
+  },
+}
+
 export const voidCommands = {
   break: {
     name: 'line-break',
@@ -386,9 +421,9 @@ export const voidCommands = {
     flow: 'inline',
     void: true,
     icon: <Fragment />,
-    active: (_editor: CustomEditor) => false,
-    disabled: (_editor: CustomEditor) => false,
-    execute(_editor: CustomEditor, _opts?: ExecuteOptions) {},
+    active: (_: CustomEditor) => false,
+    disabled: (_: CustomEditor) => false,
+    execute(_: CustomEditor, _opts?: ExecuteOptions) {},
   },
 }
 
@@ -397,8 +432,9 @@ export const commands: Commands = Object.assign(
   devCommands,
   historyCommands,
   typographyCommands,
-  linkCommands,
+  resourceCommands,
   listCommands,
   formattingCommands,
+  modifierCommands,
   voidCommands,
 )

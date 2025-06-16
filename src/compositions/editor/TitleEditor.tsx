@@ -20,7 +20,7 @@ export function TitleEditor({
       )}
     >
       <textarea
-        className="placeholder:text-muted-foreground flex field-sizing-content h-[1.1lh] resize-none overflow-visible focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+        className="placeholder:text-muted-foreground flex field-sizing-content h-[calc(100%_+_0.111em)] resize-none overflow-visible focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
         spellCheck="false"
         rows={1}
         defaultValue={defaultValue}
