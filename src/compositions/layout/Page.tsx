@@ -1,5 +1,7 @@
 import { HTMLAttributes, ReactElement } from 'react'
 
+import { cva } from 'class-variance-authority'
+
 import { AppBarPassthrough, AppBarSlot } from '@/compositions/appbar'
 import { sidebarItems } from '@/compositions/data/sidebar-items'
 import { AppFooter } from '@/compositions/footer/AppFooter'
@@ -11,14 +13,24 @@ export interface PageLayoutProps extends HTMLAttributes<HTMLDivElement> {
   children: [ReactElement, ReactElement]
 }
 
+const variants = cva('', {
+  variants: {
+    components: {
+      'parent-half-page': 'flex w-full basis-full flex-col lg:flex-row',
+      'child-half-page':
+        'flex h-full w-full min-w-0 flex-row justify-center px-4 sm:px-8 lg:px-0 lg:py-2 lg:pe-8',
+    },
+  },
+})
+
 export function PageLayout({ children, className, SidebarProps, ...props }: PageLayoutProps) {
   return (
     <div
       data-component="page-layout"
-      className={cn('flex w-full basis-full flex-col gap-8 lg:flex-row', className)}
+      className={cn(variants({ components: 'parent-half-page' }), 'gap-8', className)}
       {...props}
     >
-      <aside className="hidden lg:block lg:w-fit lg:max-w-62.5 lg:shrink-0">
+      <aside className="hidden lg:block lg:w-fit lg:max-w-64 lg:shrink-0">
         <AppSidebar
           className="[&>[data-slot=sidebar-inner]]:border-0"
           items={sidebarItems}
@@ -28,12 +40,7 @@ export function PageLayout({ children, className, SidebarProps, ...props }: Page
         />
       </aside>
 
-      <div
-        className={cn(
-          'flex h-full w-full min-w-0 flex-row justify-center gap-8',
-          'px-4 sm:px-8 lg:px-0 lg:py-2 lg:pe-8',
-        )}
-      >
+      <div className={cn(variants({ components: 'child-half-page' }), 'gap-8')}>
         <div className="flex h-full w-full min-w-0 flex-col items-center gap-8 xl:shrink">
           {/* <main className="grid grid-flow-row h-full gap-8">{children[0]}</main> */}
           <main className="flex h-full w-full flex-col items-center gap-8">{children[0]}</main>
@@ -53,7 +60,7 @@ export function PageLayout({ children, className, SidebarProps, ...props }: Page
           <AppFooter data-breakpoint-excluded="xl" breakpoint="xl" strategy="exclude" />
         </div>
 
-        <aside className="sticky top-0 hidden max-h-screen grow xl:block [&>:first-child]:ms-auto [&>:first-child]:w-62.5">
+        <aside className="sticky top-0 hidden max-h-screen grow xl:block [&>:first-child]:ms-auto [&>:first-child]:w-64">
           {children[1]}
         </aside>
       </div>
