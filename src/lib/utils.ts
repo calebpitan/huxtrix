@@ -6,16 +6,25 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export type TryCatch<R, E> = { trial: () => R; error?: (e: E) => R }
-export function result<R>(r: () => R): R | undefined
-export function result<R, E = Error>(r: () => R, e: (e: E) => R): R
-export function result<R, E = Error>(tc: TryCatch<R, E>): R
-export function result<R, E = Error>(tr: TryCatch<R, E> | (() => R), te?: (e: E) => R) {
+export function sandbox<R>(r: () => R): R | undefined
+export function sandbox<R, E = Error>(r: () => R, e: (e: E) => R): R
+export function sandbox<R, E = Error>(tc: TryCatch<R, E>): R
+export function sandbox<R, E = Error>(tr: TryCatch<R, E> | (() => R), te?: (e: E) => R) {
   const { r, e } = isFn(tr) ? { r: tr, e: te } : { r: tr.trial, e: tr.error }
   try {
     return r()
   } catch (err) {
     return e?.(err as E)
   }
+}
+
+export function option<T, R>(value: T | undefined, map: (v: T) => R): R | undefined {
+  if (value === undefined || value === null) return undefined
+  return map(value)
+}
+
+export function evaluate<R>(expr: () => R): R {
+  return expr()
 }
 
 export const _formatNumber = (num: number): string => {
