@@ -2,7 +2,6 @@ import { NavigationGuardProvider } from 'next-navigation-guard'
 
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppBarPassthrough, AppBarProvider, AppBarSlot } from '@/compositions/appbar'
-import { AppFooter } from '@/compositions/footer/AppFooter'
 import { ThemeProvider } from '@/compositions/providers'
 
 type RootLayoutProps = Readonly<{
@@ -27,16 +26,14 @@ export function RootLayout({ children }: RootLayoutProps) {
 
             <AppBarPassthrough slot="bottombar">
               {/* <BreakpointPassthrough breakpoints="lg" strategy="exclude"> */}
-                <AppBarSlot
-                  slot="bottombar"
-                  data-breakpoint-excluded="lg"
-                  breakpoint="lg"
-                  strategy="exclude"
-                />
+              <AppBarSlot
+                slot="bottombar"
+                data-breakpoint-excluded="lg"
+                breakpoint="lg"
+                strategy="exclude"
+              />
               {/* </BreakpointPassthrough> */}
             </AppBarPassthrough>
-
-            <AppFooter data-breakpoint-included="xl" breakpoint="xl" strategy="include" />
           </div>
         </AppBarProvider>
       </NavigationGuardProvider>

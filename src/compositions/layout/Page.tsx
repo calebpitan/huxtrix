@@ -4,7 +4,6 @@ import { cva } from 'class-variance-authority'
 
 import { AppBarPassthrough, AppBarSlot } from '@/compositions/appbar'
 import { sidebarItems } from '@/compositions/data/sidebar-items'
-import { AppFooter } from '@/compositions/footer/AppFooter'
 import { AppSidebar, AppSidebarProps } from '@/compositions/sidebar/AppSidebar'
 import { cn } from '@/lib/utils'
 
@@ -56,8 +55,6 @@ export function PageLayout({ children, className, SidebarProps, ...props }: Page
             />
             {/* </BreakpointPassthrough> */}
           </AppBarPassthrough>
-
-          <AppFooter data-breakpoint-excluded="xl" breakpoint="xl" strategy="exclude" />
         </div>
 
         <aside className="sticky top-0 hidden max-h-screen grow xl:block [&>:first-child]:ms-auto [&>:first-child]:w-64">
