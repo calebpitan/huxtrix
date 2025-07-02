@@ -13,7 +13,9 @@ import {
 } from '@/components/ui/list-classic-node';
 
 export const ListKit = [
-  ListPlugin,
+  ListPlugin.configure({
+    options: { enableResetOnShiftTab: true },
+  }),
   BulletedListPlugin.configure({
     node: { component: BulletedListElement },
     shortcuts: { toggle: { keys: 'mod+alt+5' } },
