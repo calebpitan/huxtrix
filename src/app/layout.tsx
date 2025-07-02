@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { DM_Sans, Geist_Mono } from 'next/font/google'
 
+import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { RootLayout } from '@/compositions/layout'
 import { cn } from '@/lib/utils'
 
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   viewportFit: 'cover',
-  interactiveWidget: 'resizes-content'
+  interactiveWidget: 'resizes-content',
 }
 
 type RootLayoutProps = Readonly<{ children: React.ReactNode }>
@@ -33,6 +34,7 @@ export default function Root({ children }: RootLayoutProps) {
         )}
       >
         <RootLayout>{children}</RootLayout>
+        <TailwindIndicator />
       </body>
     </html>
   )
