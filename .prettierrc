@@ -20,5 +20,7 @@
   "importOrderSortSpecifiers": true,
   "importOrderGroupNamespaceSpecifiers": true,
   "importOrderParserPlugins": ["typescript", "jsx"],
-  "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"]
+  "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "src/app/global.css",
+  "tailwindFunctions": ["cn", "cva"]
 }
