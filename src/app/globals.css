@@ -1,5 +1,7 @@
 @layer theme, base, components, silk, utilities;
 
+@plugin "tailwind-scrollbar-hide";
+
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/preflight.css' layer(base);
 @import '@silk-hq/components/unlayered-styles' layer(silk);
@@ -46,6 +48,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-brand: var(--brand);
+  --color-highlight: var(--highlight);
 }
 
 :root {
@@ -81,6 +85,8 @@
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
+  --brand: oklch(0.623 0.214 259.815);
+  --highlight: oklch(0.852 0.199 91.936);
 }
 
 .dark {
@@ -115,6 +121,8 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+  --brand: oklch(0.707 0.165 254.624);
+  --highlight: oklch(0.852 0.199 91.936);
 }
 
 @layer base {
@@ -213,4 +221,58 @@
 
 @utility safe-area-b-* {
   padding-bottom: env(safe-area-inset-bottom, --spacing(--value(number)));
+}
+
+[data-editor-root] {
+  code {
+    @apply font-mono;
+  }
+
+  & ol {
+    list-style-type: decimal;
+
+    & > li > ol {
+      list-style-type: lower-alpha;
+
+      & > li > ol {
+        list-style-type: lower-roman;
+      }
+    }
+  }
+
+  & ol > li > ol > li > ol > li > ol {
+    list-style-type: decimal;
+
+    & > li > ol {
+      list-style-type: lower-alpha;
+
+      & > li > ol {
+        list-style-type: lower-roman;
+      }
+    }
+  }
+
+  & ul {
+    list-style-type: disc;
+
+    & > li > ul {
+      list-style-type: circle;
+
+      & > li > ul {
+        list-style-type: square;
+      }
+    }
+  }
+
+  & ul > li > ul > li > ul > li > ul {
+    list-style-type: disc;
+
+    & > li > ul {
+      list-style-type: circle;
+
+      & > li > ul {
+        list-style-type: square;
+      }
+    }
+  }
 }
