@@ -9,6 +9,14 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
       "cache": false
     },
+    "build:watch": {
+      "cache": false,
+      "persistent": true
+    },
+    "brl": {
+      "outputs": [],
+      "cache": false
+    },
     "lint": {
       "dependsOn": ["^lint"]
     },
