@@ -1,5 +1,22 @@
 {
   "name": "@hux/trpc",
-  "private": "true",
-  "packageManager": "yarn@4.6.0"
+  "private": true,
+  "packageManager": "yarn@4.6.0",
+  "scripts": {
+    "brl": "yarn p:brl",
+    "build": "yarn p:build"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.81.5",
+    "@trpc/client": "^11.4.3",
+    "@trpc/server": "^11.4.3",
+    "@trpc/tanstack-react-query": "^11.4.3",
+    "client-only": "^0.0.1",
+    "server-only": "^0.0.1",
+    "superjson": "^2.2.2",
+    "zod": "^3.25.69"
+  },
+  "peerDependencies": {
+    "react": "^19"
+  }
 }
