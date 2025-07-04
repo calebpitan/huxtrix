@@ -1,18 +1,22 @@
-'use client'
+'use client';
 
 import {
   BulletedListPlugin,
   ListItemPlugin,
   ListPlugin,
   NumberedListPlugin,
-} from '@platejs/list-classic/react'
+  TaskListPlugin,
+} from '@platejs/list-classic/react';
 
-import { BulletedListElement, NumberedListElement } from '@/components/ui/list-classic-node'
+import {
+  BulletedListElement,
+  ListItemElement,
+  NumberedListElement,
+  TaskListElement,
+} from '@/components/ui/list-classic-node';
 
 export const ListKit = [
-  ListPlugin.configure({
-    options: { enableResetOnShiftTab: true },
-  }),
+  ListPlugin,
   BulletedListPlugin.configure({
     node: { component: BulletedListElement },
     shortcuts: { toggle: { keys: 'mod+alt+5' } },
@@ -21,5 +25,9 @@ export const ListKit = [
     node: { component: NumberedListElement },
     shortcuts: { toggle: { keys: 'mod+alt+6' } },
   }),
-  ListItemPlugin,
-]
+  TaskListPlugin.configure({
+    node: { component: TaskListElement },
+    shortcuts: { toggle: { keys: 'mod+alt+7' } },
+  }),
+  ListItemPlugin.withComponent(ListItemElement),
+];

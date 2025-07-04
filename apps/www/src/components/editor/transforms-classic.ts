@@ -7,6 +7,7 @@ import { insertCodeBlock, toggleCodeBlock } from '@platejs/code-block';
 import { insertDate } from '@platejs/date';
 import { insertColumnGroup, toggleColumnGroup } from '@platejs/layout';
 import { triggerFloatingLink } from '@platejs/link/react';
+import { toggleList } from '@platejs/list-classic';
 import { insertEquation, insertInlineEquation } from '@platejs/math';
 import {
   insertAudioPlaceholder,
@@ -27,23 +28,10 @@ import {
 
 const ACTION_THREE_COLUMNS = 'action_three_columns';
 
-const insertList = (editor: PlateEditor, type: string) => {
-  editor.tf.insertNodes(
-    editor.api.create.block({
-      indent: 1,
-      listStyleType: type,
-    }),
-    { select: true }
-  );
-};
-
 const insertBlockMap: Record<
   string,
   (editor: PlateEditor, type: string) => void
 > = {
-  [KEYS.listTodo]: insertList,
-  [KEYS.ol]: insertList,
-  [KEYS.ul]: insertList,
   [ACTION_THREE_COLUMNS]: (editor) =>
     insertColumnGroup(editor, { columns: 3, select: true }),
   [KEYS.audio]: (editor) => insertAudioPlaceholder(editor, { select: true }),
@@ -66,6 +54,7 @@ const insertBlockMap: Record<
   [KEYS.toc]: (editor) => insertToc(editor, { select: true }),
   [KEYS.video]: (editor) => insertVideoPlaceholder(editor, { select: true }),
 };
+
 
 const insertInlineMap: Record<
   string,
@@ -104,31 +93,15 @@ export const insertInlineElement = (editor: PlateEditor, type: string) => {
   }
 };
 
-const setList = (
-  editor: PlateEditor,
-  type: string,
-  entry: NodeEntry<TElement>
-) => {
-  editor.tf.setNodes(
-    editor.api.create.block({
-      indent: 1,
-      listStyleType: type,
-    }),
-    {
-      at: entry[1],
-    }
-  );
-};
-
-const setBlockMap: Record<
-  string,
-  (editor: PlateEditor, type: string, entry: NodeEntry<TElement>) => void
-> = {
-  [KEYS.listTodo]: setList,
-  [KEYS.ol]: setList,
-  [KEYS.ul]: setList,
+const setBlockMap: Record<string, (editor: PlateEditor, type: string) => void> = {
   [ACTION_THREE_COLUMNS]: (editor) => toggleColumnGroup(editor, { columns: 3 }),
   [KEYS.codeBlock]: (editor) => toggleCodeBlock(editor),
+  [KEYS.olClassic]: (editor) =>
+    toggleList(editor, { type: editor.getType(KEYS.olClassic) }),
+  [KEYS.taskList]: (editor) =>
+    toggleList(editor, { type: editor.getType(KEYS.taskList) }),
+  [KEYS.ulClassic]: (editor) =>
+    toggleList(editor, { type: editor.getType(KEYS.ulClassic) }),
 };
 
 export const setBlockType = (
@@ -140,11 +113,8 @@ export const setBlockType = (
     const setEntry = (entry: NodeEntry<TElement>) => {
       const [node, path] = entry;
 
-      if (node[KEYS.listType]) {
-        editor.tf.unsetNodes([KEYS.listType, 'indent'], { at: path });
-      }
       if (type in setBlockMap) {
-        return setBlockMap[type](editor, type, entry);
+        return setBlockMap[type](editor, type);
       }
       if (node.type !== type) {
         editor.tf.setNodes({ type }, { at: path });
@@ -168,15 +138,5 @@ export const setBlockType = (
 };
 
 export const getBlockType = (block: TElement) => {
-  if (block[KEYS.listType]) {
-    if (block[KEYS.listType] === KEYS.ol) {
-      return KEYS.ol;
-    } else if (block[KEYS.listType] === KEYS.listTodo) {
-      return KEYS.listTodo;
-    } else {
-      return KEYS.ul;
-    }
-  }
-
   return block.type;
 };
