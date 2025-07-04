@@ -18,6 +18,7 @@ import { LinkKit } from '@/components/editor/plugins/link-kit'
 import { ListKit } from '@/components/editor/plugins/list-classic-kit'
 import { MathKit } from '@/components/editor/plugins/math-kit'
 import { SlashKit } from '@/components/editor/plugins/slash-kit'
+import { SuggestionKit } from '@/components/editor/plugins/suggestion-kit'
 import { EditorContainer } from '@/components/ui/editor'
 import { useAppBarGeometry } from '@/compositions/appbar'
 import { useBreakpoint } from '@/hooks/use-breakpoint'
@@ -46,6 +47,7 @@ export const ArticleEditorKit = [
   ...DndKit,
   ...ExitBreakKit,
   ...SlashKit,
+  ...SuggestionKit,
   TrailingBlockPlugin,
 ]
 
@@ -67,7 +69,7 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
     }
   }, [ctx.state.content])
 
-  const editor = usePlateEditor({
+  const editor: ArticleEditor = usePlateEditor({
     value,
     plugins: ArticleEditorKit,
   })

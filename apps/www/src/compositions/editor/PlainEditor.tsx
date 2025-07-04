@@ -2,25 +2,18 @@
 
 import React from 'react'
 
-import {
-  Bold,
-  Code,
-  Highlighter,
-  Italic,
-  Strikethrough,
-  Subscript,
-  Superscript,
-} from 'lucide-react'
+import { Bold, Code, Highlighter, Italic, Strikethrough } from 'lucide-react'
 
 import { Editor } from '@/components/ui/editor'
 import { FixedToolbar } from '@/components/ui/fixed-toolbar'
 import { RedoToolbarButton, UndoToolbarButton } from '@/components/ui/history-toolbar-button'
-import { InsertToolbarButton } from '@/components/ui/insert-toolbar-button'
+import { InsertToolbarButton } from '@/components/ui/insert-toolbar-classic-button'
 import { LinkToolbarButton } from '@/components/ui/link-toolbar-button'
 import { IndentToolbarButton, ListToolbarButton } from '@/components/ui/list-classic-toolbar-button'
 import { MarkToolbarButton } from '@/components/ui/mark-toolbar-button'
+import { MoreToolbarButton } from '@/components/ui/more-toolbar-button'
 import { Separator } from '@/components/ui/separator'
-import { TurnIntoToolbarButton } from '@/components/ui/turn-into-toolbar-button'
+import { TurnIntoToolbarButton } from '@/components/ui/turn-into-toolbar-classic-button'
 import { cn } from '@/lib/utils'
 
 export interface PlainEditorProps extends React.ComponentProps<typeof Editor> {
@@ -73,12 +66,6 @@ export function PlainEditorToolbar({
       <MarkToolbarButton nodeType="code" tooltip="Code (⌘E)">
         <Code />
       </MarkToolbarButton>
-      <MarkToolbarButton nodeType="subscript" tooltip="Superscript (⌘,)">
-        <Subscript />
-      </MarkToolbarButton>
-      <MarkToolbarButton nodeType="superscript" tooltip="Superscript (⌘.)">
-        <Superscript />
-      </MarkToolbarButton>
       <MarkToolbarButton nodeType="highlight" tooltip="Highlight">
         <Highlighter />
       </MarkToolbarButton>
@@ -91,9 +78,14 @@ export function PlainEditorToolbar({
 
       <ListToolbarButton nodeType="ul" />
       <ListToolbarButton nodeType="ol" />
+      <ListToolbarButton nodeType="taskList" />
 
       <IndentToolbarButton />
       <IndentToolbarButton reverse={true} />
+
+      {separator}
+
+      <MoreToolbarButton />
     </FixedToolbar>
   )
 }
