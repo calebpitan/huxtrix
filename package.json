@@ -18,7 +18,9 @@
     "p:typecheck": "cd $INIT_CWD && tsc -p $INIT_CWD/tsconfig.json",
     "lint": "yarn g:lint",
     "lint:fix": "yarn g:lint:fix",
-    "typecheck": "yarn g:typecheck"
+    "typecheck": "yarn g:typecheck",
+    "ds:generate": "drizzle-kit generate --config=drizzle.config.ts",
+    "ds:migrate": "drizzle-kit migrate --config=drizzle.config.ts"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -29,6 +31,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "barrelsby": "^2.8.1",
+    "drizzle-kit": "^0.31.4",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "prettier": "^3.6.0",
@@ -46,5 +49,8 @@
     "apps/*",
     "packages/*",
     "devtools/*"
-  ]
+  ],
+  "dependencies": {
+    "next-auth": "^5.0.0-beta.29"
+  }
 }
