@@ -1,7 +1,8 @@
 import * as t from 'drizzle-orm/pg-core'
-import { eq, sql } from 'drizzle-orm'
+import { eq, getTableName, sql } from 'drizzle-orm'
 
 import { model } from './base'
+import { UserModel } from './user'
 
 const NAME = 'accounts'
 
@@ -9,8 +10,10 @@ const NAME = 'accounts'
  * @enum {AccountType}
  */
 export const AccountType = {
-  managed: 'managed',
-  sso: 'sso',
+  /** Magic link */
+  email: 'email',
+  /** OAuth */
+  oidc: 'oidc',
 } as const
 
 /**
@@ -23,22 +26,25 @@ export const AccountSSOProvider = {
 export const AccountModel = model(
   NAME,
   {
-    email: t.varchar({ length: 255 }).notNull(),
-    password: t.varchar({ length: 255 }),
-    accessToken: t.varchar({ length: 512 }),
-    ssoProvider: t.varchar({ enum: [AccountSSOProvider.google] }),
-    accountType: t
-      .varchar({ enum: [AccountType.managed, AccountType.sso] })
-      .notNull()
-      .default(AccountType.managed),
+    provider: t.text({ enum: [AccountSSOProvider.google] }).notNull(),
+    providerAccountId: t.text().notNull(),
+    type: t.text({ enum: [AccountType.email, AccountType.oidc] }).notNull(),
+    userId: model.id().notNull(),
+    access_token: t.text(),
+    expires_at: t.integer(),
+    id_token: t.text(),
+    scope: t.text(),
+    session_state: t.text(),
+    refresh_token: t.text(),
+    token_type: t.text(),
   },
   (s) => [
-    // unique index for email in lower
-    t.uniqueIndex(model.uq(NAME, s.email)).on(sql`LOWER(${s.email})`),
-    // check constraint to ensure necessary fields are compatible with account type
-    t.check(
-      model.ck(NAME, 'account_type_compat'),
-      sql`(${eq(s.accountType, AccountType.managed)} AND ${s.password} IS NOT NULL) OR (${eq(s.accountType, AccountType.sso)} AND ${s.ssoProvider} IS NOT NULL)`,
-    ),
+    t
+      .foreignKey({
+        columns: [s.userId],
+        foreignColumns: [UserModel.id],
+        name: model.fk(NAME, getTableName(UserModel), s.userId),
+      })
+      .onDelete('cascade'),
   ],
 )

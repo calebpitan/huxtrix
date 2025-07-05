@@ -2,6 +2,16 @@
   "name": "@hux/datasource",
   "private": true,
   "packageManager": "yarn@4.6.0",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./schema": {
+      "default": "./dist/schema/index.js",
+      "types": "./dist/schema/index.d.ts"
+    }
+  },
   "scripts": {
     "brl": "yarn p:brl",
     "build": "yarn p:build",
@@ -11,7 +21,9 @@
     "typecheck": "yarn p:typecheck"
   },
   "dependencies": {
-    "drizzle-orm": "^0.44.2"
+    "drizzle-orm": "^0.44.2",
+    "postgres": "^3.4.7",
+    "ulid": "^3.0.1"
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.4"
