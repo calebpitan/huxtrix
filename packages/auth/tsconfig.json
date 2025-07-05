@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@hux/tsconfig/base.json",
+  "compilerOptions": {
+    "incremental": true,
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "outDir": "dist"
+  }
+}

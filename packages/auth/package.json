@@ -1,0 +1,23 @@
+{
+  "name": "@hux/auth",
+  "private": true,
+  "packageManager": "yarn@4.6.0",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "brl": "yarn p:brl",
+    "build": "yarn p:build",
+    "build:watch": "yarn p:build:watch",
+    "lint": "yarn p:lint",
+    "lint:fix": "yarn p:lint:fix",
+    "typecheck": "yarn p:typecheck"
+  },
+  "dependencies": {
+    "@auth/drizzle-adapter": "^1.10.0",
+    "next-auth": "^5.0.0-beta.29"
+  }
+}
