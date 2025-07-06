@@ -17,6 +17,9 @@ interface HxAuthResult extends NextAuthResult {
   auth: Auth
 }
 
+type InitAuthEmailOptions = { serverAddress: string }
+type InitAuthOptions = { email: InitAuthEmailOptions }
+
 export type Auth = NextAuthResult['auth']
 
 function createAdapter(db: Database): Adapter {
@@ -39,7 +42,7 @@ function createAdapter(db: Database): Adapter {
  * @param db The `PostgresJsDatabase` instance
  * @returns The initialized authentication object
  */
-export function initAuth(db: Database): HxAuthResult {
+export function initAuth(db: Database, options: InitAuthOptions): HxAuthResult {
   const result = NextAuth({
     adapter: createAdapter(db),
     providers: [
@@ -54,7 +57,7 @@ export function initAuth(db: Database): HxAuthResult {
           }
         },
       }),
-      Resend,
+      Resend({ from: options.email.serverAddress }),
     ],
     debug: true,
   })
