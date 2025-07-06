@@ -18,7 +18,7 @@ interface HxAuthResult extends NextAuthResult {
 }
 
 type InitAuthEmailOptions = { serverAddress: string }
-type InitAuthOptions = { email: InitAuthEmailOptions }
+type InitAuthOptions = { email: InitAuthEmailOptions; debug?: boolean }
 
 export type Auth = NextAuthResult['auth']
 
@@ -59,7 +59,7 @@ export function initAuth(db: Database, options: InitAuthOptions): HxAuthResult {
       }),
       Resend({ from: options.email.serverAddress }),
     ],
-    debug: true,
+    debug: options.debug,
   })
 
   return result
