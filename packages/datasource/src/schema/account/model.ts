@@ -1,10 +1,12 @@
 import * as t from 'drizzle-orm/pg-core'
 import { eq, getTableName, sql } from 'drizzle-orm'
 
-import { model } from './base'
-import { UserModel } from './user'
+import { model } from '../base'
+import { UserModel } from '../user'
 
 const NAME = 'accounts'
+
+export type AccountModel = typeof AccountModel.$inferSelect
 
 /**
  * @enum {AccountType}
@@ -12,7 +14,7 @@ const NAME = 'accounts'
 export const AccountType = {
   /** Magic link */
   email: 'email',
-  /** OAuth */
+  /** OAuth/OpenID Connect */
   oidc: 'oidc',
 } as const
 
