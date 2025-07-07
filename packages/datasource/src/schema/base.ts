@@ -63,6 +63,7 @@ const namingConventions = {
    */
   ix: <T extends string, C extends PgColumn>(tb: T, ...cols: C[]) =>
     `ix_${_suffix(tb, ...cols)}` as const,
+
   /**
    * Generate a conventional name for a database unique index
    * @param tb The table that has the column(s) to add a unique constraint on
@@ -71,6 +72,7 @@ const namingConventions = {
    */
   uq: <T extends string, C extends PgColumn>(tb: T, ...cols: C[]) =>
     `uq_${_suffix(tb, ...cols)}` as const,
+
   /**
    * Generate a conventional name for a database check constraint
    * @param tb The table that would have the check constraint
@@ -78,6 +80,7 @@ const namingConventions = {
    * @returns A string that describes a name for the check constraint
    */
   ck: <T extends string, N extends string>(tb: T, name: N) => `ck_${tb}_${name}` as const,
+
   /**
    * Generate a conventional name for a database foreign key constraint
    * @param ltb The local table that has a reference to another table
@@ -87,6 +90,7 @@ const namingConventions = {
    */
   fk: <T1 extends string, T2 extends string, C extends PgColumn>(ltb: T1, ftb: T2, ...cols: C[]) =>
     `fk_${_suffix2(ltb, ftb, ...cols)}` as const,
+
   /**
    * Generate a conventional name for a database primary key constraint
    * @param tb The table that has the primary key constraint
@@ -99,7 +103,7 @@ const ulid = monotonicFactory()
 
 export const IDModel = {
   /**
-   * ULID exposable identifier
+   * ULID: exposable identifier
    */
   id: varchar({ length: 26 })
     .primaryKey()
@@ -111,7 +115,7 @@ export const TimestampModel = {
   updatedAt: timestamp({ withTimezone: true })
     .defaultNow()
     .notNull()
-    .$onUpdate(() => sql`NOW();`),
+    .$onUpdate(() => new Date()),
   deletedAt: timestamp({ withTimezone: true }),
 }
 
