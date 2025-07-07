@@ -32,7 +32,7 @@ type TransformModelKey<ModelKey extends string> = ModelKey extends `${infer S}${
  * Transform the relations keys, removing "Relations" from them and converting them from
  * PascalCase to camelCase
  */
-type TransformRelKey<RelKey extends string> = RelKey extends `${infer S}${infer Rest}Relations`
+type TransformRelKey<RelKey extends string> = RelKey extends `${infer S}${infer Rest}`
   ? `${Lowercase<S>}${Rest}`
   : never
 
@@ -50,6 +50,8 @@ type TransformSchema<T extends Record<string, unknown>, K extends keyof T = keyo
   [P in K as TransformModelKey<Exclude<P, number | symbol>>]: T[P]
 }
 
-export type Schema = TransformSchema<Pick<SchemaModule, ModelKeys<SchemaModuleMembers>>>
-export type Rel = TransformRel<Pick<SchemaModule, RelationKeys<SchemaModuleMembers>>>
+export type Models = TransformSchema<Pick<SchemaModule, ModelKeys<SchemaModuleMembers>>>
+export type Relations = TransformRel<Pick<SchemaModule, RelationKeys<SchemaModuleMembers>>>
+
+export type Schema = Models & Relations
 export type Database = PostgresJsDatabase<Schema>
