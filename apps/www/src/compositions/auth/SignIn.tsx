@@ -1,100 +1,82 @@
-import { useId } from 'react'
+import { Fragment } from 'react'
 
-import { InfoIcon } from 'lucide-react'
+import { AuthErrorCodes } from '@hux/auth'
+
+import { AlertCircleIcon } from 'lucide-react'
 import Link from 'next/link'
 
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import { signIn } from '@/lib/auth'
-import Google from '@/public/icons/google.svg'
+import { evaluate } from '@/lib/utils'
 
-export function SignIn() {
-  const magicLinkEmailInputId = useId()
+import * as Surface from './surface'
+import { ContinueWithEmail, ContinueWithGoogle } from './choices'
+import { LegalNotice } from './legal-notice'
+
+export interface SignInProps {
+  redirectTo?: string
+  error?: { code: string; identifier?: string }
+}
+
+export function SignIn({ error, redirectTo = '/' }: SignInProps) {
+  const formatting = evaluate(() => {
+    if (!error?.code) {
+      return undefined
+    }
+    switch (error.code) {
+      case AuthErrorCodes.acoountNotFound:
+        return {
+          title: 'Account Not Found',
+          message: error.identifier ? (
+            <Fragment>
+              User with email address <strong>{error.identifier}</strong> does not exist
+            </Fragment>
+          ) : (
+            'User account not found'
+          ),
+        }
+      default:
+        return {
+          title: 'Unknown Error',
+          message: 'An unknown error has occured, please try signing in at another time',
+        }
+    }
+  })
+
   return (
-    <div className="bg-muted dark:bg-background bg-radial-[at_80%_75%] mask-radial-at-bottom-left flex w-full flex-col items-center justify-items-center gap-8 from-fuchsia-300 via-indigo-300 to-orange-200 py-12 dark:[background-image:none]">
-      <div className="bg-background/40 dark:bg-muted/40 lg:rounded-4xl w-lg border-border max-w-full space-y-8 border p-4 sm:p-8 lg:p-12">
+    <Surface.Backdrop>
+      {formatting && (
+        <Alert variant="destructive" className="w-lg bg-background/40 dark:bg-muted/40 max-w-full">
+          <AlertCircleIcon />
+          <AlertTitle>{formatting.title}</AlertTitle>
+          <AlertDescription>
+            <p>{formatting.message}</p>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <Surface.Surface type="top">
         <div className="space-y-4">
-          <div className="text-center text-2xl font-bold md:text-3xl">Sign In</div>
-          <div className="text-accent-foreground text-justify text-sm">
-            <p>
-              By continuing, you agree to our{' '}
-              <Link
-                href="/tos"
-                className="font-medium underline underline-offset-4 transition-[text-underline-offset] duration-300 hover:underline-offset-2"
-              >
-                User Agreement
-              </Link>{' '}
-              and acknowledge that you understand the{' '}
-              <Link
-                href="/privacy"
-                className="font-medium underline underline-offset-4 transition-[text-underline-offset] duration-300 hover:underline-offset-2"
-              >
-                Privacy Policy
-              </Link>
-              .
-            </p>
-          </div>
+          <div className="text-center text-2xl font-bold tracking-tighter md:text-3xl">Sign In</div>
+          <LegalNotice />
         </div>
 
-        <div className="flex flex-col justify-items-center">
-          <form
-            action={async () => {
-              'use server'
-              await signIn('google')
-            }}
-          >
-            <Button size="lg" className="w-full rounded-full" type="submit">
-              <Google />
-              <span className="ms-4">Continue with Google</span>
-            </Button>
-          </form>
-        </div>
+        <ContinueWithGoogle redirectTo={redirectTo} />
 
         <Separator orientation="horizontal" />
 
-        <div>
-          {/* <div className="text-foreground/70 pb-4 text-sm">
-            <div className="mb-2 text-center font-bold">Get a magic link</div>
-          </div> */}
+        <ContinueWithEmail redirectTo={redirectTo} />
+      </Surface.Surface>
 
-          <form
-            action={async (formData) => {
-              'use server'
-              await signIn('resend', formData)
-            }}
-          >
-            <div className="space-y-2">
-              <Label htmlFor={magicLinkEmailInputId}>Email</Label>
-              <Input
-                id={magicLinkEmailInputId}
-                name="email"
-                className="placeholder:text-foreground/50 h-12 rounded-2xl"
-                type="email"
-                placeholder="neil.armstrong@example.com"
-              />
-              <div className="text-foreground/70 inline-flex items-center gap-2 text-xs">
-                <InfoIcon width="1em" height="1em" />
-                <span>
-                  You will get a short-lived, one-time link in your email that you can use to login.
-                </span>
-              </div>
-            </div>
-
-            <Button className="mt-8 h-12 w-full rounded-2xl font-bold" type="submit">
-              <span>Continue</span>
-            </Button>
-          </form>
-        </div>
-      </div>
-
-      <div className="bg-background/40 dark:bg-muted/40 w-lg border-border max-w-full space-y-8 border p-2 ps-4 lg:rounded-full">
+      <Surface.Surface type="extension">
         <div className="flex items-center justify-between">
-          <div className="text-sm font-semibold text-foreground/70">Dont&apos;t have an account?</div>
-          <Button size="sm" className='rounded-full bg-fuchsia-500/30 dark:bg-fuchsia-300/70 dark:hover:bg-fuchsia-300/60 hover:bg-fuchsia-500/20 text-black'>Create Account</Button>
+          <div className="text-foreground/70 text-sm font-medium">Dont&apos;t have an account?</div>
+          <Button size="sm" variant="link" asChild>
+            <Link href="/signup">Create Account</Link>
+          </Button>
         </div>
-      </div>
-    </div>
+      </Surface.Surface>
+    </Surface.Backdrop>
   )
 }
