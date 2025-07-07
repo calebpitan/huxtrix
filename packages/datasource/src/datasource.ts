@@ -9,10 +9,10 @@ export function datasource(url: string, config: Pick<DrizzleConfig, 'logger'> = 
     casing: 'snake_case',
     ...config,
     schema: {
-      AccountModel,
-      SessionModel,
-      UserModel,
-      VerificationTokenModel,
+      account: AccountModel,
+      session: SessionModel,
+      user: UserModel,
+      verificationToken: VerificationTokenModel,
     },
   })
 }
