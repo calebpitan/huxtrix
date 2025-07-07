@@ -1,12 +1,12 @@
 import * as t from 'drizzle-orm/pg-core'
-import { getTableName } from 'drizzle-orm'
+import { InferSelectModel, getTableName } from 'drizzle-orm'
 
 import { TimestampModel, model } from '../base'
 import { UserModel } from '../user/model'
 
 const NAME = 'sessions'
 
-export type SessionModel = typeof SessionModel.$inferSelect
+export type SessionModel = InferSelectModel<typeof SessionModel>
 
 /**
  * `sessionToken` is primary key and session model therefore doesn't have

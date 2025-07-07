@@ -1,12 +1,12 @@
 import * as t from 'drizzle-orm/pg-core'
-import { eq, getTableName, sql } from 'drizzle-orm'
+import { eq, getTableName, InferSelectModel, sql } from 'drizzle-orm'
 
 import { model } from '../base'
 import { UserModel } from '../user'
 
 const NAME = 'accounts'
 
-export type AccountModel = typeof AccountModel.$inferSelect
+export type AccountModel = InferSelectModel<typeof AccountModel>
 
 /**
  * @enum {AccountType}
