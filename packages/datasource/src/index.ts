@@ -3,5 +3,8 @@
  */
 
 export * from './datasource'
+export * from './errors'
 export * from './type'
+export * from './entities/index'
+export * from './repositories/index'
 export * from './schema/index'
