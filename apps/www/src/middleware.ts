@@ -1,7 +1,8 @@
-import { NextRequest } from 'next/server'
-import { NextResponse } from 'next/server'
+import { MiddlewareConfig, NextMiddleware, NextRequest, NextResponse } from 'next/server'
 
-export const config = {
+// import { auth } from '@/lib/auth'
+
+export const config: MiddlewareConfig = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
@@ -14,14 +15,23 @@ export const config = {
   ],
 }
 
-export function middleware(request: NextRequest) {
+const AUTH_PATHS = new Set(['/signin', '/signup'])
+
+export const middleware: NextMiddleware = (request: NextRequest) => {
   const headers = new Headers(request.headers)
   headers.set('x-pathname', request.nextUrl.pathname)
   headers.set('x-url', request.nextUrl.toString())
 
-  return NextResponse.next({
+  const response = NextResponse.next({
     request: {
       headers,
     },
   })
+
+  // check if the page is a signin or signup page and include the correct auth intent in cookies
+  if (AUTH_PATHS.has(request.nextUrl.pathname)) {
+    response.cookies.set('auth.intent', request.nextUrl.pathname.replace(/^\//, ''))
+  }
+
+  return response
 }
