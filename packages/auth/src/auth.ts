@@ -94,7 +94,7 @@ export function initAuth(session: Database, options: InitAuthOptions): HxAuthRes
           return `${origin}${pathname}?${query.toString()}`
         }
 
-        const [{ exists }] = await session.execute<Record<'exists', boolean>>(sql`
+        const result = await session.execute<Record<'exists', boolean>>(sql`
           SELECT EXISTS (
             SELECT 1 
               FROM ${UserModel}
@@ -103,7 +103,7 @@ export function initAuth(session: Database, options: InitAuthOptions): HxAuthRes
           )
         `)
 
-        if (!exists) {
+        if (!result.at(0)!.exists) {
           const query = new URLSearchParams({
             error: AuthErrorCodes.acoountNotFound,
             identifier: email,
