@@ -14,4 +14,8 @@ run_barrelsby() {
     fi
 }
 
-run_barrelsby "$INIT_CWD/src" -D -l all -q -S
+run_barrelsby "$INIT_CWD/src" -D -l all -q -S -e '(^.*\/react\/.*$)'
+
+if [ -d "$INIT_CWD/src/react" ]; then
+    run_barrelsby "$INIT_CWD/src/react" -D -l all -q -S
+fi
