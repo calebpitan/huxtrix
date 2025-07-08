@@ -1,6 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalEnv": ["NODE_ENV", "DATABASE_URL", "SERVER_EMAIL_ADDRESS"],
+  "globalEnv": ["NODE_ENV", "DATABASE_URL", "SERVER_EMAIL_ADDRESS", "BASE_URL"],
   "ui": "stream",
   "tasks": {
     "build": {
