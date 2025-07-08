@@ -3,7 +3,7 @@ import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapte
 type Transform<T, R> = (v: T) => R
 const defaultMap = <T, R>(v: T) => v as unknown as R
 
-function getSeverOrigin<R = string>(
+function getServerOrigin<R = string>(
   h: ReadonlyHeaders,
   map: Transform<string, R> = defaultMap,
 ): R | null {
@@ -28,4 +28,4 @@ function getServerUrl<R = string>(
   return value ? map(value) : null
 }
 
-export { getSeverOrigin, getServerUrl }
+export { getServerOrigin, getServerUrl }
