@@ -3,15 +3,15 @@ import { Fragment } from 'react'
 import { AuthErrorCodes } from '@hux/auth'
 
 import { AlertCircleIcon } from 'lucide-react'
-import Link from 'next/link'
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { evaluate } from '@/lib/utils'
 
 import * as Surface from './surface'
-import { ContinueWithEmail, ContinueWithGoogle } from './choices'
+import { Alternate } from './alternate'
+import { ContinueWithEmail } from './choices-email'
+import { ContinueWithGoogle } from './choices-google'
 import { LegalNotice } from './legal-notice'
 
 export interface SignInProps {
@@ -66,16 +66,14 @@ export function SignIn({ error, redirectTo = '/' }: SignInProps) {
 
         <Separator orientation="horizontal" />
 
-        <ContinueWithEmail redirectTo={redirectTo} />
+        <ContinueWithEmail
+          message="You will get a one-time link in your email that you can use to login"
+          redirectTo={redirectTo}
+        />
       </Surface.Surface>
 
       <Surface.Surface type="extension">
-        <div className="flex items-center justify-between">
-          <div className="text-foreground/70 text-sm font-medium">Dont&apos;t have an account?</div>
-          <Button size="sm" variant="link" asChild>
-            <Link href="/signup">Create Account</Link>
-          </Button>
-        </div>
+        <Alternate cta="Create account" message="Dont't have an account?" href="/signup" />
       </Surface.Surface>
     </Surface.Backdrop>
   )

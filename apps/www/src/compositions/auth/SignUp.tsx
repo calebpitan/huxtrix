@@ -3,15 +3,15 @@ import { Fragment } from 'react'
 import { AuthErrorCodes } from '@hux/auth'
 
 import { AlertCircleIcon } from 'lucide-react'
-import Link from 'next/link'
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { evaluate } from '@/lib/utils'
 
 import * as Surface from './surface'
-import { ContinueWithEmail, ContinueWithGoogle } from './choices'
+import { Alternate } from './alternate'
+import { ContinueWithEmail } from './choices-email'
+import { ContinueWithGoogle } from './choices-google'
 import { LegalNotice } from './legal-notice'
 
 export interface SignUpProps {
@@ -69,21 +69,14 @@ export function SignUp({ error, redirectTo = '/' }: SignUpProps) {
 
         <Separator orientation="horizontal" />
 
-        <ContinueWithEmail redirectTo={redirectTo} />
+        <ContinueWithEmail
+          message="You will get a one-time link in your email to continue from"
+          redirectTo={redirectTo}
+        />
       </Surface.Surface>
 
       <Surface.Surface type="extension">
-        <div className="flex items-center justify-between">
-          <div className="text-foreground/70 text-sm font-medium">Already have an account?</div>
-          <Button
-            size="sm"
-            variant="link"
-            asChild
-            className="rounded-full bg-fuchsia-500/30 text-black hover:bg-fuchsia-500/20 dark:bg-fuchsia-300/70 dark:hover:bg-fuchsia-300/60"
-          >
-            <Link href="/signin">Sign into your account</Link>
-          </Button>
-        </div>
+        <Alternate cta="Sign into your account" message="Already have an account?" href="/signin" />
       </Surface.Surface>
     </Surface.Backdrop>
   )
