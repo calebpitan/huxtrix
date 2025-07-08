@@ -3,6 +3,7 @@
  */
 
 export * from './datasource'
+export * from './drizzle'
 export * from './errors'
 export * from './type'
 export * from './entities/index'
