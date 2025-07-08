@@ -1936,8 +1936,10 @@ __metadata:
   dependencies:
     drizzle-kit: "npm:^0.31.4"
     drizzle-orm: "npm:^0.44.2"
+    neverthrow: "npm:^8.2.0"
     postgres: "npm:^3.4.7"
     ulid: "npm:^3.0.1"
+    zod: "npm:^3.25.75"
   languageName: unknown
   linkType: soft
 
@@ -3635,6 +3637,13 @@ __metadata:
   version: 4.0.2
   resolution: "@react-dnd/shallowequal@npm:4.0.2"
   checksum: 10c0/9a352fd176752e5d9c2797d598aca034b7829111ae0c992d80f40d5f068fcd6a039b1841c741dfa1ab67a36a00664310aec4f0ce216e4112f80875c9fe6fd8dc
+  languageName: node
+  linkType: hard
+
+"@rollup/rollup-linux-x64-gnu@npm:^4.24.0":
+  version: 4.44.2
+  resolution: "@rollup/rollup-linux-x64-gnu@npm:4.44.2"
+  conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
@@ -8846,6 +8855,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"neverthrow@npm:^8.2.0":
+  version: 8.2.0
+  resolution: "neverthrow@npm:8.2.0"
+  dependencies:
+    "@rollup/rollup-linux-x64-gnu": "npm:^4.24.0"
+  dependenciesMeta:
+    "@rollup/rollup-linux-x64-gnu":
+      optional: true
+  checksum: 10c0/7058a31bcc4b608021dbc217287105c133480265eca742ec11b0211ff81bdf1bb16098687bf16b20d0212578ccaf47f7df8733cea10f10c315bd4538b4cc1f04
+  languageName: node
+  linkType: hard
+
 "next-auth@npm:^5.0.0-beta.29":
   version: 5.0.0-beta.29
   resolution: "next-auth@npm:5.0.0-beta.29"
@@ -11537,6 +11558,13 @@ __metadata:
   version: 3.25.69
   resolution: "zod@npm:3.25.69"
   checksum: 10c0/05381edd0485ddebbb0d35f9193747e186dd87a58fc4747f8d12c769a4eb0acc66403af153f478dc6f424d0778cf7c9b436bf304b0939cc1ffe225210c0c6d08
+  languageName: node
+  linkType: hard
+
+"zod@npm:^3.25.75":
+  version: 3.25.75
+  resolution: "zod@npm:3.25.75"
+  checksum: 10c0/e11c83dcd1437401c1edf4f0448bd13b9133e83196385d0ee5407662bef6c08099cb511b5e65f11f2feba244b6709bcd34077c9450c9f3064f75df51b362b5f2
   languageName: node
   linkType: hard
 
