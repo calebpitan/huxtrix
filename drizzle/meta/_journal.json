@@ -15,6 +15,13 @@
       "when": 1751739785533,
       "tag": "0001_vengeful_white_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1751907289162,
+      "tag": "0002_soft_dark_beast",
+      "breakpoints": true
     }
   ]
 }
