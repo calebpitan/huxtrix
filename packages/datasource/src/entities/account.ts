@@ -1,9 +1,19 @@
 import z from 'zod'
 
-import { AccountModel, AccountSSOProvider, AccountType } from '../schema'
+import { AccountDict, AccountModel, AccountSSOProvider, AccountType } from '../schema/account/model'
+import { DeepReadonly, ForUpdate } from '../type'
 import { BaseEntity, ID } from './base'
+import { UserEntity, UserEntityMapper } from './user'
 
-export type AccountEntity = z.infer<typeof AccountEntity>
+export type BaseAccountEntity = DeepReadonly<z.infer<typeof BaseAccountEntity>>
+
+export interface AccountEntity extends BaseAccountEntity {
+  readonly user?: UserEntity
+}
+
+export type PartialUpdate<T extends Record<string, any>> = Partial<
+  Omit<T, 'id' | Exclude<keyof AccountEntity, keyof BaseAccountEntity>>
+>
 
 /**
  * Value object for {@link AccountEntity} `provider`
@@ -22,18 +32,24 @@ export const AccountTokensVObject = z.object({
   refresh: z.string().nullable(),
   type: z.string().nullable(),
   scope: z.string().nullable(),
-  expiry: z.number().int().nullable(),
+  expiry: z.int().nullable(),
   sessionState: z.string().nullable(),
 })
 
-export const AccountEntity = BaseEntity.merge(
-  z.object({
-    provider: AccountProviderVObject,
-    type: z.enum([AccountType.email, AccountType.oidc]),
-    userId: ID,
-    tokens: AccountTokensVObject,
-  }),
-)
+export const BaseAccountEntity = z.object({
+  ...BaseEntity.shape,
+  provider: AccountProviderVObject,
+  tokens: AccountTokensVObject,
+  type: z.enum([AccountType.email, AccountType.oidc]),
+  userId: ID,
+})
+
+export const AccountEntity = z.object({
+  ...BaseAccountEntity.shape,
+  get user(): z.ZodOptional<typeof UserEntity> {
+    return z.optional(UserEntity)
+  },
+})
 
 export const AccountEntityMapper = {
   /**
@@ -51,9 +67,9 @@ export const AccountEntityMapper = {
    * @param model The model to map from, into a corresponding entity
    * @returns The mapped entity
    */
-  from(model: AccountModel): AccountEntity {
+  from(model: AccountDict | AccountModel): AccountEntity {
     return AccountEntity.parse(
-      this.struct({
+      AccountEntityMapper.struct({
         id: model.id,
         createdAt: model.createdAt,
         deletedAt: model.deletedAt,
@@ -73,6 +89,7 @@ export const AccountEntityMapper = {
         type: model.type,
         updatedAt: model.updatedAt,
         userId: model.userId,
+        user: model.user ? UserEntityMapper.from(model.user) : undefined,
       }),
     )
   },
@@ -83,7 +100,7 @@ export const AccountEntityMapper = {
    * @returns The mapped model
    */
   into(entity: AccountEntity): AccountModel {
-    return {
+    return new AccountModel({
       access_token: entity.tokens.access,
       createdAt: entity.createdAt,
       deletedAt: entity.deletedAt,
@@ -98,7 +115,32 @@ export const AccountEntityMapper = {
       token_type: entity.tokens.type,
       type: entity.type,
       updatedAt: entity.updatedAt,
+      user: entity.user && UserEntityMapper.into(entity.user),
+      userId: entity.userId,
+    })
+  },
+
+  /**
+   * Map an entity into its corresponding model
+   * @param entity The entity to map into a corresposing model
+   * @returns The mapped model
+   */
+  pinto(entity: ForUpdate<'account', AccountEntity>): ForUpdate<'account', AccountModel> {
+    const model = {
+      access_token: entity.tokens?.access,
+      deletedAt: entity.deletedAt,
+      expires_at: entity.tokens?.expiry,
+      id_token: entity.tokens?.openid,
+      provider: entity.provider?.name,
+      providerAccountId: entity.provider?.accountId,
+      refresh_token: entity.tokens?.refresh,
+      scope: entity.tokens?.scope,
+      session_state: entity.tokens?.sessionState,
+      token_type: entity.tokens?.type,
+      type: entity.type,
       userId: entity.userId,
     }
+
+    return Object.fromEntries(Object.entries(model).filter(([, v]) => typeof v !== 'undefined'))
   },
 }
