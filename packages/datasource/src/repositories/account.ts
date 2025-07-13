@@ -1,55 +1,31 @@
-import { eq } from 'drizzle-orm'
-import { Result, err, ok } from 'neverthrow'
-
 import { AccountEntity, AccountEntityMapper } from '../entities/account'
-import { NoResultFoundError } from '../errors'
-import { AccountModel } from '../schema/account/model'
+import { AccountDict, AccountModel } from '../schema/account/model'
 import { UserModel } from '../schema/user/model'
-import { Database } from '../type'
+import { DatabaseSession, LoadOptions } from '../type'
+import { FindAllOptions, Mapper, RepositoryFactory } from './base'
 
-export class AccountRepository<S extends Database> {
-  constructor(private readonly session: S) {}
+const KEY = 'account'
+const LOAD_OPTIONS = { user: true } as const satisfies LoadOptions<'account'>
 
-  async findByEmail(email: string): Promise<AccountEntity[]> {
-    const result = await this.session
-      .select({ account: AccountModel })
-      .from(AccountModel)
-      .innerJoin(UserModel, eq(AccountModel.userId, UserModel.id))
-      .where(eq(UserModel.email, email))
-
-    const accounts = result.map(({ account }) => AccountEntityMapper.from(account))
-
-    return accounts
+export class AccountRepository<S extends DatabaseSession> extends RepositoryFactory(
+  KEY,
+  AccountModel.table,
+  LOAD_OPTIONS,
+)<S, AccountEntity, Mapper<AccountDict, AccountEntity>> {
+  constructor(public readonly session: S) {
+    super(session, AccountEntityMapper)
   }
 
-  async find(pk: string): Promise<AccountEntity | undefined> {
-    const model = await this.session.query.account.findFirst({
-      with: { user: true },
-      where(fields, op) {
-        return op.eq(fields.id, pk)
+  async findByEmail(email: string): Promise<AccountEntity[]> {
+    const result = await this.session.query.account.findMany({
+      with: LOAD_OPTIONS,
+      where(_fields, op) {
+        return op.eq(UserModel.table.email, email)
       },
     })
 
-    if (!model) {
-      return undefined
-    }
+    const accounts = result.map((account) => AccountEntityMapper.from(AccountModel.new(account)))
 
-    return AccountEntityMapper.from(model)
-  }
-
-  async one(pk: string): Promise<Result<AccountEntity, NoResultFoundError>> {
-    const account = await this.find(pk)
-
-    if (!account) {
-      return err(new NoResultFoundError())
-    }
-
-    return ok(account)
-  }
-
-  async findall(offset?: number, limit?: number): Promise<AccountEntity[]> {
-    const accounts = await this.session.query.account.findMany({ offset, limit })
-
-    return accounts.map(AccountEntityMapper.from)
+    return accounts
   }
 }
