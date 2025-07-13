@@ -1,6 +1,11 @@
-import { PostgresJsDatabase, drizzle } from 'drizzle-orm/postgres-js'
+import { DBQueryConfig, ExtractTablesWithRelations } from 'drizzle-orm'
+import { PgTable, PgTableWithColumns } from 'drizzle-orm/pg-core'
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 
 import * as schema from './schema'
+
+export type Constructor<T, P extends Array<any> = []> = new (...args: P) => T
+
 
 type SchemaModule = typeof schema
 type SchemaModuleMembers = keyof SchemaModule
@@ -47,7 +52,7 @@ type TransformRel<T extends Record<string, unknown>, K extends keyof T = keyof T
  * Applies `TransformModelKey<K>` on the keys of the generic schema `T` given.
  */
 type TransformSchema<T extends Record<string, unknown>, K extends keyof T = keyof T> = {
-  [P in K as TransformModelKey<Exclude<P, number | symbol>>]: T[P]
+  [P in K as TransformModelKey<Exclude<P, number | symbol>>]: T[P] extends Record<'table', PgTable> ? T[P]['table'] : never
 }
 
 export type Models = TransformSchema<Pick<SchemaModule, ModelKeys<SchemaModuleMembers>>>
@@ -55,3 +60,29 @@ export type Relations = TransformRel<Pick<SchemaModule, RelationKeys<SchemaModul
 
 export type Schema = Models & Relations
 export type Database = PostgresJsDatabase<Schema>
+export type DatabaseSession = Parameters<Parameters<Database['transaction']>[0]>[0]
+
+export type DeepReadonly<T> = T extends (...args: any[]) => any // Functions are left as-is
+  ? T
+  : T extends Array<infer U> // Arrays are mapped recursively
+    ? ReadonlyArray<DeepReadonly<U>>
+    : T extends object // Objects are mapped recursively
+      ? T extends Date
+        ? T
+        : { readonly [K in keyof T]: DeepReadonly<T[K]> }
+      : T // Primitives remain unchanged
+
+export type GetTableConfig<T> = T extends PgTable<infer C> ? C : never
+export type GetQueryConfig<K extends keyof Models> = DBQueryConfig<
+  'one' | 'many',
+  true,
+  ExtractTablesWithRelations<Schema>,
+  ExtractTablesWithRelations<Schema>[K]
+>
+export type LoadOptions<K extends keyof Models> = NonNullable<GetQueryConfig<K>['with']>
+
+export type ForUpdate<K extends keyof Models, T extends Record<string, any>> = Partial<
+  Omit<T, 'id' | 'createdAt' | 'updatedAt' | keyof LoadOptions<K>>
+>
+
+export type TCols<T> = T extends PgTableWithColumns<infer C> ? C['columns'] : never

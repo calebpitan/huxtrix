@@ -10,13 +10,13 @@ export function datasource(url: string, config: Pick<DrizzleConfig, 'logger'> = 
     casing: 'snake_case',
     ...config,
     schema: {
-      account: AccountModel,
+      account: AccountModel.table,
       accountRelations: AccountRelations,
-      session: SessionModel,
+      session: SessionModel.table,
       sessionRelations: SessionRelations,
-      user: UserModel,
+      user: UserModel.table,
       userRelations: UserRelations,
-      verificationToken: VerificationTokenModel,
+      verificationToken: VerificationTokenModel.table,
     },
   })
 }
