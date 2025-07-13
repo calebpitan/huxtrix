@@ -11,10 +11,6 @@ export interface AccountEntity extends BaseAccountEntity {
   readonly user?: UserEntity
 }
 
-export type PartialUpdate<T extends Record<string, any>> = Partial<
-  Omit<T, 'id' | Exclude<keyof AccountEntity, keyof BaseAccountEntity>>
->
-
 /**
  * Value object for {@link AccountEntity} `provider`
  */
