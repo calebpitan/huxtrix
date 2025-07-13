@@ -16,6 +16,8 @@ export const { TRPCProvider, useTRPC } = createTRPCContext<AppRouter>()
 
 let browserQueryClient: QueryClient
 
+const isFn = (v: unknown): v is CallableFunction => typeof v === 'function'
+
 function getQueryClient() {
   if (typeof window === 'undefined') {
     // Server: always make a new query client
@@ -29,16 +31,9 @@ function getQueryClient() {
   return browserQueryClient
 }
 
-function getUrl() {
-  const base = (() => {
-    if (typeof window !== 'undefined') return ''
-    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
-    return 'http://localhost:3000'
-  })()
-  return `${base}/api/trpc`
-}
-
-export function TRPCReactProvider(props: Readonly<{ children: React.ReactNode }>) {
+export function TRPCReactProvider(
+  props: Readonly<{ children: React.ReactNode; url: string | (() => string) }>,
+) {
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
   //       suspend because React will throw away the client on the initial
@@ -49,7 +44,7 @@ export function TRPCReactProvider(props: Readonly<{ children: React.ReactNode }>
       links: [
         httpBatchLink({
           transformer: superjson,
-          url: getUrl(),
+          url: isFn(props.url) ? props.url() : props.url,
         }),
       ],
     }),
