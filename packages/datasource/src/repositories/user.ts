@@ -1,10 +1,9 @@
-import { GetColumnData, eq, sql } from 'drizzle-orm'
 import { Result, err, ok } from 'neverthrow'
 
 import { UserEntity, UserEntityMapper } from '../entities/user'
 import { MultipleResultsFoundError, NoResultFoundError } from '../errors'
 import { UserDict, UserModel } from '../schema'
-import { DatabaseSession, LoadOptions, TCols } from '../type'
+import { DatabaseSession, LoadOptions } from '../type'
 import { ExecutionOptions, Mapper, RepositoryFactory } from './base'
 
 const KEY = 'user'
