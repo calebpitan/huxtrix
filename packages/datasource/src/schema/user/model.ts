@@ -1,15 +1,16 @@
 import * as t from 'drizzle-orm/pg-core'
-import { InferSelectModel, Many, Relations, sql } from 'drizzle-orm'
+import { InferSelectModel, sql } from 'drizzle-orm'
 
-import { model } from '../base'
+import { DataStructureProxy, model } from '../base'
 import type { UserRelations } from './relations'
 
 const NAME = 'users'
 
-export type UserBaseModel = InferSelectModel<typeof UserModel>
-export type UserModel = UserBaseModel & UserRelations
+export type UserDictBase = InferSelectModel<typeof users>
+export type UserDict = UserDictBase & UserRelations
+export type UsersTable = typeof users
 
-export const UserModel = model(
+export const users = model(
   NAME,
   {
     /** The unique, user's email address */
@@ -42,3 +43,19 @@ export const UserModel = model(
       .where(sql`${s.username} IS NOT NULL AND ${s.deletedAt} IS NULL`),
   ],
 )
+
+export class UserModel extends DataStructureProxy<UserDict>() {
+  public static readonly table = users
+
+  static new(data: UserDict) {
+    return new UserModel(data)
+  }
+
+  toStruct() {
+    return this.__data__
+  }
+
+  toJSON() {
+    return this.__data__
+  }
+}

@@ -4,6 +4,8 @@ import { PgTableFn, PgTableWithColumns, pgTable, timestamp, varchar } from 'driz
 import { PgColumnsBuilders } from 'drizzle-orm/pg-core/columns/all'
 import { monotonicFactory } from 'ulid'
 
+import { Constructor } from '../type'
+
 type ModelExtras = typeof namingConventions & {
   id: typeof id
   generateId: (seedTime?: number) => string
@@ -99,7 +101,7 @@ const namingConventions = {
   pk: <T extends string>(tb: T) => `pk_${tb}` as const,
 }
 
-const ulid = monotonicFactory()
+export const ulid = monotonicFactory()
 
 export const IDModel = {
   /**
@@ -177,3 +179,25 @@ model.ck = namingConventions.ck
 model.fk = namingConventions.fk
 model.pk = namingConventions.pk
 model.generateId = (seedTime) => ulid(seedTime)
+
+export function DataStructureProxy<DS extends Record<string, any>>() {
+  class DataStructureProxy {
+    constructor(public readonly __data__: DS) {}
+  }
+
+  return new Proxy(DataStructureProxy, {
+    construct(target, args, newTarget) {
+      const constructed: DataStructureProxy = Reflect.construct(target, args, newTarget)
+
+      return new Proxy(constructed, {
+        get(target, key) {
+          if (key in target) return Reflect.get(target, key)
+          return Reflect.get(target.__data__, key)
+        },
+      })
+    },
+  }) as unknown as Constructor<
+    DataStructureProxy & DS,
+    ConstructorParameters<typeof DataStructureProxy>
+  >
+}

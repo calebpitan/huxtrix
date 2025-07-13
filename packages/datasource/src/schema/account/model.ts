@@ -1,12 +1,14 @@
 import * as t from 'drizzle-orm/pg-core'
-import { eq, getTableName, InferSelectModel, sql } from 'drizzle-orm'
+import { InferSelectModel, getTableName } from 'drizzle-orm'
 
-import { model } from '../base'
+import { DataStructureProxy, model } from '../base'
 import { UserModel } from '../user'
+import { AccountRelations } from './relations'
 
 const NAME = 'accounts'
 
-export type AccountModel = InferSelectModel<typeof AccountModel>
+export type AccountDictBase = InferSelectModel<typeof accounts>
+export type AccountDict = AccountDictBase & AccountRelations
 
 /**
  * @enum {AccountType}
@@ -25,7 +27,7 @@ export const AccountSSOProvider = {
   google: 'google',
 } as const
 
-export const AccountModel = model(
+export const accounts = model(
   NAME,
   {
     provider: t.text({ enum: [AccountSSOProvider.google] }).notNull(),
@@ -44,9 +46,25 @@ export const AccountModel = model(
     t
       .foreignKey({
         columns: [s.userId],
-        foreignColumns: [UserModel.id],
-        name: model.fk(NAME, getTableName(UserModel), s.userId),
+        foreignColumns: [UserModel.table.id],
+        name: model.fk(NAME, getTableName(UserModel.table), s.userId),
       })
       .onDelete('cascade'),
   ],
 )
+
+export class AccountModel extends DataStructureProxy<AccountDict>() {
+  public static readonly table = accounts
+
+  static new(data: AccountDict) {
+    return new AccountModel(data)
+  }
+
+  toStruct() {
+    return this.__data__
+  }
+
+  toJSON() {
+    return this.__data__
+  }
+}
