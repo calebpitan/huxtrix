@@ -9,6 +9,41 @@ import { ExecutionOptions, Mapper, RepositoryFactory } from './base'
 const KEY = 'user'
 const LOAD_OPTIONS = { accounts: true, sessions: true } as const satisfies LoadOptions<'user'>
 
+/**
+ * Repository for managing user entities in the database.
+ *
+ * This repository provides methods for finding and managing user accounts with
+ * comprehensive data loading. It automatically loads related accounts and sessions
+ * data for all queries to provide complete user information.
+ *
+ * The repository supports various user lookup methods including email and username
+ * searches, with built-in error handling for cases where multiple users are found
+ * or no user exists. It also provides optimized existence checks for performance
+ * when you only need to verify user existence without loading full data.
+ *
+ * All methods support soft-delete filtering through execution options, allowing
+ * you to include or exclude deleted users as needed.
+ *
+ * @template S - The database session type
+ *
+ * @example
+ * ```typescript
+ * // Find a user by email with error handling
+ * const result = await userRepo.findByEmail('user@example.com')
+ * if (result.isOk()) {
+ *   const user = result.value
+ *   console.log(`Found user: ${user.username}`)
+ * } else {
+ *   console.log('User not found')
+ * }
+ *
+ * // Check if a username is available
+ * const exists = await userRepo.existsByUsername('john_doe')
+ * if (!exists) {
+ *   console.log('Username is available')
+ * }
+ * ```
+ */
 export class UserRepository<S extends DatabaseSession> extends RepositoryFactory(
   KEY,
   UserModel.table,
@@ -38,6 +73,23 @@ export class UserRepository<S extends DatabaseSession> extends RepositoryFactory
    * @param email - The email address to search for
    * @param options - Execution options including redaction strategy for soft-deleted users
    * @returns Promise that resolves to a Result containing the user entity or an error
+   *
+   * @example
+   * ```typescript
+   * // Find user by email with proper error handling
+   * const result = await userRepo.findByEmail('john.doe@example.com')
+   *
+   * if (result.isOk()) {
+   *   const user = result.value
+   *   console.log(`User: ${user.username}`)
+   *   console.log(`Accounts: ${user.accounts?.length || 0}`)
+   *   console.log(`Active sessions: ${user.sessions?.length || 0}`)
+   * } else if (result.error instanceof NoResultFoundError) {
+   *   console.log('User not found')
+   * } else {
+   *   console.log('Multiple users found with same email')
+   * }
+   * ```
    */
   async findByEmail(
     email: string,
@@ -68,6 +120,19 @@ export class UserRepository<S extends DatabaseSession> extends RepositoryFactory
    * @param username - The username to search for
    * @param options - Execution options including redaction strategy for soft-deleted users
    * @returns Promise that resolves to a Result containing the user entity or an error
+   *
+   * @example
+   * ```typescript
+   * // Find user by username with proper error handling
+   * const result = await userRepo.findByUsername('john_doe')
+   *
+   * if (result.isOk()) {
+   *   const user = result.value
+   *   console.log(`Found user: ${user.email}`)
+   * } else {
+   *   console.log('User not found')
+   * }
+   * ```
    */
   async findByUsername(
     username: string,
@@ -95,6 +160,17 @@ export class UserRepository<S extends DatabaseSession> extends RepositoryFactory
    * @param email - The email address to check
    * @param options - Execution options including redaction strategy for soft-deleted users
    * @returns Promise that resolves to true if a user exists with the email, false otherwise
+   *
+   * @example
+   * ```typescript
+   * // Check if email is already registered
+   * const emailExists = await userRepo.existsByEmail('newuser@example.com')
+   * if (emailExists) {
+   *   console.log('Email is already registered')
+   * } else {
+   *   console.log('Email is available for registration')
+   * }
+   * ```
    */
   async existsByEmail(email: string, options: ExecutionOptions = {}): Promise<boolean> {
     return this._existsBy(email, options, (m) => m.email)
@@ -109,6 +185,17 @@ export class UserRepository<S extends DatabaseSession> extends RepositoryFactory
    * @param username - The username to check
    * @param options - Execution options including redaction strategy for soft-deleted users
    * @returns Promise that resolves to true if a user exists with the username, false otherwise
+   *
+   * @example
+   * ```typescript
+   * // Check if username is available
+   * const usernameExists = await userRepo.existsByUsername('john_doe')
+   * if (usernameExists) {
+   *   console.log('Username is already taken')
+   * } else {
+   *   console.log('Username is available')
+   * }
+   * ```
    */
   async existsByUsername(username: string, options: ExecutionOptions = {}): Promise<boolean> {
     return this._existsBy(username, options, (m) => m.username)

@@ -7,19 +7,16 @@ import { NoResultFoundError } from '../errors'
 import { DatabaseSession, LoadOptions, Schema } from '../type'
 
 type BaseColumns = { id: PgColumn; createdAt: PgColumn; updatedAt: PgColumn; deletedAt: PgColumn }
-
 type Table<C extends BaseColumns = BaseColumns> = PgTableWithColumns<
   UpdateTableConfig<TableConfig, { columns: C }>
 >
 
+type Bound<T, I> = T extends I ? T : never
 type TKeys<S extends Schema> = Exclude<keyof ExtractTablesWithRelations<S>, 'session'>
-
 type TCols<S extends Schema, K extends TKeys<S>> = Bound<
   ExtractTablesWithRelations<S>[K]['columns'],
   BaseColumns
 >
-
-type Bound<T, I> = T extends I ? T : never
 
 export type FindAllOptions = { limit?: number; offset?: number }
 export type ExecutionOptions = { redacted?: 'exclude' | 'include' | 'only' }
