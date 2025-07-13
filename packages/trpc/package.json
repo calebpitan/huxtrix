@@ -2,6 +2,16 @@
   "name": "@hux/trpc",
   "private": true,
   "packageManager": "yarn@4.6.0",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "default": "./dist/react/index.js"
+    }
+  },
   "scripts": {
     "brl": "yarn p:brl",
     "build": "yarn p:build"
@@ -13,11 +23,13 @@
     "@trpc/server": "^11.4.3",
     "@trpc/tanstack-react-query": "^11.4.3",
     "client-only": "^0.0.1",
+    "effect": "^3.16.12",
     "server-only": "^0.0.1",
     "superjson": "^2.2.2",
-    "zod": "^3.25.69"
+    "zod": "^4.0.2"
   },
   "peerDependencies": {
+    "next": "^15",
     "react": "^19"
   }
 }

@@ -1,17 +1,17 @@
 import z from 'zod'
 
-import { SessionModel } from '../schema/session/model'
+import { SessionDict, SessionModel } from '../schema/session/model'
+import { DeepReadonly } from '../type'
 import { BaseTimestampEntity, ID } from './base'
 
-export type SessionEntity = z.infer<typeof SessionEntity>
+export type SessionEntity = DeepReadonly<z.infer<typeof SessionEntity>>
 
-export const SessionEntity = BaseTimestampEntity.merge(
-  z.object({
-    userId: ID,
-    token: z.string(),
-    expires: z.date(),
-  }),
-)
+export const SessionEntity = z.object({
+  ...BaseTimestampEntity.shape,
+  userId: ID,
+  token: z.string(),
+  expires: z.date(),
+})
 
 export const SessionEntityMapper = {
   /**
@@ -29,9 +29,9 @@ export const SessionEntityMapper = {
    * @param model The model to map from, into a corresponding entity
    * @returns The mapped entity
    */
-  from(model: SessionModel): SessionEntity {
+  from(model: SessionDict | SessionModel): SessionEntity {
     return SessionEntity.parse(
-      this.struct({
+      SessionEntityMapper.struct({
         createdAt: model.createdAt,
         expires: model.expires,
         token: model.sessionToken,
@@ -47,12 +47,12 @@ export const SessionEntityMapper = {
    * @returns The mapped model
    */
   into(entity: SessionEntity): SessionModel {
-    return {
+    return new SessionModel({
       createdAt: entity.createdAt,
       expires: entity.expires,
       sessionToken: entity.token,
       updatedAt: entity.updatedAt,
       userId: entity.userId,
-    }
+    })
   },
 }

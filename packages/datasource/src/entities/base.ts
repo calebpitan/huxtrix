@@ -1,20 +1,24 @@
 import z from 'zod'
 
+export type BaseEntity = Readonly<z.infer<typeof BaseEntity>>
+
 export const BaseTimestampEntity = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
 })
 
-export const TimestampEntity = BaseTimestampEntity.merge(
-  z.object({
-    deletedAt: z.date().nullable(),
-  }),
-)
-
-export const IDEntity = z.object({
-  id: z.string().ulid(),
+export const TimestampEntity = z.object({
+  ...BaseTimestampEntity.shape,
+  deletedAt: z.date().nullable(),
 })
 
-export const BaseEntity = IDEntity.merge(TimestampEntity)
+export const IDEntity = z.object({
+  id: z.ulid(),
+})
 
-export const ID = z.string().ulid()
+export const BaseEntity = z.object({
+  ...IDEntity.shape,
+  ...TimestampEntity.shape,
+})
+
+export const ID = z.ulid()

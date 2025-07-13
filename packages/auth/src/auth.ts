@@ -1,22 +1,15 @@
+/// <reference path="../../../node_modules/next-auth/jwt.d.ts" />
+
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
-import {
-  AccountModel,
-  Database,
-  SessionModel,
-  UserModel,
-  VerificationTokenModel,
-  sql,
-} from '@hux/datasource'
+import { AccountModel, Database, SessionModel, UserModel } from '@hux/datasource'
+import { VerificationTokenModel, sql, ulid } from '@hux/datasource'
 
 import NextAuth from 'next-auth'
 import type { NextAuthConfig, NextAuthResult } from 'next-auth'
 import { Adapter } from 'next-auth/adapters'
+
 import Google, { GoogleProfile } from 'next-auth/providers/google'
 import Resend from 'next-auth/providers/resend'
-
-interface HxAuthResult extends NextAuthResult {
-  auth: Auth
-}
 
 type InitAuthEmailOptions = { serverAddress: string }
 
@@ -30,12 +23,16 @@ export type InitAuthOptions = Pick<NextAuthConfig, 'pages' | 'debug'> & {
 export type Auth = NextAuthResult['auth']
 export type AuthIntent = 'signin' | 'signup'
 
+export interface HxAuthResult extends NextAuthResult {
+  auth: Auth
+}
+
 function createAdapter(session: Database): Adapter {
   const adapter = DrizzleAdapter(session, {
-    accountsTable: AccountModel,
-    usersTable: UserModel,
-    sessionsTable: SessionModel,
-    verificationTokensTable: VerificationTokenModel,
+    accountsTable: AccountModel.table,
+    usersTable: UserModel.table,
+    sessionsTable: SessionModel.table,
+    verificationTokensTable: VerificationTokenModel.table,
   })
 
   return adapter
@@ -44,6 +41,8 @@ function createAdapter(session: Database): Adapter {
 export const AuthErrorCodes = {
   acoountNotFound: 'account_not_found',
   invalidEmail: 'invlaid_email',
+  SessionRequired: 'SessionRequired',
+  OAuthAccountNotLinked: 'OAuthAccountNotLinked',
 } as const
 
 /**
@@ -62,6 +61,7 @@ export function initAuth(session: Database, options: InitAuthOptions): HxAuthRes
       Google<GoogleProfile>({
         profile(profile) {
           return {
+            id: ulid(),
             email: profile.email,
             image: profile.picture,
             name: profile.name,
@@ -94,16 +94,16 @@ export function initAuth(session: Database, options: InitAuthOptions): HxAuthRes
           return `${origin}${pathname}?${query.toString()}`
         }
 
-        const result = await session.execute<Record<'exists', boolean>>(sql`
+        const [result] = await session.execute<Record<'exists', boolean>>(sql`
           SELECT EXISTS (
             SELECT 1 
-              FROM ${UserModel}
-              WHERE ${UserModel.email} = ${email}
-              AND ${UserModel.deletedAt} IS NULL
+              FROM ${UserModel.table}
+              WHERE ${UserModel.table.email} = ${email}
+              AND ${UserModel.table.deletedAt} IS NULL
           )
         `)
 
-        if (!result.at(0)!.exists) {
+        if (!result!.exists) {
           const query = new URLSearchParams({
             error: AuthErrorCodes.acoountNotFound,
             identifier: email,
@@ -113,8 +113,48 @@ export function initAuth(session: Database, options: InitAuthOptions): HxAuthRes
 
         return true
       },
+      jwt({ token, user }) {
+        if (user) {
+          token.id = user.id
+        }
+
+        return token
+      },
+      session({ session, token }) {
+        if (token) {
+          session.user.id = token.id
+        }
+        return session
+      },
     },
   })
 
   return result
+}
+
+export type { Session } from 'next-auth'
+
+declare module 'next-auth' {
+  interface User {
+    id: string
+    email: string
+    name: string
+    image: string | null
+  }
+  interface Session {
+    user: User
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    id: string
+    email: string
+    exp: number
+    iat: number
+    jti: number
+    name: string | null
+    picture: string | null
+    sub: string
+  }
 }
