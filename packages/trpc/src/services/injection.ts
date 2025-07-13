@@ -1,11 +1,12 @@
-import { HxAuthResult } from '@hux/auth'
 import { AccountRepository, DatabaseSession, UnitOfWork, UserRepository } from '@hux/datasource'
 
 import { Context } from 'effect'
 
+import type { TRPCSessionFn } from '../server/createContext'
+
 export class AuthMiddlewareDep extends Context.Tag('AuthMiddlewareDep')<
   AuthMiddlewareDep,
-  Pick<HxAuthResult, 'auth'>
+  { auth: TRPCSessionFn }
 >() {}
 
 export class DatabaseSessionDep extends Context.Tag('DatabaseSessionDep')<

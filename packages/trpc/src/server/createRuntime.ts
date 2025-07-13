@@ -1,17 +1,14 @@
-import { HxAuthResult } from '@hux/auth'
 import { AccountRepository, DatabaseSession, UserRepository } from '@hux/datasource'
 
 import { Effect, Layer, ManagedRuntime } from 'effect'
 
-import {
-  AccountRepositoryDep,
-  AuthMiddlewareDep,
-  DatabaseSessionDep,
-  UserRepositoryDep,
-} from '../services/injection'
+import { AccountRepositoryDep, AuthMiddlewareDep, DatabaseSessionDep } from '../services/injection'
+import { UserRepositoryDep } from '../services/injection'
+import type { TRPCSessionFn } from './createContext'
 
-interface TRPCRuntimeOptions extends Pick<HxAuthResult, 'auth'> {
+interface TRPCRuntimeOptions<F extends TRPCSessionFn = TRPCSessionFn> {
   session: DatabaseSession
+  auth: F
 }
 
 export function createTRPCRuntime(options: TRPCRuntimeOptions) {
