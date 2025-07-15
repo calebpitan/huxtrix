@@ -1,5 +1,4 @@
 /// <reference path="../../../node_modules/next-auth/jwt.d.ts" />
-
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { AccountModel, Database, SessionModel, UserModel } from '@hux/datasource'
 import { VerificationTokenModel, sql, ulid } from '@hux/datasource'
@@ -7,7 +6,6 @@ import { VerificationTokenModel, sql, ulid } from '@hux/datasource'
 import NextAuth from 'next-auth'
 import type { NextAuthConfig, NextAuthResult } from 'next-auth'
 import { Adapter } from 'next-auth/adapters'
-
 import Google, { GoogleProfile } from 'next-auth/providers/google'
 import Resend from 'next-auth/providers/resend'
 
@@ -76,13 +74,10 @@ export function initAuth(session: Database, options: InitAuthOptions): HxAuthRes
     pages: options.pages,
     session: { strategy: options.sessionStrategy ?? 'jwt' },
     callbacks: {
-      async signIn({ user, email: emailOptions }) {
+      async signIn({ user }) {
         const email = user.email?.trim()
         const pathname = options.pages?.signIn ?? '/api/auth/signin'
-        const [intent, origin] = await Promise.all([
-          await options.getIntent(),
-          options.getBaseUrl(),
-        ])
+        const [intent, origin] = await Promise.all([options.getIntent(), options.getBaseUrl()])
 
         if (!intent || intent === 'signup') {
           return true
