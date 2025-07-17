@@ -36,6 +36,10 @@ export function SignIn({ error, redirectTo = '/' }: SignInProps) {
             'User account not found'
           ),
         }
+
+      case AuthErrorCodes.SessionRequired:
+        return
+
       default:
         return {
           title: 'Unknown Error',
