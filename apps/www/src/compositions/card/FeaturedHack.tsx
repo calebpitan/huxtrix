@@ -5,12 +5,12 @@ import { Bookmark, ThumbsUp } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { cn, formatNumber } from '@/lib/utils'
 
-type Interactions = {
+interface Interactions {
   upvotes: number
   bookmarks: number
 }
 
-export type FeaturedHack = {
+export interface FeaturedHack {
   id: number
   title: string
   author: string
@@ -45,7 +45,8 @@ export const FeaturedHackCard = ({ hack, className, ...props }: FeaturedHackCard
         <CardContent className="-m-6 flex flex-1 items-end justify-center overflow-hidden">
           <div
             className={cn(
-              'pt-50 w-full rounded-b-[--spacing(6.75)] p-6 text-gray-50/90',
+              // prettier-ignore
+              'w-full rounded-b-[--spacing(6.75)] p-6 pt-50 text-gray-50/90',
               'supports-[backdrop-filter]:bg-radial-[at_25%_25%] backdrop-blur-md backdrop-brightness-50',
               'from-black/40 to-transparent to-75%',
               '[mask-image:linear-gradient(to_top,_white_32%,_transparent)]',
