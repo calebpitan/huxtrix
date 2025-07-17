@@ -30,7 +30,7 @@ interface AppDialogBaseProps {
   title?: ReactElement<ComponentProps<typeof AppDialogTitle>> | string
   description?: ReactElement<ComponentProps<typeof AppDialogDescription>> | string
   open?: boolean
-  onOpenChange?(open: boolean): void
+  onOpenChange?: (open: boolean) => void
 }
 
 interface AppSwipeDialogProps

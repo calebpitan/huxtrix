@@ -6,7 +6,14 @@ import { type Result, err, ok } from 'neverthrow'
 import { NoResultFoundError } from '../errors'
 import { DatabaseSession, LoadOptions, Schema } from '../type'
 
-type BaseColumns = { id: PgColumn; createdAt: PgColumn; updatedAt: PgColumn; deletedAt: PgColumn }
+interface BaseColumns {
+  id: PgColumn
+  createdAt: PgColumn
+  updatedAt: PgColumn
+  deletedAt: PgColumn
+  [k: string]: PgColumn
+}
+
 type Table<C extends BaseColumns = BaseColumns> = PgTableWithColumns<
   UpdateTableConfig<TableConfig, { columns: C }>
 >
@@ -18,14 +25,19 @@ type TCols<S extends Schema, K extends TKeys<S>> = Bound<
   BaseColumns
 >
 
-export type FindAllOptions = { limit?: number; offset?: number }
-export type ExecutionOptions = { redacted?: 'exclude' | 'include' | 'only' }
+export interface FindAllOptions {
+  limit?: number
+  offset?: number
+}
+export interface ExecutionOptions {
+  redacted?: 'exclude' | 'include' | 'only'
+}
 
 export interface Mapper<M extends Record<string, unknown>, E extends Record<string, any>> {
-  struct(shape: E): E
-  from(model: M): E
-  into(entity: E): M
-  pinto(entity: Partial<E>): Partial<M>
+  struct: (shape: E) => E
+  from: (model: M) => E
+  into: (entity: E) => M
+  pinto: (entity: Partial<E>) => Partial<M>
 }
 
 export abstract class AbstractRepository<S extends DatabaseSession, E extends Record<string, any>> {
@@ -253,7 +265,7 @@ export function RepositoryFactory<
       partial: Partial<E>,
       options: ExecutionOptions = {},
     ): Promise<Result<E, NoResultFoundError>> {
-      const { createdAt, updatedAt, ...values } = this.mapper.pinto(partial)
+      const { ...values } = this.mapper.pinto(partial)
       const [result] = await this.session
         .update(model)
         // @ts-expect-error - Drizzle type inference limitations

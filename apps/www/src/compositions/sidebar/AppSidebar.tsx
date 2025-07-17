@@ -6,8 +6,16 @@ import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu } from '@/component
 import { SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
 import { cn, isFn } from '@/lib/utils'
 
-type Brand = { name: string; icon?: React.ReactNode }
-type SidebarItem = { title: string; icon: React.ReactNode; label: React.ReactNode; link: string }
+interface Brand {
+  name: string
+  icon?: React.ReactNode
+}
+interface SidebarItem {
+  title: string
+  icon: React.ReactNode
+  label: React.ReactNode
+  link: string
+}
 
 export interface AppSidebarProps
   extends HTMLAttributes<HTMLDivElement>,

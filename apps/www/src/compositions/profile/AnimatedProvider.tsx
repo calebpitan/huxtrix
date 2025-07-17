@@ -11,9 +11,14 @@ import { useAnimationFrame } from '@/hooks/use-animation-frame'
 import { useElementBounding } from '@/hooks/use-element-bounding'
 import { createDomRect, scroll } from '@/lib/utils'
 
-type InitialSizes = { container: DOMRect; header: DOMRect; anchor: DOMRect; sidebar: DOMRect }
+interface InitialSizes {
+  container: DOMRect
+  header: DOMRect
+  anchor: DOMRect
+  sidebar: DOMRect
+}
 
-type AnimatedProfileMotion = {
+interface AnimatedProfileMotion {
   /**
    * The realtive displacement along the x-axis between the header's start position
    * and it's end position.
@@ -60,7 +65,7 @@ type AnimatedProfileMotion = {
   }
 }
 
-type UseAnimatedProfileMotionParams = {
+interface UseAnimatedProfileMotionParams {
   x: MotionValue<number>
   y: MotionValue<number>
   boundedScrollY: MotionValue<number>
@@ -79,7 +84,7 @@ interface AnimatedProfileContextType {
   updateRefs: (refs: Partial<AnimatedProfileRefs>) => void
 }
 
-export type AnimatedProfileRefs = {
+export interface AnimatedProfileRefs {
   root: RefObject<HTMLDivElement | null>
   header: RefObject<HTMLDivElement | null>
   anchor: RefObject<HTMLDivElement | null>

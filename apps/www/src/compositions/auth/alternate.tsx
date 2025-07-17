@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 
-export type AlternateProps = {
+export interface AlternateProps {
   message: string
   href: string
   cta: string

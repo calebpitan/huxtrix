@@ -30,7 +30,7 @@ import { TitleEditor } from './TitleEditor'
 import { ARTICLE_EDITOR_CONTENT } from './content'
 
 export interface ArticleEditorProps extends Omit<ComponentProps<'div'>, 'onChange'> {
-  onChange?(value: string): void
+  onChange?: (value: string) => void
 }
 
 export type ArticleEditor = TPlateEditor<Value, (typeof ArticleEditorKit)[number]>
@@ -61,9 +61,9 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
   const editorContainerRef = useRef<HTMLDivElement>(null)
 
   const ctx = useTextEditor()
-  const value = useMemo(() => {
+  const value = useMemo<Value>(() => {
     try {
-      return ctx.state.content ? JSON.parse(ctx.state.content) : ARTICLE_EDITOR_CONTENT
+      return ctx.state.content ? (JSON.parse(ctx.state.content) as Value) : ARTICLE_EDITOR_CONTENT
     } catch {
       return ARTICLE_EDITOR_CONTENT
     }

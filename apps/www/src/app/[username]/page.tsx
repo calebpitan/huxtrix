@@ -9,7 +9,9 @@ import { PageAppBar, PageLayout } from '@/compositions/layout'
 import { AnimatedProfileProvider } from '@/compositions/profile/AnimatedProvider'
 import { LatestHacksSection } from '@/compositions/section/LatestHacks'
 
-type Params = { username: string }
+interface Params {
+  username: string
+}
 
 export interface ProfilePageProps {
   params: Promise<Params>

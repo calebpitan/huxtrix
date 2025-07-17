@@ -54,7 +54,7 @@ export const AccountEntityMapper = {
    * @param data The structured data
    * @returns The structured data
    */
-  struct(data: AccountEntity): AccountEntity {
+  struct: (data: AccountEntity): AccountEntity => {
     return data
   },
 
@@ -63,7 +63,7 @@ export const AccountEntityMapper = {
    * @param model The model to map from, into a corresponding entity
    * @returns The mapped entity
    */
-  from(model: AccountDict | AccountModel): AccountEntity {
+  from: (model: AccountDict | AccountModel): AccountEntity => {
     return AccountEntity.parse(
       AccountEntityMapper.struct({
         id: model.id,
@@ -95,7 +95,7 @@ export const AccountEntityMapper = {
    * @param entity The entity to map into a corresposing model
    * @returns The mapped model
    */
-  into(entity: AccountEntity): AccountModel {
+  into: (entity: AccountEntity): AccountModel => {
     return new AccountModel({
       access_token: entity.tokens.access,
       createdAt: entity.createdAt,
@@ -121,7 +121,7 @@ export const AccountEntityMapper = {
    * @param entity The entity to map into a corresposing model
    * @returns The mapped model
    */
-  pinto(entity: ForUpdate<'account', AccountEntity>): ForUpdate<'account', AccountModel> {
+  pinto: (entity: ForUpdate<'account', AccountEntity>): ForUpdate<'account', AccountModel> => {
     const model = {
       access_token: entity.tokens?.access,
       deletedAt: entity.deletedAt,

@@ -5,7 +5,10 @@ import { cva } from 'class-variance-authority'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-export type Category = { name: string; icon: string }
+export interface Category {
+  name: string
+  icon: string
+}
 export interface PopularCategoriesSectionProps extends HTMLAttributes<HTMLElement> {
   categories: Category[]
   className?: string

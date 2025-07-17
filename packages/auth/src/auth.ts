@@ -1,4 +1,3 @@
-/// <reference path="../../../node_modules/next-auth/jwt.d.ts" />
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { AccountModel, Database, SessionModel, UserModel } from '@hux/datasource'
 import { VerificationTokenModel, sql, ulid } from '@hux/datasource'
@@ -6,10 +5,13 @@ import { VerificationTokenModel, sql, ulid } from '@hux/datasource'
 import NextAuth from 'next-auth'
 import type { NextAuthConfig, NextAuthResult } from 'next-auth'
 import { Adapter } from 'next-auth/adapters'
+import 'next-auth/jwt'
 import Google, { GoogleProfile } from 'next-auth/providers/google'
 import Resend from 'next-auth/providers/resend'
 
-type InitAuthEmailOptions = { serverAddress: string }
+interface InitAuthEmailOptions {
+  serverAddress: string
+}
 
 export type InitAuthOptions = Pick<NextAuthConfig, 'pages' | 'debug'> & {
   email: InitAuthEmailOptions

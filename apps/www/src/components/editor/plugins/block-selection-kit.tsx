@@ -19,7 +19,7 @@ export const BlockSelectionKit = [
       belowRootNodes: (props) => {
         if (!props.attributes.className?.includes('slate-selectable')) return null
 
-        return <BlockSelection {...(props as PlateElementProps)} />
+        return <BlockSelection {...(props as unknown as PlateElementProps)} />
       },
     },
   })),

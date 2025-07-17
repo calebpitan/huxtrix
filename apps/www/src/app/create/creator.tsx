@@ -26,11 +26,11 @@ export function PostCreator() {
     setIsPresented(guard.active)
   }
 
-  const makePost = useCallback(async () => {
+  const makePost = useCallback(() => {
     console.log('Making post of content: %s', editor.state.content)
   }, [editor.state.content])
 
-  const saveDraft = useCallback(async () => {
+  const saveDraft = useCallback(() => {
     console.log('Saving draft of content: %s', editor.state.content)
   }, [editor.state.content])
 
@@ -44,27 +44,19 @@ export function PostCreator() {
 
   function handleSaveDraft() {
     // TODO: Save draft
-    saveDraft()
+    void Promise.resolve(saveDraft())
       .then(() => setIsPresented(false))
       .then(() => guard.accept())
   }
 
   function handleDsicard() {
-    Promise.resolve()
+    void Promise.resolve()
       .then(() => setIsPresented(false))
       .then(() => guard.accept())
   }
 
   return (
     <Fragment>
-      {/* <TextEditor
-        className="w-full"
-        placeholder="Share a useful hack or trick..."
-        content={editor.state.content}
-        mode={editor.state.mode}
-        onChange={(content) => editor.setContent(content)}
-      /> */}
-
       <div style={{ height: '100%' }}>
         <ArticleEditor onChange={(value) => editor.setContent(value)} />
       </div>

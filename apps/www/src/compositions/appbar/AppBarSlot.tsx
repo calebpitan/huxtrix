@@ -5,7 +5,10 @@ import { Discriminate } from '@/lib/types'
 import { BottomBar, BottomBarProps } from './BottomBar'
 import { TopBar, TopBarProps } from './TopBar'
 
-type AppBarSlotBaseProps = { children?: ReactNode; ref?: Ref<HTMLElement> }
+interface AppBarSlotBaseProps {
+  children?: ReactNode
+  ref?: Ref<HTMLElement>
+}
 
 type ForwardedProps<S extends AppBarSlotKey> = {
   topbar: Omit<TopBarProps, 'slot'> & Discriminate<S, 'slot'>

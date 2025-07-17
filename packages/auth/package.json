@@ -24,5 +24,8 @@
     "@auth/drizzle-adapter": "^1.10.0",
     "@hux/datasource": "workspace:^",
     "next-auth": "^5.0.0-beta.29"
+  },
+  "devDependencies": {
+    "@hux/eslint": "workspace:^"
   }
 }

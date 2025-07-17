@@ -6,7 +6,7 @@ import { createPortal } from 'react-dom'
 
 import type { AppBarSlotKey } from './AppBarSlot'
 
-export type AppBarPortalProps = {
+export interface AppBarPortalProps {
   children: ReactNode
   slots: AppBarSlotKey | AppBarSlotKey[]
 }

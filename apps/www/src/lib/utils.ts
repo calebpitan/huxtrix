@@ -5,7 +5,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export type TryCatch<R, E> = { trial: () => R; error?: (e: E) => R }
+export interface TryCatch<R, E> {
+  trial: () => R
+  error?: (e: E) => R
+}
+
 export function sandbox<R>(r: () => R): R | undefined
 export function sandbox<R, E = Error>(r: () => R, e: (e: E) => R): R
 export function sandbox<R, E = Error>(tc: TryCatch<R, E>): R
@@ -44,7 +48,7 @@ export const _formatNumber = (num: number): string => {
   return formattedNum + item.symbol
 }
 
-export const formatNumber = (num: number, locale: string = 'en-US'): string => {
+export const formatNumber = (num: number, locale = 'en-US'): string => {
   return new Intl.NumberFormat(locale, {
     notation: 'compact',
     maximumFractionDigits: 1,
@@ -68,7 +72,8 @@ export const createDomRect = (rect: Partial<DOMRect> = {}): DOMRect => ({
   x: rect.x ?? 0,
   y: rect.y ?? 0,
   toJSON() {
-    return rect.toJSON?.() || this
+    const v = rect.toJSON?.() as Record<string, unknown>
+    return v ?? this
   },
 })
 
@@ -141,7 +146,7 @@ export function isUrl(string: string) {
     return false
   }
 
-  const match = string.match(protocolAndDomainRE)
+  const match = protocolAndDomainRE.exec(string)
   if (!match) {
     return false
   }

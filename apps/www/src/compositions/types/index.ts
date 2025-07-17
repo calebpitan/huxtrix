@@ -1,4 +1,4 @@
-export type Profile = {
+export interface Profile {
   name: string
   username: string
   image: string
@@ -6,12 +6,12 @@ export type Profile = {
   social: SocialProfile[]
 }
 
-export type SocialProfile = {
+export interface SocialProfile {
   name: 'x' | 'ig' | 'yt' | 'tiktok' | 'substack'
   url: string
 }
 
-export type NavItem = {
+export interface NavItem {
   href: string
   label: string
   icon: React.ElementType

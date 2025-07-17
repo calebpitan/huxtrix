@@ -43,7 +43,7 @@ export function TopBar({ children, className, ...props }: TopBarProps) {
 export function TopBarContent({ children, className, name, size, ...props }: TopBarContentProps) {
   return (
     <div className={cn(variants({ components: 'content', size }), className)} {...props}>
-      {children ? children : <span className="font-bold tracking-tight">{name}</span>}
+      {children ?? <span className="font-bold tracking-tight">{name}</span>}
     </div>
   )
 }

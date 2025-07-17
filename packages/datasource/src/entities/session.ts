@@ -20,7 +20,7 @@ export const SessionEntityMapper = {
    * @param data The structured data
    * @returns The structured data
    */
-  struct(data: SessionEntity): SessionEntity {
+  struct: (data: SessionEntity): SessionEntity => {
     return data
   },
 
@@ -29,7 +29,7 @@ export const SessionEntityMapper = {
    * @param model The model to map from, into a corresponding entity
    * @returns The mapped entity
    */
-  from(model: SessionDict | SessionModel): SessionEntity {
+  from: (model: SessionDict | SessionModel): SessionEntity => {
     return SessionEntity.parse(
       SessionEntityMapper.struct({
         createdAt: model.createdAt,
@@ -46,7 +46,7 @@ export const SessionEntityMapper = {
    * @param entity The entity to map into a corresposing model
    * @returns The mapped model
    */
-  into(entity: SessionEntity): SessionModel {
+  into: (entity: SessionEntity): SessionModel => {
     return new SessionModel({
       createdAt: entity.createdAt,
       expires: entity.expires,

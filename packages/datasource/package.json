@@ -28,6 +28,7 @@
     "zod": "^4.0.2"
   },
   "devDependencies": {
+    "@hux/eslint": "workspace:^",
     "drizzle-kit": "^0.31.4"
   }
 }

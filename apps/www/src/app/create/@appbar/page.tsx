@@ -14,7 +14,9 @@ export default function CreatorPageAppBar() {
 
   const handleCancel = useCallback(() => {
     // This is an implementation detail of the next-navigation-guard package and is not reliable
-    const unstable_StackIndex: number = window.history.state.__next_navigation_guard_stack_index
+    const unstable_StackIndex = (window.history.state as Record<string, number>)
+      .__next_navigation_guard_stack_index
+
     if (window.history.length > 1 && unstable_StackIndex !== 0) {
       // not at the top of the stack, so we can go back
       router.back()

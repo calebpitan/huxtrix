@@ -12,7 +12,7 @@ export function TitleEditor({
   return (
     <div
       data-component="title-editor"
-      data-content={value || defaultValue}
+      data-content={value ?? defaultValue}
       className={cn(
         "grid after:invisible after:whitespace-pre-wrap after:content-[attr(data-content)_'_']",
         'after:[grid-area:1_/_1_/_2_/_2] [&>textarea]:[grid-area:1_/_1_/_2_/_2]',
@@ -26,7 +26,7 @@ export function TitleEditor({
         defaultValue={defaultValue}
         value={value}
         onBeforeInput={(e) => {
-          if ((e.nativeEvent as InputEvent).data === '\n') {
+          if ((e.nativeEvent).data === '\n') {
             e.preventDefault()
           }
         }}

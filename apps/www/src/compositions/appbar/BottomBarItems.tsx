@@ -7,7 +7,7 @@ import { Icon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-type Item = {
+interface Item {
   href: string
   isActive: boolean
   label: string
@@ -21,15 +21,9 @@ export interface BottomBarItemsProps extends Omit<ComponentProps<'ul'>, 'childre
 const variants = cva('', {
   variants: {
     component: {
-      list: `supports-[backdrop-filter]:bg-muted/60 border-border/50 flex w-full \
-        justify-between border-t py-1 safe-area-b-1 backdrop-blur-xl md:mx-auto md:mb-6 md:w-auto \
-        md:max-w-2xl md:justify-center md:gap-12 md:rounded-full md:border-[0.5px] \
-        md:px-8 md:py-1.5 md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] \
-      `,
+      list: `supports-[backdrop-filter]:bg-muted/60 border-border/50 safe-area-b-1 flex w-full justify-between border-t py-1 backdrop-blur-xl md:mx-auto md:mb-6 md:w-auto md:max-w-2xl md:justify-center md:gap-12 md:rounded-full md:border-[0.5px] md:px-8 md:py-1.5 md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)]`,
       item: 'flex-1 md:flex-initial',
-      link: `hover:text-primary flex flex-col items-center justify-center py-1.5 \
-        transition-colors md:py-2
-      `,
+      link: `hover:text-primary flex flex-col items-center justify-center py-1.5 transition-colors md:py-2`,
     },
     active: { true: '' },
   },

@@ -5,13 +5,16 @@ import { useEffect, useMemo, useRef } from 'react'
 
 import { ElementSize, useElementSize } from '@/hooks/use-element-size'
 
-type AppBarRefs = {
+interface AppBarRefs {
   topbar: RefObject<HTMLElement | null>
   bottombar: RefObject<HTMLElement | null>
 }
-type AppBarSizes = { topbar: ElementSize; bottombar: ElementSize }
+interface AppBarSizes {
+  topbar: ElementSize
+  bottombar: ElementSize
+}
 
-export type AppBarContextType = {
+export interface AppBarContextType {
   refs: AppBarRefs
 }
 

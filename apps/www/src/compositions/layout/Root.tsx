@@ -27,7 +27,7 @@ export function RootLayout({ children }: RootLayoutProps) {
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
       <NavigationGuardProvider>
         <SessionProvider>
-          <TRPCReactProvider url={getUrl}>
+          <TRPCReactProvider url={getUrl()}>
             <AppBarProvider>
               <div data-component="root-layout" className="relative flex min-h-dvh flex-col">
                 <AppBarPassthrough slot="topbar">

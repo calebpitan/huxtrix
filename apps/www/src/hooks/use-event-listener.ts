@@ -36,7 +36,10 @@ export function useEventListener(
   target?: Target | RefObject<HTMLElement>,
   options?: UseEventListenerOptions,
 ) {
-  const resolveListener = useCallback((l: typeof listener) => (isFn(l) ? l : l.handleEvent), [])
+  const resolveListener = useCallback(
+    (l: typeof listener) => (isFn(l) ? l : (e: Event) => l.handleEvent(e)),
+    [],
+  )
   const savedListener = useRef(resolveListener(listener))
 
   useEffect(() => {
@@ -44,7 +47,7 @@ export function useEventListener(
   }, [listener, resolveListener])
 
   useEffect(() => {
-    const targetElement = target && 'current' in target ? target.current : target || window
+    const targetElement = target && 'current' in target ? target.current : target ?? window
 
     if (!targetElement?.addEventListener) return
 

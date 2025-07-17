@@ -4,10 +4,14 @@ import z from 'zod'
 
 import { signIn } from '@/lib/auth/server'
 
-type EmailSignInFormState = { errors: { email?: string[] }; message?: string; success?: boolean }
+interface EmailSignInFormState {
+  errors: { email?: string[] }
+  message?: string
+  success?: boolean
+}
 
 const EmailSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   redirectTo: z.string().default('/'),
 })
 

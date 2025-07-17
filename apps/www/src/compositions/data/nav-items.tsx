@@ -1,6 +1,9 @@
 import { Compass, Home, PlusCircle, Search, User } from 'lucide-react'
 
-type GetNavItemsOptions = { pageUrl: URL | null; defaultItems?: Array<NavItem> }
+interface GetNavItemsOptions {
+  pageUrl: URL | null
+  defaultItems?: Array<NavItem>
+}
 
 export type NavItem = (typeof navItems)[number]
 

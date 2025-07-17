@@ -8,19 +8,23 @@ import Substack from '@/public/icons/substack.svg'
 import Tiktok from '@/public/icons/tiktok.svg'
 import X from '@/public/icons/x.svg'
 import Youtube from '@/public/icons/youtube.svg'
+import { ComponentProps, FC } from 'react'
 
-export type SocialProfile = { name: 'x' | 'ig' | 'yt' | 'tiktok' | 'substack'; url: string | null }
+export interface SocialProfile {
+  name: 'x' | 'ig' | 'yt' | 'tiktok' | 'substack'
+  url: string | null
+}
 
 export interface SocialProfilesProps extends HTMLMotionProps<'div'> {
   profiles: SocialProfile[]
 }
 
 const icons = {
-  x: X,
-  ig: Instagram,
-  yt: Youtube,
-  tiktok: Tiktok,
-  substack: Substack,
+  x: X as FC<ComponentProps<'svg'>>,
+  ig: Instagram as FC<ComponentProps<'svg'>>,
+  yt: Youtube as FC<ComponentProps<'svg'>>,
+  tiktok: Tiktok as FC<ComponentProps<'svg'>>,
+  substack: Substack as FC<ComponentProps<'svg'>>,
 }
 
 export const SocialProfiles = ({ className, profiles, ...props }: SocialProfilesProps) => {

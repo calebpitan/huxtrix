@@ -2,7 +2,7 @@ import { AccountEntity, AccountEntityMapper } from '../entities/account'
 import { AccountDict, AccountModel } from '../schema/account/model'
 import { UserModel } from '../schema/user/model'
 import { DatabaseSession, LoadOptions } from '../type'
-import { ExecutionOptions, FindAllOptions, Mapper, RepositoryFactory } from './base'
+import { ExecutionOptions, Mapper, RepositoryFactory } from './base'
 
 const KEY = 'account'
 const LOAD_OPTIONS = { user: true } as const satisfies LoadOptions<'account'>

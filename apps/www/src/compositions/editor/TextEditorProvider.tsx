@@ -2,34 +2,40 @@
 
 import { createContext, use, useMemo, useRef, useState } from 'react'
 
-type EditorState = { content: string; mode: 'edit' | 'preview' }
+interface EditorState {
+  content: string
+  mode: 'edit' | 'preview'
+}
 
-type TextEditorContextType = {
+interface TextEditorContextType {
   controller: TextEditorController
   state: EditorState
-  setContent(content: string): void
-  toggleMode(): void
+  setContent: (content: string) => void
+  toggleMode: () => void
 }
 
 type Events = keyof EventHandlerMap
-type Handler<Args extends Array<unknown>> = (...args: Args) => void
-type EventHandlerMap = { save: []; post: [] }
+type Handler<Args extends unknown[]> = (...args: Args) => void
+interface EventHandlerMap {
+  save: []
+  post: []
+}
 
 const TextEditorContext = createContext<TextEditorContextType | null>(null)
 
 class TextEditorController {
-  private readonly registry: Map<Events, CallableFunction> = new Map()
+  private readonly registry = new Map<Events, CallableFunction>()
 
   handle<E extends Events>(event: E, handler: Handler<EventHandlerMap[E]>) {
     this.registry.set(event, handler)
   }
 
   save(): void {
-    return this.registry.get('save')?.()
+    return void this.registry.get('save')?.()
   }
 
   post(): void {
-    return this.registry.get('post')?.()
+    return void this.registry.get('post')?.()
   }
 }
 

@@ -55,7 +55,7 @@ export const UserEntityMapper = {
    * @param data The structured data
    * @returns The structured data
    */
-  struct(data: UserEntity): UserEntity {
+  struct: (data: UserEntity): UserEntity => {
     return data
   },
 
@@ -64,7 +64,7 @@ export const UserEntityMapper = {
    * @param model The model to map from, into a corresponding entity
    * @returns The mapped entity
    */
-  from(model: UserDict | UserModel): UserEntity {
+  from: (model: UserDict | UserModel): UserEntity => {
     return UserEntity.parse(
       UserEntityMapper.struct({
         accounts: model.accounts?.map(AccountEntityMapper.from),
@@ -93,7 +93,7 @@ export const UserEntityMapper = {
    * @param entity The entity to map into a corresposing model
    * @returns The mapped model
    */
-  into(entity: UserEntity): UserModel {
+  into: (entity: UserEntity): UserModel => {
     return new UserModel({
       accounts: entity.accounts?.map(AccountEntityMapper.into),
       createdAt: entity.createdAt,
@@ -116,7 +116,7 @@ export const UserEntityMapper = {
    * @param entity The entity to map into a corresposing model
    * @returns The mapped model
    */
-  pinto(entity: ForUpdate<'user', UserEntity>): ForUpdate<'user', UserModel> {
+  pinto: (entity: ForUpdate<'user', UserEntity>): ForUpdate<'user', UserModel> => {
     const model = {
       deletedAt: entity.deletedAt,
       email: entity.email?.address,

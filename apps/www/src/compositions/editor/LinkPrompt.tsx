@@ -16,7 +16,7 @@ import { Label } from '@/components/ui/label'
 
 export interface LinkPromptProps extends ComponentProps<'div'> {
   data: { text?: string; url?: string; og?: boolean }
-  onConfirm(respones: z.infer<typeof formSchema>): void
+  onConfirm: (respones: z.infer<typeof formSchema>) => void
 }
 
 const formSchema = z.object({
@@ -39,6 +39,7 @@ export function LinkPrompt({ data, onConfirm, ...props }: LinkPromptProps) {
   return (
     <div {...props}>
       <Form {...form}>
+        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}

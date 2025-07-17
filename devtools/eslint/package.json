@@ -6,16 +6,20 @@
   "description": "A package to share ESLint configurations in workspace",
   "exports": {
     "./base": {
-      "default": "./base.js",
-      "types": "base.d.ts"
+      "types": "base.d.ts",
+      "default": "./base.js"
+    },
+    "./libs": {
+      "types": "libs.d.ts",
+      "default": "./libs.js"
     },
     "./next-js": {
-      "default": "./next.js",
-      "types": "next.d.ts"
+      "types": "next.d.ts",
+      "default": "./next.js"
     },
     ".": {
-      "default": "./index.js",
-      "types": "./index.d.ts"
+      "types": "./index.d.ts",
+      "default": "./index.js"
     }
   },
   "devDependencies": {

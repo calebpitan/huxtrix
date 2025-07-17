@@ -12,8 +12,8 @@ function getServerOrigin<R = string>(
   if (origin) return map(origin)
 
   // Fallback to x-forwarded-proto and x-forwarded-host
-  const protocol = h.get('x-forwarded-proto') || 'https'
-  const host = h.get('x-forwarded-host') || h.get('host')
+  const protocol = h.get('x-forwarded-proto') ?? 'https'
+  const host = h.get('x-forwarded-host') ?? h.get('host')
 
   if (!host) return null
 

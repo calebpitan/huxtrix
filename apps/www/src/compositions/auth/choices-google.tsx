@@ -4,7 +4,7 @@ import Google from '@/public/icons/google.svg'
 
 export type ContinueWithGoogleProps = Readonly<{ redirectTo: string }>
 
-export async function ContinueWithGoogle({ redirectTo }: ContinueWithGoogleProps) {
+export function ContinueWithGoogle({ redirectTo }: ContinueWithGoogleProps) {
   return (
     <div className="flex flex-col justify-items-center">
       <form

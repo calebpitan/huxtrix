@@ -14,7 +14,10 @@
   },
   "scripts": {
     "brl": "yarn p:brl",
-    "build": "yarn p:build"
+    "build": "yarn p:build",
+    "lint": "yarn p:lint",
+    "lint:fix": "yarn p:lint:fix",
+    "typecheck": "yarn p:typecheck"
   },
   "dependencies": {
     "@hux/datasource": "workspace:^",
@@ -31,5 +34,8 @@
   "peerDependencies": {
     "next": "^15",
     "react": "^19"
+  },
+  "devDependencies": {
+    "@hux/eslint": "workspace:^"
   }
 }
