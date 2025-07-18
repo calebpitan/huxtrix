@@ -1,42 +1,20 @@
-import { ID } from '@hux/datasource'
-
-import { Effect } from 'effect'
-import z from 'zod'
-
+import * as uc from '../../../usecases/user/update'
 import { protectedProcedure } from '../../../server/trpc'
-import { UserRepositoryDep } from '../../../services/injection'
 
 export const updateUser = protectedProcedure
-  .input(
-    z.object({
-      id: ID,
-      data: z.object({
-        firstName: z.string(),
-        lastName: z.string(),
-        username: z.string().regex(/^[A-Za-z](?:[A-Za-z0-9-])*$/),
-      }),
-    }),
-  )
+  .input(uc.updateUserInput)
   .mutation(async ({ ctx, input }) => {
-    return await ctx.runEffect(
-      Effect.gen(function* () {
-        const repo = yield* UserRepositoryDep
+    return await ctx.runEffect(uc.updateUserUseCase(input))
+  })
 
-        const result = yield* Effect.promise(() =>
-          repo.update(input.id, {
-            name: {
-              first: input.data.firstName,
-              last: input.data.lastName,
-            },
-            username: input.data.username,
-          }),
-        )
+export const updateUserProfile = protectedProcedure
+  .input(uc.updateUserProfileInput)
+  .mutation(async ({ ctx, input }) => {
+    return await ctx.runEffect(uc.updateUserProfileUseCase(input))
+  })
 
-        if (result.isErr()) {
-          return yield* Effect.fail(result.error)
-        }
-
-        return result.value
-      }),
-    )
+export const updateUsername = protectedProcedure
+  .input(uc.updateUsernameInput)
+  .mutation(async ({ ctx, input }) => {
+    return await ctx.runEffect(uc.updateUsernameUseCase(input))
   })
