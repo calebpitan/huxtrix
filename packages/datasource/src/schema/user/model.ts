@@ -10,6 +10,20 @@ export type UserDictBase = InferSelectModel<typeof users>
 export type UserDict = UserDictBase & UserRelations
 export type UsersTable = typeof users
 
+type RedesSocialesDelUsuario = Record<keyof typeof SocialTypes, string>
+
+export type SocialTypes = keyof typeof SocialTypes
+
+/**
+ * @enum
+ */
+export const SocialTypes = {
+  x: 'x',
+  ig: 'ig',
+  yt: 'yt',
+  tiktok: 'tiktok',
+} as const
+
 export const users = model(
   NAME,
   {
@@ -30,6 +44,8 @@ export const users = model(
     name: t.text().default('').notNull(),
     /** The unique, user's name on the platform */
     username: t.text(),
+    /** The user's social profiles */
+    socials: t.json().$type<RedesSocialesDelUsuario>(),
   },
   (s) => [
     // unique index for email in lower

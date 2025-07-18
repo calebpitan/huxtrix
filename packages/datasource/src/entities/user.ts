@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { UserDict, UserModel } from '../schema/user/model'
+import { type SocialTypes, type UserDict, UserModel } from '../schema/user/model'
 import { DeepReadonly, ForUpdate } from '../type'
 import { AccountEntity, AccountEntityMapper } from './account'
 import { BaseEntity } from './base'
@@ -30,12 +30,18 @@ export const NameVObject = z.object({
   last: z.string().default(''),
 })
 
+export const SocialsVObject = z.object({
+  name: z.enum(['x', 'ig', 'yt', 'tiktok']),
+  url: z.url(),
+})
+
 export const BaseUserEntity = z.object({
   ...BaseEntity.shape,
   avatar: z.url().nullable(),
   email: EmailVObject,
   name: NameVObject,
   username: z.string().nullable().default(null),
+  socials: z.array(SocialsVObject),
 })
 
 export const UserEntity: z.ZodType<UserEntity> = z.object({
@@ -82,6 +88,7 @@ export const UserEntityMapper = {
           last: model.familyName,
         },
         sessions: model.sessions?.map(SessionEntityMapper.from),
+        socials: socialsToEntries(model.socials),
         updatedAt: model.updatedAt,
         username: model.username,
       }),
@@ -106,6 +113,7 @@ export const UserEntityMapper = {
       image: entity.avatar,
       name: entity.name.first.concat(' ', entity.name.last),
       sessions: entity.sessions?.map(SessionEntityMapper.into),
+      socials: socialsFromEntries(entity.socials),
       updatedAt: entity.updatedAt,
       username: entity.username,
     })
@@ -125,9 +133,23 @@ export const UserEntityMapper = {
       givenName: entity.name?.first,
       image: entity.avatar,
       name: entity.name?.first.concat(' ', entity.name.last),
+      socials: entity.socials && socialsFromEntries(entity.socials),
       username: entity.username,
     }
 
-    return Object.fromEntries(Object.entries(model).filter(([, v]) => typeof v !== 'undefined'))
+    return omitUndefined(model)
   },
+}
+
+function omitUndefined<T extends Record<string, unknown>>(obj: T): T {
+  return Object.fromEntries(Object.entries(obj).filter(([, v]) => typeof v !== 'undefined')) as T
+}
+
+function socialsFromEntries(entries: ReadonlyArray<z.infer<typeof SocialsVObject>>) {
+  return Object.fromEntries(entries.map((s) => [s.name, s.url])) as Record<SocialTypes, string>
+}
+
+function socialsToEntries(socials: Record<SocialTypes, string> | null) {
+  const socialEntries = socials ? (Object.entries(socials) as Array<[SocialTypes, string]>) : []
+  return socialEntries.flatMap(([name, url]) => ({ name, url }))
 }
