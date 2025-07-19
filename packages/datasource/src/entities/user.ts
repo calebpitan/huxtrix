@@ -46,11 +46,11 @@ export const BaseUserEntity = z.object({
 
 export const UserEntity: z.ZodType<UserEntity> = z.object({
   ...BaseUserEntity.shape,
-  get sessions(): z.ZodArray<typeof SessionEntity> {
-    return z.array(SessionEntity)
+  get sessions() {
+    return z.array(SessionEntity).optional()
   },
-  get accounts(): z.ZodArray<typeof AccountEntity> {
-    return z.array(AccountEntity)
+  get accounts() {
+    return z.array(AccountEntity).optional()
   },
 })
 
