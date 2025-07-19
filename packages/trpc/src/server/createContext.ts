@@ -54,13 +54,13 @@ export const createContextInner = Effect.gen(function* () {
   const database = yield* DatabaseSessionDep
 
   return async function createInnerContext(opts: CreateInnerTRPCContextOptions) {
-    return {
+    return Promise.resolve({
       db: database,
       info: opts.info,
       req: opts.req,
       res: { headers: opts.resHeaders } as Record<'headers', Headers | undefined>,
       session: opts.session,
       runtime: opts.runtime,
-    }
+    })
   }
 })

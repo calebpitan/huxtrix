@@ -3,14 +3,15 @@ import 'server-only'
 import { cache } from 'react'
 
 import { createTRPCClient, httpBatchLink } from '@trpc/client'
+import { AnyRouter } from '@trpc/server'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 
 import { Effect, Exit } from 'effect'
+import superjson from 'superjson'
 
 import { makeQueryClient } from '../react/query-client'
 import type { Context } from './createContext'
 import { appRouter } from './routers/app'
-import { AnyRouter } from '@trpc/server'
 
 // IMPORTANT: Create a stable getter for the query client that
 //            will return the same client during the same request.
@@ -84,7 +85,8 @@ export function createExternalTRPC<Router extends AnyRouter>(
       links: [
         httpBatchLink({
           url: config.externalUrl,
-          headers: config.headers || (() => ({})),
+          transformer: superjson,
+          headers: config.headers ?? (() => ({})),
         }),
       ],
     }),
@@ -103,7 +105,7 @@ export async function executeTRPCOperation<T>(operation: Effect.Effect<T, Error>
 
   if (Exit.isFailure(exit)) {
     console.error('tRPC operation failed:', exit.cause)
-    throw new Error(`tRPC operation failed: ${exit.cause}`)
+    throw new Error(`tRPC operation failed: ${exit.cause.toString()}`)
   }
 
   return exit.value
@@ -113,9 +115,9 @@ export async function executeTRPCOperation<T>(operation: Effect.Effect<T, Error>
  * Type-safe wrapper for the server-side tRPC instance.
  * This ensures proper typing when using the tRPC instance.
  */
-export type ServerTRPC = ReturnType<typeof createTRPCOptionsProxy>
+export type ServerTRPC<R extends AnyRouter> = ReturnType<typeof createTRPCOptionsProxy<R>>
 
 /**
  * Type-safe wrapper for the external tRPC client.
  */
-export type ExternalTRPC = ReturnType<typeof createTRPCOptionsProxy>
+export type ExternalTRPC<R extends AnyRouter> = ReturnType<typeof createTRPCOptionsProxy<R>>
