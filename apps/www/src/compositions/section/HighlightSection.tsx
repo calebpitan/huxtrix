@@ -2,6 +2,10 @@
 
 import { Fragment, HTMLAttributes, useState } from 'react'
 
+import { useSession } from '@hux/auth/react'
+import { useTRPC } from '@hux/trpc/react'
+import { useQuery } from '@tanstack/react-query'
+
 import { cva } from 'class-variance-authority'
 import Image from 'next/image'
 
@@ -33,6 +37,15 @@ export function HighlightSection({
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<(typeof highlights)[0] | null>(null)
   const { className: contentClassName, ...contentProps } = ContentProps
+
+  const { data: session } = useSession({ required: true })
+
+  const trpc = useTRPC()
+  const userQuery = useQuery(
+    trpc.user.getByID.queryOptions({ id: session?.user.id ?? '' }, { enabled: !!session?.user.id }),
+  )
+
+  console.log(userQuery.data)
 
   return (
     <section

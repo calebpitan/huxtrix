@@ -4,3 +4,4 @@
 
 export * from './exists'
 export * from './mapError'
+export * from './notfound'

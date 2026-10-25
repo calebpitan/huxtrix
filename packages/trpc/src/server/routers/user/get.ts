@@ -1,25 +1,18 @@
 import { ID } from '@hux/datasource'
 
-import { Effect } from 'effect'
 import z from 'zod'
 
 import { apiProcedure } from '../../../server/trpc'
-import { UserRepositoryDep } from '../../../services/injection'
+import { queryUserByID, queryUserByUsername } from '../../../services/user/query'
 
 export const getUserByID = apiProcedure
   .input(z.object({ id: ID }))
   .query(async ({ ctx, input }) => {
-    return ctx.runEffect(
-      Effect.gen(function* () {
-        const repo = yield* UserRepositoryDep
+    return ctx.runEffect(queryUserByID(input.id))
+  })
 
-        const result = yield* Effect.promise(() => repo.one(input.id))
-
-        if (result.isErr()) {
-          return yield* Effect.fail(result.error)
-        }
-
-        return result.value
-      }),
-    )
+export const getUserByUsername = apiProcedure
+  .input(z.object({ username: z.string() }))
+  .query(async ({ ctx, input }) => {
+    return ctx.runEffect(queryUserByUsername(input.username))
   })

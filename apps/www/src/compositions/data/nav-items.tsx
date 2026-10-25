@@ -1,5 +1,7 @@
 import { Compass, Home, PlusCircle, Search, User } from 'lucide-react'
 
+import { Links } from '@/lib/links'
+
 interface GetNavItemsOptions {
   pageUrl: URL | null
   defaultItems?: Array<NavItem>
@@ -33,15 +35,15 @@ export const navItems = [
     aria: 'Search',
   },
   {
-    href: '/signin',
+    href: Links.signin(),
     label: 'Profile',
     icon: <User />,
     aria: 'Profile',
   },
 ] as const
 
-export function getNavItems<U extends Record<'username', string>>(
-  user: U | undefined,
+export function getNavItems<U extends Record<'username', string | null>>(
+  user: U | null,
   options: GetNavItemsOptions,
 ) {
   const { pageUrl, defaultItems = navItems } = options
@@ -49,7 +51,12 @@ export function getNavItems<U extends Record<'username', string>>(
   const items = defaultItems
     .filter((item) => item.label !== 'Profile' || user !== undefined)
     .map((item) => {
-      const href = item.label !== 'Profile' ? item.href : `/${user!.username}`
+      const href =
+        item.label !== 'Profile'
+          ? item.href
+          : user
+            ? `/${user.username ?? Links.profile.edit}`
+            : Links.signin(pageUrl?.href)
       const isActive = href === pageUrl?.pathname
 
       return { ...item, href, isActive }

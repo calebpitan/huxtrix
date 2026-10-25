@@ -46,6 +46,8 @@ export const users = model(
     username: t.text(),
     /** The user's social profiles */
     socials: t.json().$type<RedesSocialesDelUsuario>(),
+    /** The user's profile summary, as in bio */
+    summary: t.text().default('').notNull(),
   },
   (s) => [
     // unique index for email in lower

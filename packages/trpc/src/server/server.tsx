@@ -2,7 +2,7 @@ import 'server-only'
 
 import { cache } from 'react'
 
-import { createTRPCClient, httpBatchLink } from '@trpc/client'
+import { createTRPCClient, httpBatchLink, loggerLink } from '@trpc/client'
 import { AnyRouter } from '@trpc/server'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 
@@ -83,6 +83,7 @@ export function createExternalTRPC<Router extends AnyRouter>(
   return createTRPCOptionsProxy<Router>({
     client: createTRPCClient<AnyRouter>({
       links: [
+        loggerLink(),
         httpBatchLink({
           url: config.externalUrl,
           transformer: superjson,

@@ -64,6 +64,7 @@
     "date-fns": "^4.1.0",
     "effect": "^3.16.12",
     "is-hotkey": "^0.2.0",
+    "lodash.isequal": "^4.5.0",
     "lowlight": "^3.3.0",
     "lucide-react": "^0.511.0",
     "motion": "^12.12.1",
@@ -86,6 +87,7 @@
   "devDependencies": {
     "@hux/eslint": "workspace:^",
     "@hux/tsconfig": "workspace:^",
-    "@types/is-hotkey": "^0"
+    "@types/is-hotkey": "^0",
+    "@types/lodash.isequal": "^4"
   }
 }

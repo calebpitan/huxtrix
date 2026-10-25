@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { headers } from 'next/headers'
 
 import { getNavItems } from '@/compositions/data/nav-items'
-import { getUserProfileById } from '@/lib/datasource/user'
+import { getSessionUser } from '@/lib/datasource/user'
 import { getServerUrl } from '@/lib/server'
 
 import { PageBottomBar } from './PageBottomBar'
@@ -15,7 +15,7 @@ export interface PageAppBarProps {
 
 export async function PageAppBar({ title }: PageAppBarProps) {
   const headersList = await headers()
-  const user = await getUserProfileById('123')
+  const user = await getSessionUser()
   const uri = getServerUrl(headersList, (v) => new URL(v))
   const items = getNavItems(user, { pageUrl: uri })
 

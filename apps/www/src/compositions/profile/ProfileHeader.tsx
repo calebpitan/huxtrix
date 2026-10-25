@@ -25,7 +25,7 @@ export const ProfileHeader = forwardRef<HTMLDivElement, ProfileHeaderProps>(
       <motion.div data-component="profile-header" className={cn(className)} {...props} ref={ref}>
         <div className="flex flex-col items-center gap-4">
           <Avatar className="size-24 lg:size-32" {...AvatarProps}>
-            <AvatarImage src={profile.image} />
+            <AvatarImage src={profile.avatar ?? ''} />
             <AvatarFallback>{profile.name.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
 
@@ -40,7 +40,7 @@ export const ProfileHeader = forwardRef<HTMLDivElement, ProfileHeaderProps>(
 
             <div className={cn('text-muted-foreground max-w-62.5 h-[3lh] text-sm')}>
               <ClampedText className="text-foreground" alignment="center" lines={2}>
-                {profile.bio}
+                {profile.summary}
               </ClampedText>
             </div>
           </div>

@@ -5,9 +5,11 @@ import { cloneElement, isValidElement, useEffect, useMemo, useRef } from 'react'
 
 import { AnimatePresence, HTMLMotionProps, MotionValue, Transition, motion } from 'motion/react'
 import { cubicBezier, useSpring, useTransform } from 'motion/react'
+import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { useForkRef } from '@/hooks/use-fork-ref'
+import { Links } from '@/lib/links'
 import { cn } from '@/lib/utils'
 
 import { useAnimatedProfile } from './AnimatedProvider'
@@ -99,8 +101,8 @@ function AnimatedProfileSidebar({
         style={{ y: mode === 'primary' ? y : 0 }}
       >
         <div className="flex w-full flex-row justify-center gap-4">
-          <Button variant="secondary" size="sm" className="rounded-full">
-            Edit Profile
+          <Button asChild={true} variant="secondary" size="sm" className="rounded-full">
+            <Link href={Links.profile.edit}>Edit Profile</Link>
           </Button>
           <Button variant="default" size="sm" className="rounded-full">
             Subscribers
@@ -173,7 +175,7 @@ function AnimatedProfile({
         className="z-0 py-4"
         data-q={motion.signal.get()}
         style={{ opacity }}
-        profiles={profile.social}
+        profiles={profile.socials}
       />
 
       {children}

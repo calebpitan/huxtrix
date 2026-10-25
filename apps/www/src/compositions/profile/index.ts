@@ -1,4 +1,6 @@
 export * from './Animated'
 export * from './AnimatedProvider'
 export * from './ProfileHeader'
+export * from './ProfileSetup'
+export * from './ProfileEditor'
 export * from './Socials'

@@ -1,9 +1,9 @@
 export interface Profile {
   name: string
   username: string
-  image: string
-  bio: string
-  social: SocialProfile[]
+  avatar: string | null
+  summary: string
+  socials: SocialProfile[]
 }
 
 export interface SocialProfile {

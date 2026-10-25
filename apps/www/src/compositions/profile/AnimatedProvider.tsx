@@ -76,7 +76,7 @@ interface UseAnimatedProfileMotionParams {
 }
 
 interface AnimatedProfileContextType {
-  profile?: Profile | null
+  profile: Profile
   initialSizes: InitialSizes
   mode: 'primary' | 'alternate'
   motion: AnimatedProfileMotion
@@ -91,7 +91,8 @@ export interface AnimatedProfileRefs {
   sidebar: RefObject<HTMLDivElement | null>
 }
 
-export interface AnimatedProfileProviderProps extends Pick<AnimatedProfileContextType, 'profile'> {
+export interface AnimatedProfileProviderProps {
+  profile: Promise<Profile>
   children: ReactNode
 }
 
@@ -147,9 +148,10 @@ export const useAnimatedProfileMotion = (params: UseAnimatedProfileMotionParams)
 
 export function AnimatedProfileProvider({
   children,
-  profile: defaultProfile = null,
+  profile: defaultProfile,
 }: AnimatedProfileProviderProps) {
-  const [profile, setProfile] = useState<Profile | null>(() => defaultProfile)
+  const _profile = use(defaultProfile)
+  const [profile, setProfile] = useState<Profile>(() => _profile)
   const [refs, setRefs] = useState<Partial<AnimatedProfileRefs>>({})
 
   const [mode, setMode] = useState<'primary' | 'alternate'>('primary')
@@ -177,7 +179,6 @@ export function AnimatedProfileProvider({
   const { scrollY, scrollYProgress } = useScroll({
     target: refs.root,
     offset: ['start start', 'end start'],
-    layoutEffect: true,
   })
   // Movement of the header along the x-axis in isolation of scroll, that is, without accounting for scroll-x motion
   // This is actually the animation between the header current position and it's destination position in the sidebar

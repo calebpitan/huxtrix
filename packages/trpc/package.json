@@ -13,8 +13,10 @@
     }
   },
   "scripts": {
+    "dev": "yarn p:dev",
     "brl": "yarn p:brl",
     "build": "yarn p:build",
+    "build:watch": "yarn p:build:watch",
     "lint": "yarn p:lint",
     "lint:fix": "yarn p:lint:fix",
     "typecheck": "yarn p:typecheck"

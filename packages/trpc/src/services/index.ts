@@ -3,3 +3,4 @@
  */
 
 export * from './injection'
+export * from './user/index'

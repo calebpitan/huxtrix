@@ -4,10 +4,10 @@ import { Metadata } from 'next'
 
 import * as AnimatedProfile from '@/compositions/profile/Animated'
 import { latestHacks } from '@/compositions/data/latest-hacks'
-import { profiles } from '@/compositions/data/profiles'
 import { PageAppBar, PageLayout } from '@/compositions/layout'
 import { AnimatedProfileProvider } from '@/compositions/profile/AnimatedProvider'
 import { LatestHacksSection } from '@/compositions/section/LatestHacks'
+import { getUserByUsername } from '@/lib/datasource/user'
 
 interface Params {
   username: string
@@ -21,7 +21,7 @@ export async function generateMetadata({
   params: paramsPromise,
 }: ProfilePageProps): Promise<Metadata> {
   const params = await paramsPromise
-  const profile = profiles.find((p) => p.username === params.username)
+  const profile = await getUserByUsername(params.username)
 
   if (!profile) {
     return {
@@ -30,14 +30,20 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${profile.name} — Huxtrix`,
-    description: profile.bio,
+    title: `${profile.names.name} — Huxtrix`,
+    description: profile.summary,
   }
 }
 
 export default function ProfilePage({ params: paramsPromise }: ProfilePageProps) {
   const params = use(paramsPromise)
-  const profile = profiles.find((p) => p.username === params.username)
+  const profile = getUserByUsername(params.username).then((d) => ({
+    name: d.names.name,
+    avatar: d.avatar,
+    socials: d.socials,
+    summary: d.summary,
+    username: d.username ?? '',
+  }))
 
   return (
     <AnimatedProfileProvider profile={profile}>

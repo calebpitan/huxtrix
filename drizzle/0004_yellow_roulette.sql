@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "summary" text DEFAULT '' NOT NULL;
