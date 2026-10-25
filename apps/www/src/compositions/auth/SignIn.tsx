@@ -1,52 +1,22 @@
-import { Fragment } from 'react'
-
-import { AuthErrorCodes } from '@hux/auth'
-
 import { AlertCircleIcon } from 'lucide-react'
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
-import { evaluate } from '@/lib/utils'
 
 import * as Surface from './surface'
 import { Alternate } from './alternate'
 import { ContinueWithEmail } from './choices-email'
 import { ContinueWithGoogle } from './choices-google'
+import { AuthPageError, formatAuthError } from './format-auth-error'
 import { LegalNotice } from './legal-notice'
 
 export interface SignInProps {
   redirectTo?: string
-  error?: { code: string; identifier?: string }
+  error?: AuthPageError
 }
 
 export function SignIn({ error, redirectTo = '/' }: SignInProps) {
-  const formatting = evaluate(() => {
-    if (!error?.code) {
-      return undefined
-    }
-    switch (error.code) {
-      case AuthErrorCodes.acoountNotFound:
-        return {
-          title: 'Account Not Found',
-          message: error.identifier ? (
-            <Fragment>
-              User with email address <strong>{error.identifier}</strong> does not exist
-            </Fragment>
-          ) : (
-            'User account not found'
-          ),
-        }
-
-      case AuthErrorCodes.SessionRequired:
-        return
-
-      default:
-        return {
-          title: 'Unknown Error',
-          message: 'An unknown error has occured, please try signing in at another time',
-        }
-    }
-  })
+  const formatting = formatAuthError(error)
 
   return (
     <Surface.Backdrop>

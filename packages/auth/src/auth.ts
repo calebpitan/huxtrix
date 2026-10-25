@@ -42,7 +42,15 @@ export const AuthErrorCodes = {
   acoountNotFound: 'account_not_found',
   invalidEmail: 'invlaid_email',
   SessionRequired: 'SessionRequired',
+  Configuration: 'Configuration',
+  AccessDenied: 'AccessDenied',
+  Verification: 'Verification',
   OAuthAccountNotLinked: 'OAuthAccountNotLinked',
+  OAuthSignin: 'OAuthSignin',
+  OAuthCallback: 'OAuthCallback',
+  OAuthCreateAccount: 'OAuthCreateAccount',
+  Callback: 'Callback',
+  EmailSignin: 'EmailSignin',
 } as const
 
 /**

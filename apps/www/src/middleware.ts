@@ -22,6 +22,18 @@ export const middleware: NextMiddleware = (request: NextRequest) => {
   headers.set('x-pathname', request.nextUrl.pathname)
   headers.set('x-url', request.nextUrl.toString())
 
+  // Auth.js only has one error page (/signin). If this attempt started on
+  // signup, send it there before this visit overwrites the intent cookie.
+  if (
+    request.nextUrl.pathname === '/signin' &&
+    request.nextUrl.searchParams.has('error') &&
+    request.cookies.get('auth.intent')?.value === 'signup'
+  ) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/signup'
+    return NextResponse.redirect(url)
+  }
+
   const response = NextResponse.next({
     request: {
       headers,

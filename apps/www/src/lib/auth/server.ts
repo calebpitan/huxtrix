@@ -23,6 +23,7 @@ const options: InitAuthOptions = {
   },
   pages: {
     signIn: '/signin',
+    error: '/signin',
   },
   sessionStrategy: 'jwt',
 }
