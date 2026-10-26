@@ -1,4 +1,5 @@
 import { type Callsite, withCallsite } from './caller.js'
+import { resolveCallsite } from './resolve-callsite.js'
 import { type LogFields, type LogLevel, type Logger } from './types.js'
 
 const LEVEL_RANK: Record<LogLevel, number> = {
@@ -31,16 +32,19 @@ function parseFrame(line: string): (Callsite & { functionName?: string }) | unde
 }
 
 function isLoggerFrame(frame: { functionName?: string; file: string }) {
-  if (frame.functionName && LOGGER_METHODS.has(frame.functionName)) return true
-  return frame.file.includes('/packages/logger/') || frame.file.includes('/@hux/logger/')
+  const name = frame.functionName?.slice(frame.functionName.lastIndexOf('.') + 1)
+  if (name && LOGGER_METHODS.has(name)) return true
+  return frame.file.includes('packages/logger/') || frame.file.includes('@hux/logger')
 }
 
 function callsiteOfCaller(): Callsite | undefined {
   const lines = new Error().stack?.split('\n') ?? []
   for (const line of lines.slice(3)) {
     const frame = parseFrame(line)
-    if (!frame || isLoggerFrame(frame)) continue
-    return { file: frame.file, line: frame.line, column: frame.column }
+    if (!frame) continue
+    const resolved = resolveCallsite({ file: frame.file, line: frame.line, column: frame.column })
+    if (isLoggerFrame({ functionName: frame.functionName, file: resolved.file })) continue
+    return resolved
   }
   return undefined
 }

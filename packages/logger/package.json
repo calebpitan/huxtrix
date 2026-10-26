@@ -29,6 +29,7 @@
     "typecheck": "yarn p:typecheck"
   },
   "dependencies": {
+    "@jridgewell/trace-mapping": "^0.3.29",
     "effect": "^3.16.12",
     "pino": "^9.7.0"
   },
