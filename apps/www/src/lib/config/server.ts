@@ -7,7 +7,7 @@ const ConfigSchema = z
     DATABASE_URL: z.string().url(),
     SERVER_EMAIL_ADDRESS: z.string(),
     NODE_ENV: z.enum(['development', 'production', 'test']),
-    BASE_URL: z.string().url().default('http://localhost:3000'),
+    BASE_URL: z.url().default('http://localhost:3000'),
   })
   .transform((data) => ({
     datasourceUrl: data.DATABASE_URL,

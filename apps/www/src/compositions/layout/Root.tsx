@@ -45,7 +45,7 @@ export async function RootLayout({ children }: RootLayoutProps) {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
       <NavigationGuardProvider>
-        <SessionProvider>
+        <SessionProvider session={session}>
           <TRPCReactProvider url={getUrl()}>
             <HydrationBoundary state={dehydrate(queryClient)}>
               <AppBarProvider>

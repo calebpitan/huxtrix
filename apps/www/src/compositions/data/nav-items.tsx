@@ -55,7 +55,9 @@ export function getNavItems<U extends Record<'username', string | null>>(
         item.label !== 'Profile'
           ? item.href
           : user
-            ? `/${user.username ?? Links.profile.edit}`
+            ? user.username
+              ? `/${user.username}`
+              : Links.profile.edit
             : Links.signin(pageUrl?.href)
       const isActive = href === pageUrl?.pathname
 
