@@ -1,6 +1,6 @@
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { AccountModel, Database, SessionModel, UserModel } from '@hux/datasource'
-import { VerificationTokenModel, sql, ulid } from '@hux/datasource'
+import { VerificationTokenModel, sql } from '@hux/datasource'
 
 import NextAuth from 'next-auth'
 import type { NextAuthConfig, NextAuthResult } from 'next-auth'
@@ -69,7 +69,7 @@ export function initAuth(session: Database, options: InitAuthOptions): HxAuthRes
       Google<GoogleProfile>({
         profile(profile) {
           return {
-            id: ulid(),
+            id: profile.sub,
             email: profile.email,
             image: profile.picture,
             name: profile.name,

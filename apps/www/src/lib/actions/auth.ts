@@ -15,6 +15,16 @@ const EmailSchema = z.object({
   redirectTo: z.string().default('/'),
 })
 
+function toFieldErrors<T extends Record<string, unknown>>(
+  a: Partial<Record<keyof T, { errors: string[] }>>,
+) {
+  return Object.fromEntries(
+    Object.entries(a).map(([k, v]) => {
+      return [k as keyof T, v?.errors] as const
+    }),
+  ) as Partial<Record<keyof T, string[]>>
+}
+
 export const emailSignInAction = async (formState: EmailSignInFormState, formData: FormData) => {
   const validation = await EmailSchema.safeParseAsync({
     email: formData.get('email'),
@@ -25,7 +35,7 @@ export const emailSignInAction = async (formState: EmailSignInFormState, formDat
     return {
       ...formState,
       success: false,
-      errors: validation.error.flatten().fieldErrors,
+      errors: toFieldErrors(z.treeifyError(validation.error).properties!),
     }
   }
 
