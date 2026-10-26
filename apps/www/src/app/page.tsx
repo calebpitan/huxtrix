@@ -10,12 +10,12 @@ import { PopularCategoriesSection } from '@/compositions/section/PopularCategori
 import { PopularCategoriesSectionProps } from '@/compositions/section/PopularCategories'
 
 const categories: PopularCategoriesSectionProps['categories'] = [
-  { name: 'Tech', icon: '💻' },
-  { name: 'Food', icon: '🍔' },
-  { name: 'DIY', icon: '🛠️' },
-  { name: 'Productivity', icon: '⚡' },
-  { name: 'Home', icon: '🏠' },
-  { name: 'Life', icon: '🌱' },
+  { name: 'Tech', icon: '💻', members: '289k members' },
+  { name: 'Food', icon: '🍔', members: '142k members' },
+  { name: 'DIY', icon: '🛠️', members: '96k members' },
+  { name: 'Productivity', icon: '⚡', members: '210k members' },
+  { name: 'Home', icon: '🏠', members: '74k members' },
+  { name: 'Life', icon: '🌱', members: '188k members' },
 ]
 
 export default function Home() {
@@ -33,8 +33,7 @@ export default function Home() {
         <PopularCategoriesSection
           axis="horizontal"
           categories={categories}
-          className="-mx-4 inline-block sm:-mx-8 xl:mx-0 xl:hidden"
-          ListProps={{ className: 'max-w-[100dvw] lg:max-w-[738px] xl:max-w-[992px]' }}
+          className="-mx-4 inline-block w-dvw sm:-mx-8 lg:w-full lg:max-w-[738px] xl:mx-0 xl:hidden"
         />
 
         <FeaturedHacksSection

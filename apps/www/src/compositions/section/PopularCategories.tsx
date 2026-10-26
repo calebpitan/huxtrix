@@ -1,4 +1,6 @@
-import { HTMLAttributes } from 'react'
+'use client'
+
+import { HTMLAttributes, useState } from 'react'
 
 import { cva } from 'class-variance-authority'
 
@@ -8,6 +10,7 @@ import { cn } from '@/lib/utils'
 export interface Category {
   name: string
   icon: string
+  members: string
 }
 export interface PopularCategoriesSectionProps extends HTMLAttributes<HTMLElement> {
   categories: Category[]
@@ -25,33 +28,49 @@ export const PopularCategoriesSection = ({
 }: PopularCategoriesSectionProps) => {
   const layout = axis
   const { className: listClassName, ...listProps } = ListProps
+  const [joined, setJoined] = useState<Record<string, boolean>>({})
 
   return (
     <section
       data-component="popular-categories-section"
-      className={cn('space-y-4', className)}
+      className={cn('space-y-3', className)}
       {...props}
     >
-      <h2 className="px-4 text-sm font-bold sm:px-8 xl:px-0">Popular</h2>
+      <h2
+        className={cn(
+          'text-sm font-bold',
+          layout === 'horizontal' ? 'px-4 sm:px-8 xl:px-0' : 'px-2',
+        )}
+      >
+        Popular
+      </h2>
       <div
         className={cn(categoryVariants({ component: 'list', layout }), listClassName)}
         {...listProps}
       >
-        {categories.map((cat) => (
-          <div key={cat.name} className={categoryVariants({ component: 'item', layout })}>
-            <span className={categoryVariants({ component: 'icon', layout })}>{cat.icon}</span>
-            <div className="flex flex-col">
-              <span className={categoryVariants({ component: 'text', layout })}>{cat.name}</span>
-              <span className={'text-foreground/60 text-xs'}>289k members</span>
+        {categories.map((cat) => {
+          const isJoined = joined[cat.name] ?? false
+          const toggleJoined = () =>
+            setJoined((current) => ({
+              ...current,
+              [cat.name]: !current[cat.name],
+            }))
+
+          return (
+            <div key={cat.name} className={categoryVariants({ component: 'item', layout })}>
+              <span className={categoryVariants({ component: 'icon', layout })}>{cat.icon}</span>
+              <div className="flex min-w-0 flex-col gap-0.5">
+                <span className={categoryVariants({ component: 'text', layout })}>{cat.name}</span>
+                <span className="text-foreground/50 truncate text-xs">{cat.members}</span>
+              </div>
+              <JoinButton
+                joined={isJoined}
+                onClick={toggleJoined}
+                className={layout === 'horizontal' ? 'mt-auto w-full' : 'ms-auto h-7'}
+              />
             </div>
-            <Button
-              className="ms-auto h-6 rounded-full bg-amber-500 text-black hover:bg-amber-500/80 active:scale-95"
-              size="sm"
-            >
-              Join
-            </Button>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </section>
   )
@@ -59,13 +78,42 @@ export const PopularCategoriesSection = ({
 
 PopularCategoriesSection.displayName = 'PopularCategoriesSection'
 
+function JoinButton({
+  joined,
+  onClick,
+  className,
+}: {
+  joined: boolean
+  onClick: () => void
+  className?: string
+}) {
+  return (
+    <Button
+      type="button"
+      variant="ghost"
+      size="sm"
+      aria-pressed={joined}
+      onClick={onClick}
+      className={cn(
+        'h-8 rounded-full border bg-transparent px-3 text-xs shadow-none',
+        joined
+          ? 'text-foreground/60 hover:bg-foreground/10 hover:text-foreground active:bg-foreground/15 dark:hover:bg-foreground/10 dark:active:bg-foreground/15 border-transparent dark:bg-transparent'
+          : 'border-border text-foreground dark:border-input hover:border-amber-500 hover:bg-amber-500 hover:text-black active:scale-[0.97] active:border-amber-600 active:bg-amber-600 active:text-black dark:bg-transparent dark:hover:border-amber-500 dark:hover:bg-amber-500 dark:hover:text-black dark:active:border-amber-600 dark:active:bg-amber-600',
+        className,
+      )}
+    >
+      {joined ? 'Joined' : 'Join'}
+    </Button>
+  )
+}
+
 const categoryVariants = cva('', {
   variants: {
     component: {
-      list: 'no-scrollbar flex cursor-pointer snap-x snap-mandatory gap-4 overflow-x-auto',
-      item: 'bg-muted/70 dark:bg-muted/60 border-primary/20 w-full cursor-pointer snap-center rounded-2xl transition-shadow',
-      icon: 'inline-flex size-8 items-center justify-center rounded-full bg-amber-500/70',
-      text: 'text-sm font-medium',
+      list: 'no-scrollbar flex',
+      item: '',
+      icon: 'inline-flex shrink-0 items-center justify-center rounded-full',
+      text: 'font-semibold',
     },
     layout: { vertical: '', horizontal: '' },
   },
@@ -73,42 +121,45 @@ const categoryVariants = cva('', {
     {
       component: 'list',
       layout: 'vertical',
-      className: 'flex-col items-center gap-3 px-1 py-3',
+      className: 'flex-col gap-0.5',
     },
     {
       component: 'list',
       layout: 'horizontal',
-      className: 'min-w-[90px] flex-row items-center px-4 py-4 sm:px-8',
+      className:
+        'w-full snap-x snap-mandatory scroll-ps-4 gap-3 overflow-x-auto px-4 sm:scroll-ps-8 sm:px-8',
     },
     {
       component: 'item',
       layout: 'vertical',
-      className: 'flex items-center gap-3 px-4 py-3',
+      className:
+        'hover:bg-muted group flex w-full items-center gap-3 rounded-xl px-2 py-2 transition-colors',
     },
     {
       component: 'item',
       layout: 'horizontal',
-      className: 'flex min-w-[90px] flex-col items-center justify-center py-4',
+      className:
+        'flex w-[calc((100%-0.75rem)/2.15)] shrink-0 snap-start flex-col gap-3 rounded-2xl bg-muted/50 p-3 sm:w-[calc((100%-1.5rem)/3.15)]',
     },
     {
       component: 'icon',
       layout: 'vertical',
-      className: 'text-xl',
+      className: 'bg-muted size-9 text-base transition-colors group-hover:bg-background',
     },
     {
       component: 'icon',
       layout: 'horizontal',
-      className: 'mb-2 text-2xl',
+      className: 'bg-background size-11 text-xl',
     },
     {
       component: 'text',
       layout: 'vertical',
-      className: 'text-base',
+      className: 'truncate text-sm',
     },
     {
       component: 'text',
       layout: 'horizontal',
-      className: 'text-center text-sm',
+      className: 'line-clamp-2 text-left text-sm leading-5',
     },
   ],
   defaultVariants: {
