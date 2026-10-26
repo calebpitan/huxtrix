@@ -2,9 +2,10 @@
 
 import React from 'react'
 
+import { getLogger } from '@hux/logger'
 import type { QueryClient } from '@tanstack/react-query'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { createTRPCClient, httpBatchLink } from '@trpc/client'
+import { createTRPCClient, httpBatchLink, loggerLink } from '@trpc/client'
 import { createTRPCContext } from '@trpc/tanstack-react-query'
 
 import superjson from 'superjson'
@@ -43,6 +44,21 @@ export function TRPCReactProvider(
   const [trpcClient] = React.useState(() =>
     createTRPCClient<AppRouter>({
       links: [
+        loggerLink({
+          enabled: () => process.env.NODE_ENV === 'development',
+          logger(event) {
+            const log = getLogger()
+            const fields = { path: event.path, type: event.type, direction: event.direction }
+            if (event.direction === 'down' && event.result instanceof Error) {
+              log.error('tRPC client request failed', event.result, fields)
+              return
+            }
+            log.debug('tRPC client request', {
+              ...fields,
+              elapsedMs: event.direction === 'down' ? event.elapsedMs : undefined,
+            })
+          },
+        }),
         httpBatchLink({
           transformer: superjson,
           url,

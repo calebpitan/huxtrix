@@ -1,7 +1,7 @@
 import { MultipleResultsFoundError, NoResultFoundError } from '@hux/datasource'
 import { TRPCError } from '@trpc/server'
 
-import { Cause } from 'effect/Cause'
+import { type Cause, pretty } from 'effect/Cause'
 
 import { mapUserEffectError } from './errors/user/mapError'
 
@@ -21,13 +21,30 @@ function mapGenericError(error: unknown): TRPCError {
   return new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Unknown error', cause: error })
 }
 
-export function mapEffectError(cause: Cause<unknown>): TRPCError {
-  console.error('Mapping Error: ', cause)
+const prettyCauseKey = Symbol.for('@hux/trpc/pretty-cause')
 
+export function readPrettyCause(error: unknown): string | undefined {
+  if (typeof error !== 'object' || error === null || !(prettyCauseKey in error)) return undefined
+  const value = (error as { [prettyCauseKey]?: unknown })[prettyCauseKey]
+  return typeof value === 'string' ? value : undefined
+}
+
+function withPrettyCause(error: TRPCError, cause: Cause<unknown>): TRPCError {
+  Object.defineProperty(error, prettyCauseKey, { value: pretty(cause) })
+  return error
+}
+
+export function mapEffectError(cause: Cause<unknown>): TRPCError {
   switch (cause._tag) {
     case 'Fail':
       return mapUserEffectError(cause.error) ?? mapGenericError(cause.error)
     default:
-      return new TRPCError({code: 'INTERNAL_SERVER_ERROR', cause: cause, message: 'Unknown error'})
+      return withPrettyCause(
+        new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Unknown error',
+        }),
+        cause,
+      )
   }
 }
