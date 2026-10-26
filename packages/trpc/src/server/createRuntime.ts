@@ -1,4 +1,5 @@
 import { AccountRepository, DatabaseSession, UserRepository } from '@hux/datasource'
+import { LoggerLayer } from '@hux/logger/effect'
 
 import { Effect, Layer, ManagedRuntime } from 'effect'
 
@@ -32,7 +33,12 @@ export function createTRPCRuntime(options: TRPCRuntimeOptions) {
     }),
   ).pipe(Layer.provide(BaseLayer))
 
-  const AppLayer = Layer.mergeAll(AccountRepositoryLayer, UserRepositoryLayer, BaseLayer)
+  const AppLayer = Layer.mergeAll(
+    AccountRepositoryLayer,
+    UserRepositoryLayer,
+    BaseLayer,
+    LoggerLayer,
+  )
   const AppRuntime = ManagedRuntime.make(AppLayer)
 
   return AppRuntime

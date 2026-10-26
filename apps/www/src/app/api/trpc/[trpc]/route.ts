@@ -1,4 +1,4 @@
-import { appRouter, createTRPCContext, createTRPCRuntime } from '@hux/trpc'
+import { appRouter, createTRPCContext, createTRPCRuntime, logTRPCHandlerError } from '@hux/trpc'
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 
 import { NextRequest } from 'next/server'
@@ -16,7 +16,9 @@ const handler = async (req: NextRequest) => {
       req,
       router: appRouter,
       createContext: (opts) => createContext({ runtime: AppRuntime, ...opts }),
-      onError: (opts) => console.error('An Error Occurred: ', opts.error),
+      onError: (opts) => {
+        logTRPCHandlerError(opts.error, { path: opts.path, type: opts.type })
+      },
     })
 
     return response

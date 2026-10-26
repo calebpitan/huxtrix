@@ -1,0 +1,40 @@
+{
+  "name": "@hux/logger",
+  "private": true,
+  "type": "module",
+  "packageManager": "yarn@4.6.0",
+  "exports": {
+    ".": {
+      "browser": {
+        "types": "./dist/browser.d.ts",
+        "default": "./dist/browser.js"
+      },
+      "default": {
+        "types": "./dist/node.d.ts",
+        "default": "./dist/node.js"
+      }
+    },
+    "./effect": {
+      "types": "./dist/effect.d.ts",
+      "default": "./dist/effect.js"
+    }
+  },
+  "scripts": {
+    "dev": "yarn p:dev",
+    "brl": "yarn p:brl",
+    "build": "yarn p:build",
+    "build:watch": "yarn p:build:watch",
+    "lint": "yarn p:lint",
+    "lint:fix": "yarn p:lint:fix",
+    "typecheck": "yarn p:typecheck"
+  },
+  "dependencies": {
+    "effect": "^3.16.12",
+    "pino": "^9.7.0"
+  },
+  "devDependencies": {
+    "@hux/eslint": "workspace:^",
+    "@hux/tsconfig": "workspace:^",
+    "pino-pretty": "^13.0.0"
+  }
+}

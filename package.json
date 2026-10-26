@@ -49,7 +49,7 @@
     "typescript": "^5"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22.14.0"
   },
   "packageManager": "yarn@4.6.0",
   "workspaces": [

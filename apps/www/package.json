@@ -18,6 +18,7 @@
     "@hookform/resolvers": "^5.1.1",
     "@hux/auth": "workspace:^",
     "@hux/datasource": "workspace:^",
+    "@hux/logger": "workspace:^",
     "@hux/trpc": "workspace:^",
     "@platejs/ai": "^49.0.7",
     "@platejs/autoformat": "^49.0.0",

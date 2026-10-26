@@ -2,11 +2,12 @@ import 'server-only'
 
 import { cache } from 'react'
 
+import { getLogger } from '@hux/logger'
 import { createTRPCClient, httpBatchLink, loggerLink } from '@trpc/client'
 import { AnyRouter } from '@trpc/server'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 
-import { Effect, Exit } from 'effect'
+import { Cause, Effect, Exit } from 'effect'
 import superjson from 'superjson'
 
 import { makeQueryClient } from '../react/query-client'
@@ -83,7 +84,21 @@ export function createExternalTRPC<Router extends AnyRouter>(
   return createTRPCOptionsProxy<Router>({
     client: createTRPCClient<AnyRouter>({
       links: [
-        loggerLink(),
+        loggerLink({
+          enabled: () => process.env.NODE_ENV === 'development',
+          logger(event) {
+            const log = getLogger()
+            const fields = { path: event.path, type: event.type, direction: event.direction }
+            if (event.direction === 'down' && event.result instanceof Error) {
+              log.error('external tRPC request failed', event.result, fields)
+              return
+            }
+            log.debug('external tRPC request', {
+              ...fields,
+              elapsedMs: event.direction === 'down' ? event.elapsedMs : undefined,
+            })
+          },
+        }),
         httpBatchLink({
           url: config.externalUrl,
           transformer: superjson,
@@ -105,7 +120,7 @@ export async function executeTRPCOperation<T>(operation: Effect.Effect<T, Error>
   const exit = await Effect.runPromiseExit(operation)
 
   if (Exit.isFailure(exit)) {
-    console.error('tRPC operation failed:', exit.cause)
+    getLogger().error('tRPC operation failed', Cause.pretty(exit.cause))
     throw new Error(`tRPC operation failed: ${exit.cause.toString()}`)
   }
 
