@@ -27,6 +27,7 @@ import { cn } from '@/lib/utils'
 import { PlainEditor, PlainEditorToolbar } from './PlainEditor'
 import { useTextEditor } from './TextEditorProvider'
 import { TitleEditor } from './TitleEditor'
+import { platePlainText } from './draft-text'
 
 export interface ArticleEditorProps extends Omit<ComponentProps<'div'>, 'onChange'> {
   onChange?: (value: string) => void
@@ -35,14 +36,6 @@ export interface ArticleEditorProps extends Omit<ComponentProps<'div'>, 'onChang
 export type ArticleEditor = TPlateEditor<Value, (typeof ArticleEditorKit)[number]>
 
 const EMPTY_PLATE_VALUE: Value = [{ type: 'p', children: [{ text: '' }] }]
-
-function plateText(node: unknown): string {
-  if (Array.isArray(node)) return node.map(plateText).join('')
-  if (!node || typeof node !== 'object') return ''
-  if ('text' in node && typeof node.text === 'string') return node.text
-  if ('children' in node && Array.isArray(node.children)) return plateText(node.children)
-  return ''
-}
 
 function plateValueFromBody(body: string): Value {
   if (!body) return EMPTY_PLATE_VALUE
@@ -56,7 +49,7 @@ function plateValueFromBody(body: string): Value {
 }
 
 function serializePlateBody(value: Value): string {
-  return plateText(value).length === 0 ? '' : JSON.stringify(value)
+  return platePlainText(value).trim().length === 0 ? '' : JSON.stringify(value)
 }
 
 export const ArticleEditorKit = [
@@ -76,8 +69,6 @@ export const ArticleEditorKit = [
 ]
 
 export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorProps) {
-  const [title, setTitle] = useState('')
-  const [subtitle, setSubtitle] = useState('')
   const [scrolled, setScrolled] = useState(false)
 
   const isXLarge = useBreakpoint('xl')
@@ -85,6 +76,7 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
   const editorContainerRef = useRef<HTMLDivElement>(null)
 
   const ctx = useTextEditor()
+  const previewing = ctx.state.mode === 'preview' && ctx.draft.type === 'article'
   const value = useMemo<Value>(() => plateValueFromBody(ctx.draft.body), [ctx.draft.body])
 
   const editor: ArticleEditor = usePlateEditor({
@@ -129,56 +121,82 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
     <div
       className={cn(
         'grid h-full grid-flow-row',
-        'grid-rows-[var(--toolbar-height)_calc(100%_-_var(--toolbar-height))]',
-        '[--toolbar-height:--spacing(10)]',
+        previewing
+          ? 'grid-rows-[minmax(0,1fr)]'
+          : 'grid-rows-[var(--toolbar-height)_calc(100%_-_var(--toolbar-height))] [--toolbar-height:--spacing(10)]',
         className,
       )}
       {...rest}
     >
-      <Plate editor={editor} onChange={handleChange}>
-        <EditorContainer className="px-2 pt-12 xl:overflow-y-visible" ref={editorContainerRef}>
+      <Plate editor={editor} onChange={handleChange} readOnly={previewing}>
+        <EditorContainer
+          key={previewing ? 'preview' : 'edit'}
+          className="px-2 pt-12 xl:overflow-y-visible"
+          ref={editorContainerRef}
+        >
           <div className="px-page flex w-full max-w-3xl flex-col gap-8 justify-self-center">
             <div className="flex flex-col gap-2">
-              <TitleEditor
-                id="title-editor"
-                className="py-2 text-4xl font-extrabold"
-                placeholder="Title"
-                maxLength={192}
-                value={title}
-                onChange={(e) => setTitle(e.target.value.replace(/\n/g, ''))}
-              />
-              <TitleEditor
-                id="subtitle-editor"
-                className="text-foreground/70 py-1 text-lg font-light"
-                placeholder="Subtitle if you like..."
-                maxLength={128}
-                value={subtitle}
-                onChange={(e) => setSubtitle(e.target.value.replace(/\n/g, ''))}
-              />
+              {previewing ? (
+                <>
+                  {ctx.draft.title ? (
+                    <p className="break-words py-2 text-4xl font-extrabold">{ctx.draft.title}</p>
+                  ) : null}
+                  {ctx.draft.subtitle ? (
+                    <p className="text-foreground/70 break-words py-1 text-lg font-light">
+                      {ctx.draft.subtitle}
+                    </p>
+                  ) : null}
+                </>
+              ) : (
+                <>
+                  <TitleEditor
+                    id="title-editor"
+                    className="py-2 text-4xl font-extrabold"
+                    placeholder="Title"
+                    maxLength={192}
+                    value={ctx.draft.title}
+                    onChange={(event) =>
+                      ctx.updateDraft({ title: event.target.value.replace(/\n/g, '') })
+                    }
+                  />
+                  <TitleEditor
+                    id="subtitle-editor"
+                    className="text-foreground/70 py-1 text-lg font-light"
+                    placeholder="Subtitle if you like..."
+                    maxLength={128}
+                    value={ctx.draft.subtitle}
+                    onChange={(event) =>
+                      ctx.updateDraft({ subtitle: event.target.value.replace(/\n/g, '') })
+                    }
+                  />
+                </>
+              )}
             </div>
           </div>
 
           <PlainEditor
             // calc(max-w-3xl /* 768px */ + --spacing(16)  /* 64px */ + --spacing(16) /* 64px */) /* = 896px */
             className="mx-auto h-fit max-w-[896px] px-5 sm:px-16"
-            placeholder="What do you have to say?"
+            placeholder={previewing ? undefined : 'What do you have to say?'}
             data-editor-root={true}
           />
         </EditorContainer>
 
-        <PlainEditorToolbar
-          style={{ '--topbar-height': appbarGeom.topbar.height + 'px' } as CSSProperties}
-          className={cn(
-            'top-[var(--topbar-height)] z-50 -order-1 overflow-y-scroll rounded-none transition-colors lg:top-2 lg:rounded-lg',
-            {
-              'supports-[backdrop-filter]:bg-muted/60 backdrop-blur-2xl': scrolled,
-              // use shadow instead of border so as to not take out of the available size of the
-              // element which is an exact 40px used up by it's content and padding. an extra 1px
-              // bottom border will reduce available size from 40px to 39px leading to overflow-y
-              'shadow-[0_1px_0_0_var(--color-border)] lg:shadow-none': scrolled,
-            },
-          )}
-        />
+        {!previewing && (
+          <PlainEditorToolbar
+            style={{ '--topbar-height': appbarGeom.topbar.height + 'px' } as CSSProperties}
+            className={cn(
+              'top-[var(--topbar-height)] z-50 -order-1 overflow-y-scroll rounded-none transition-colors lg:top-2 lg:rounded-lg',
+              {
+                'supports-[backdrop-filter]:bg-muted/60 backdrop-blur-2xl': scrolled,
+                // use shadow instead of border so as to not take out of the available size of the
+                // element which is an exact 40px used up by it's content and padding. an extra 1px
+                // bottom border will reduce available size from 40px to 39px leading to overflow-y
+                'shadow-[0_1px_0_0_var(--color-border)] lg:shadow-none': scrolled,
+              },
+            )}
+          />
+        )}
       </Plate>
     </div>
   )

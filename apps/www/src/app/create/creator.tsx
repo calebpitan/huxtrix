@@ -5,6 +5,8 @@ import { useCallback } from 'react'
 import { useTextEditor } from '@/compositions/editor'
 import { ArticleEditor } from '@/compositions/editor/ArticleEditor'
 
+import { CreateHeader } from './create-header'
+
 export function PostCreator() {
   const editor = useTextEditor()
 
@@ -20,8 +22,11 @@ export function PostCreator() {
   editor.controller.handle('save', saveDraft)
 
   return (
-    <div style={{ height: '100%' }}>
-      <ArticleEditor onChange={(value) => editor.setContent(value)} />
+    <div className="flex h-full min-h-0 flex-col">
+      <CreateHeader />
+      <div className="min-h-0 flex-1">
+        <ArticleEditor onChange={(value) => editor.setContent(value)} />
+      </div>
     </div>
   )
 }

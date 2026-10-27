@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, use, useMemo, useRef, useState, type RefObject } from 'react'
+import { type RefObject, createContext, use, useMemo, useRef, useState } from 'react'
 
 export type DraftType = 'post' | 'article'
 export type DraftVisibility = 'everyone' | 'channel'
@@ -28,8 +28,10 @@ interface TextEditorContextType {
   state: EditorState
   draft: Draft
   draftRef: RefObject<Draft>
+  saved: boolean
   updateDraft: (partial: Partial<Draft>) => void
   setContent: (body: string) => void
+  markSaved: () => void
   toggleMode: () => void
 }
 
@@ -58,6 +60,26 @@ class TextEditorController {
   }
 }
 
+function snapshotDraft(draft: Draft): Draft {
+  return { ...draft, tags: [...draft.tags] }
+}
+
+function draftsEqual(a: Draft, b: Draft) {
+  return (
+    a.type === b.type &&
+    a.title === b.title &&
+    a.subtitle === b.subtitle &&
+    a.body === b.body &&
+    a.channelId === b.channelId &&
+    a.coverUrl === b.coverUrl &&
+    a.visibility === b.visibility &&
+    a.rewardsEnabled === b.rewardsEnabled &&
+    a.scheduledAt === b.scheduledAt &&
+    a.tags.length === b.tags.length &&
+    a.tags.every((tag, index) => tag === b.tags[index])
+  )
+}
+
 const initialDraft: Draft = {
   type: 'article',
   title: '',
@@ -83,8 +105,10 @@ export function TextEditorProvider({ children }: { children: React.ReactNode }) 
   const controller = useRef<TextEditorController>(new TextEditorController())
   const [draft, setDraft] = useState<Draft>(initialDraft)
   const [mode, setMode] = useState<EditorMode>('edit')
+  const [savedDraft, setSavedDraft] = useState<Draft | null>(null)
   const draftRef = useRef(draft)
   draftRef.current = draft
+  const saved = savedDraft !== null && draftsEqual(draft, savedDraft)
 
   const contextValue = useMemo<TextEditorContextType>(() => {
     const updateDraft = (partial: Partial<Draft>) => {
@@ -100,15 +124,19 @@ export function TextEditorProvider({ children }: { children: React.ReactNode }) 
       state: { mode },
       draft,
       draftRef,
+      saved,
       updateDraft,
       setContent(body) {
         updateDraft({ body })
+      },
+      markSaved() {
+        setSavedDraft(snapshotDraft(draftRef.current))
       },
       toggleMode() {
         setMode((current) => (current === 'edit' ? 'preview' : 'edit'))
       },
     }
-  }, [draft, mode])
+  }, [draft, mode, saved])
 
   return <TextEditorContext value={contextValue}>{children}</TextEditorContext>
 }
