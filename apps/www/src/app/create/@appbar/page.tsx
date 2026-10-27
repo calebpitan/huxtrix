@@ -1,16 +1,22 @@
 'use client'
 
-import { Fragment, useCallback } from 'react'
+import { Fragment, useCallback, useState } from 'react'
 
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import { AppBarPortal, TopBarContent } from '@/compositions/appbar'
 import { useTextEditor } from '@/compositions/editor'
 
+import { ConfirmPostDialog } from '../confirm-post-dialog'
+
 export default function CreatorPageAppBar() {
   const router = useRouter()
+  const pathname = usePathname()
   const editor = useTextEditor()
+  const [postOpen, setPostOpen] = useState(false)
+  const onCreate = pathname === '/create'
+  const primaryIsPost = onCreate && editor.draft.type === 'post'
 
   const handleCancel = useCallback(() => {
     // This is an implementation detail of the next-navigation-guard package and is not reliable
@@ -26,7 +32,19 @@ export default function CreatorPageAppBar() {
     }
   }, [router])
 
-  const handlePost = useCallback(() => editor.controller.post(), [editor.controller])
+  const handlePrimary = useCallback(() => {
+    if (!onCreate) {
+      editor.controller.post()
+      return
+    }
+
+    if (editor.draft.type === 'post') {
+      setPostOpen(true)
+      return
+    }
+
+    router.push('/create/publish')
+  }, [editor.controller, editor.draft.type, onCreate, router])
 
   return (
     <Fragment>
@@ -36,11 +54,13 @@ export default function CreatorPageAppBar() {
             Cancel
           </Button>
 
-          <Button className="rounded-full px-5" variant="default" size="sm" onClick={handlePost}>
-            Next
+          <Button className="rounded-full px-5" variant="default" size="sm" onClick={handlePrimary}>
+            {primaryIsPost ? 'Post' : 'Next'}
           </Button>
         </TopBarContent>
       </AppBarPortal>
+
+      {onCreate && <ConfirmPostDialog open={postOpen} onOpenChange={setPostOpen} />}
 
       <AppBarPortal slots={['bottombar', 'bottombar-lg']}>{null}</AppBarPortal>
     </Fragment>
