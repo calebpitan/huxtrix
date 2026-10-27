@@ -27,13 +27,37 @@ import { cn } from '@/lib/utils'
 import { PlainEditor, PlainEditorToolbar } from './PlainEditor'
 import { useTextEditor } from './TextEditorProvider'
 import { TitleEditor } from './TitleEditor'
-import { ARTICLE_EDITOR_CONTENT } from './content'
 
 export interface ArticleEditorProps extends Omit<ComponentProps<'div'>, 'onChange'> {
   onChange?: (value: string) => void
 }
 
 export type ArticleEditor = TPlateEditor<Value, (typeof ArticleEditorKit)[number]>
+
+const EMPTY_PLATE_VALUE: Value = [{ type: 'p', children: [{ text: '' }] }]
+
+function plateText(node: unknown): string {
+  if (Array.isArray(node)) return node.map(plateText).join('')
+  if (!node || typeof node !== 'object') return ''
+  if ('text' in node && typeof node.text === 'string') return node.text
+  if ('children' in node && Array.isArray(node.children)) return plateText(node.children)
+  return ''
+}
+
+function plateValueFromBody(body: string): Value {
+  if (!body) return EMPTY_PLATE_VALUE
+  try {
+    const parsed: unknown = JSON.parse(body)
+    if (Array.isArray(parsed) && parsed.length > 0) return parsed as Value
+  } catch {
+    return EMPTY_PLATE_VALUE
+  }
+  return EMPTY_PLATE_VALUE
+}
+
+function serializePlateBody(value: Value): string {
+  return plateText(value).length === 0 ? '' : JSON.stringify(value)
+}
 
 export const ArticleEditorKit = [
   ...BasicNodesKit,
@@ -61,13 +85,7 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
   const editorContainerRef = useRef<HTMLDivElement>(null)
 
   const ctx = useTextEditor()
-  const value = useMemo<Value>(() => {
-    try {
-      return ctx.state.content ? (JSON.parse(ctx.state.content) as Value) : ARTICLE_EDITOR_CONTENT
-    } catch {
-      return ARTICLE_EDITOR_CONTENT
-    }
-  }, [ctx.state.content])
+  const value = useMemo<Value>(() => plateValueFromBody(ctx.draft.body), [ctx.draft.body])
 
   const editor: ArticleEditor = usePlateEditor({
     value,
@@ -88,7 +106,7 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
 
   const handleChange = useCallback<NonNullable<ComponentProps<typeof Plate>['onChange']>>(
     ({ value }) => {
-      onChange?.(JSON.stringify(value))
+      onChange?.(serializePlateBody(value))
     },
     [onChange],
   )

@@ -2067,7 +2067,7 @@ __metadata:
     lucide-react: "npm:^0.511.0"
     motion: "npm:^12.12.1"
     next: "npm:15.3.2"
-    next-navigation-guard: "patch:next-navigation-guard@npm%3A0.1.2#~/.yarn/patches/next-navigation-guard-npm-0.1.2-f9211d4f3c.patch"
+    next-navigation-guard: "npm:^0.2.0"
     next-themes: "npm:^0.4.6"
     platejs: "npm:^49.0.19"
     react: "npm:^19.0.0"
@@ -9091,23 +9091,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-navigation-guard@npm:0.1.2":
-  version: 0.1.2
-  resolution: "next-navigation-guard@npm:0.1.2"
+"next-navigation-guard@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "next-navigation-guard@npm:0.2.0"
   peerDependencies:
     next: ^14 || ^15
-    react: ^18.3.1
-  checksum: 10c0/c4c1444e9e676d4a117635ea28c761cb6dcd7c0da02cc9574364dfeaaddeba5fa122089dee44645ea5bfe70ac55d34ed209c2fb172d6484a1793ccca16182a82
-  languageName: node
-  linkType: hard
-
-"next-navigation-guard@patch:next-navigation-guard@npm%3A0.1.2#~/.yarn/patches/next-navigation-guard-npm-0.1.2-f9211d4f3c.patch":
-  version: 0.1.2
-  resolution: "next-navigation-guard@patch:next-navigation-guard@npm%3A0.1.2#~/.yarn/patches/next-navigation-guard-npm-0.1.2-f9211d4f3c.patch::version=0.1.2&hash=74f143"
-  peerDependencies:
-    next: ^14 || ^15
-    react: ^18.3.1
-  checksum: 10c0/37e8ffd41adce39143a9b202e100ab2abc93ad96fbb0260f636e48de87957123ba470a0150175b03b1f34329606dc0468c11e2ad98db4f7b7b324350610b6c0f
+    react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+  checksum: 10c0/b53ab6d7efc550076f931f8731648ccb5a771133b59a10b0163a2162f7fceb9e8f7b95b0e4698ae419870bc1c2bbb9dc7b96f81df92fcddf60d58612c247bd7d
   languageName: node
   linkType: hard
 
