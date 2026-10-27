@@ -25,18 +25,25 @@ export function PlainEditor({ placeholder, ...rest }: PlainEditorProps) {
   return <Editor placeholder={placeholder} spellCheck="false" {...rest} />
 }
 
+function ToolbarCluster({ children }: { children: React.ReactNode }) {
+  return <div className="flex shrink-0 items-center gap-0.5">{children}</div>
+}
+
 export function PlainEditorToolbar({
   className,
   ...rest
 }: React.ComponentProps<typeof FixedToolbar>) {
   const separator = (
-    <Separator orientation="vertical" className="data-[orientation=vertical]:h-1/2" />
+    <Separator
+      orientation="vertical"
+      className="mx-2 data-[orientation=vertical]:h-5"
+    />
   )
 
   return (
     <FixedToolbar
       className={cn(
-        'justify-start border-0',
+        'static w-fit max-w-full min-w-0 justify-start gap-0 overflow-x-auto rounded-full border border-border bg-background px-2.5 py-1.5 shadow-none backdrop-blur-none supports-backdrop-blur:bg-background',
         '[&_button]:aria-checked:bg-primary/10 [&_button]:aria-checked:text-primary',
         '[&_button_>_span]:data-[state=on]:bg-primary/10 [&_button_>_span]:data-[state=on]:text-primary',
         '[&_button_>_span]:data-[state=open]:bg-primary/10 [&_button_>_span]:data-[state=open]:text-primary',
@@ -44,48 +51,59 @@ export function PlainEditorToolbar({
       )}
       {...rest}
     >
-      <UndoToolbarButton />
-      <RedoToolbarButton />
+      <ToolbarCluster>
+        <UndoToolbarButton size="default" />
+        <RedoToolbarButton size="default" />
+      </ToolbarCluster>
 
       {separator}
 
-      <InsertToolbarButton />
-      <TurnIntoToolbarButton />
+      <ToolbarCluster>
+        <InsertToolbarButton />
+        <TurnIntoToolbarButton />
+      </ToolbarCluster>
 
       {separator}
 
-      <MarkToolbarButton nodeType="bold" tooltip="Bold (⌘B)">
-        <Bold />
-      </MarkToolbarButton>
-      <MarkToolbarButton nodeType="italic" tooltip="Italic (⌘I)">
-        <Italic />
-      </MarkToolbarButton>
-      <MarkToolbarButton nodeType="strikethrough" tooltip="Strikethrough (⌘⇧X)">
-        <Strikethrough />
-      </MarkToolbarButton>
-      <MarkToolbarButton nodeType="code" tooltip="Code (⌘E)">
-        <Code />
-      </MarkToolbarButton>
-      <MarkToolbarButton nodeType="highlight" tooltip="Highlight">
-        <Highlighter />
-      </MarkToolbarButton>
+      <ToolbarCluster>
+        <MarkToolbarButton nodeType="bold" size="default" tooltip="Bold (⌘B)">
+          <Bold />
+        </MarkToolbarButton>
+        <MarkToolbarButton nodeType="italic" size="default" tooltip="Italic (⌘I)">
+          <Italic />
+        </MarkToolbarButton>
+        <MarkToolbarButton nodeType="strikethrough" size="default" tooltip="Strikethrough (⌘⇧X)">
+          <Strikethrough />
+        </MarkToolbarButton>
+        <MarkToolbarButton nodeType="code" size="default" tooltip="Code (⌘E)">
+          <Code />
+        </MarkToolbarButton>
+        <MarkToolbarButton nodeType="highlight" size="default" tooltip="Highlight">
+          <Highlighter />
+        </MarkToolbarButton>
+      </ToolbarCluster>
 
       {separator}
 
-      <LinkToolbarButton />
+      <ToolbarCluster>
+        <LinkToolbarButton size="default" />
+      </ToolbarCluster>
 
       {separator}
 
-      <ListToolbarButton nodeType="ul" />
-      <ListToolbarButton nodeType="ol" />
-      <ListToolbarButton nodeType="taskList" />
-
-      <IndentToolbarButton />
-      <IndentToolbarButton reverse={true} />
+      <ToolbarCluster>
+        <ListToolbarButton nodeType="ul" size="default" />
+        <ListToolbarButton nodeType="ol" size="default" />
+        <ListToolbarButton nodeType="taskList" size="default" />
+        <IndentToolbarButton reverse size="default" />
+        <IndentToolbarButton size="default" />
+      </ToolbarCluster>
 
       {separator}
 
-      <MoreToolbarButton />
+      <ToolbarCluster>
+        <MoreToolbarButton />
+      </ToolbarCluster>
     </FixedToolbar>
   )
 }
