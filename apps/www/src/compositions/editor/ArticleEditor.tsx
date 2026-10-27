@@ -110,7 +110,7 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
         {showToolbar ? (
           <div className="sticky top-[var(--create-header-height,0px)] z-30 w-full shrink-0 bg-background px-2 pt-3.5">
             <div className="flex w-full max-w-3xl justify-center">
-              <PlainEditorToolbar />
+              <PlainEditorToolbar className="bg-muted/30" />
             </div>
           </div>
         ) : null}
@@ -134,7 +134,7 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
                   <>
                     <TitleEditor
                       id="title-editor"
-                      className="py-2 text-4xl font-extrabold"
+                      className="py-2 text-5xl font-extrabold tracking-tighter"
                       placeholder="Title"
                       maxLength={192}
                       value={ctx.draft.title}
@@ -144,7 +144,7 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
                     />
                     <TitleEditor
                       id="subtitle-editor"
-                      className="text-foreground/70 py-1 text-lg font-light"
+                      className="text-foreground/70 py-1 text-lg font-medium"
                       placeholder="Subtitle if you like..."
                       maxLength={128}
                       value={ctx.draft.subtitle}

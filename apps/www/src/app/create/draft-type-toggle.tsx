@@ -44,7 +44,7 @@ export function DraftTypeToggle() {
     <div
       role="radiogroup"
       aria-label="Draft type"
-      className="bg-muted inline-flex shrink-0 items-center rounded-full p-1"
+      className="bg-muted/40 inline-flex shrink-0 items-center border-1 rounded-full p-1"
       onKeyDown={onKeyDown}
     >
       {draftTypes.map((option) => {

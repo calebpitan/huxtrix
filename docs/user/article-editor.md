@@ -8,7 +8,7 @@ Write an article, read it back, and continue to the publish step. You can also s
 
 Open Create. The page uses the same sidebar as the rest of Huxtrix.
 
-The channel, the cover, the title, the subtitle, and the writing sit on one left edge. A format pill sits under the header, centered on that column. It holds undo, redo, insert, text style, bold, italic, strikethrough, code, highlight, link, the three lists, and indent. More holds keyboard input, superscript, and subscript. On a narrow screen the controls scroll sideways inside the pill.
+The channel, the cover, the title, the subtitle, and the writing sit on one left edge. The title is large and tight. The subtitle is a medium weight and dimmer than the title. A format pill with a faint fill sits under the header, centered on that column. It holds undo, redo, insert, text style, bold, italic, strikethrough, code, highlight, link, the three lists, and indent. More holds keyboard input, superscript, and subscript. On a narrow screen the controls scroll sideways inside the pill.
 
 While you are writing, two chips sit above the title. Each is about 40px tall, and the page color shows through them. The channel chip has a solid border. Add cover has a dashed border until you pick an image. The channel chip reads “Choose a channel” until you pick one. Opening it shows a search box and up to twenty channels. Today those are Tech, Food, DIY, Productivity, Home, Life, and Maths & Science. Each one shows a member count. Maths & Science shows 115k members. Typing a name finds a channel even when it was not among those twenty. The chip then shows the name you picked, such as Tech.
 
@@ -20,7 +20,7 @@ Preview hides the chips and shows the title, the subtitle, and the writing.
 
 On a wide window, a header sits at the top of that column.
 
-- Post and Article are a pair of choices. Article is selected when you open the page. Choosing Post changes the header to Save draft and Post, and the column stays the article editor.
+- Post and Article sit in a light capsule with a thin border. Article is selected when you open the page. Choosing Post changes the header to Save draft and Post, and the column stays the article editor.
 - The status line counts words in the title, the subtitle, and the writing. With at least one word it also shows a read time, such as `168 words · 1 min read`. At zero words it shows `0 words`.
 - Preview shows an eye beside the word and has no fill of its own. It hides the format pill and shows the title, the subtitle, and the writing as they read. The button changes to Edit. Save draft and Next stay.
 - Save draft has no fill until you point at it. It shows Saved, with a green dot, until you change the draft.
