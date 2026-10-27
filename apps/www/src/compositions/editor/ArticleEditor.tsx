@@ -27,6 +27,9 @@ import { cn } from '@/lib/utils'
 import { PlainEditor, PlainEditorToolbar } from './PlainEditor'
 import { useTextEditor } from './TextEditorProvider'
 import { TitleEditor } from './TitleEditor'
+import { ArticlePreviewHeading } from './article-preview-heading'
+import { ChannelChip } from './channel-chip'
+import { CoverChip } from './cover-chip'
 import { platePlainText } from './draft-text'
 
 export interface ArticleEditorProps extends Omit<ComponentProps<'div'>, 'onChange'> {
@@ -134,52 +137,53 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
           className="px-2 pt-12 xl:overflow-y-visible"
           ref={editorContainerRef}
         >
-          <div className="px-page flex w-full max-w-3xl flex-col gap-8 justify-self-center">
-            <div className="flex flex-col gap-2">
-              {previewing ? (
-                <>
-                  {ctx.draft.title ? (
-                    <p className="break-words py-2 text-4xl font-extrabold">{ctx.draft.title}</p>
-                  ) : null}
-                  {ctx.draft.subtitle ? (
-                    <p className="text-foreground/70 break-words py-1 text-lg font-light">
-                      {ctx.draft.subtitle}
-                    </p>
-                  ) : null}
-                </>
-              ) : (
-                <>
-                  <TitleEditor
-                    id="title-editor"
-                    className="py-2 text-4xl font-extrabold"
-                    placeholder="Title"
-                    maxLength={192}
-                    value={ctx.draft.title}
-                    onChange={(event) =>
-                      ctx.updateDraft({ title: event.target.value.replace(/\n/g, '') })
-                    }
-                  />
-                  <TitleEditor
-                    id="subtitle-editor"
-                    className="text-foreground/70 py-1 text-lg font-light"
-                    placeholder="Subtitle if you like..."
-                    maxLength={128}
-                    value={ctx.draft.subtitle}
-                    onChange={(event) =>
-                      ctx.updateDraft({ subtitle: event.target.value.replace(/\n/g, '') })
-                    }
-                  />
-                </>
+          <div className="flex w-full max-w-3xl flex-col gap-6">
+            <div className="flex flex-col gap-6 ps-6">
+              {previewing ? null : (
+                <div className="flex items-center gap-2">
+                  <ChannelChip />
+                  <CoverChip />
+                </div>
               )}
+              <div className="flex flex-col gap-2">
+                {previewing ? (
+                  <ArticlePreviewHeading title={ctx.draft.title} subtitle={ctx.draft.subtitle} />
+                ) : (
+                  <>
+                    <TitleEditor
+                      id="title-editor"
+                      className="py-2 text-4xl font-extrabold"
+                      placeholder="Title"
+                      maxLength={192}
+                      value={ctx.draft.title}
+                      onChange={(event) =>
+                        ctx.updateDraft({ title: event.target.value.replace(/\n/g, '') })
+                      }
+                    />
+                    <TitleEditor
+                      id="subtitle-editor"
+                      className="text-foreground/70 py-1 text-lg font-light"
+                      placeholder="Subtitle if you like..."
+                      maxLength={128}
+                      value={ctx.draft.subtitle}
+                      onChange={(event) =>
+                        ctx.updateDraft({ subtitle: event.target.value.replace(/\n/g, '') })
+                      }
+                    />
+                  </>
+                )}
+              </div>
             </div>
-          </div>
 
-          <PlainEditor
-            // calc(max-w-3xl /* 768px */ + --spacing(16)  /* 64px */ + --spacing(16) /* 64px */) /* = 896px */
-            className="mx-auto h-fit max-w-[896px] px-5 sm:px-16"
-            placeholder={previewing ? undefined : 'What do you have to say?'}
-            data-editor-root={true}
-          />
+            <PlainEditor
+              variant="none"
+              className="h-fit pb-72 ps-6"
+              placeholder={
+                previewing ? undefined : 'Type / to insert a heading, image, code block…'
+              }
+              data-editor-root={true}
+            />
+          </div>
         </EditorContainer>
 
         {!previewing && (
