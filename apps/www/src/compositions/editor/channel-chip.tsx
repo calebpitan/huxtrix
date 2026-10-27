@@ -46,7 +46,7 @@ const channelChoices: ChannelChoice[] = [
   { id: 'Productivity', name: 'Productivity', icon: Zap, members: '210k members' },
   { id: 'Home', name: 'Home', icon: House, members: '74k members' },
   { id: 'Life', name: 'Life', icon: Sprout, members: '188k members' },
-  { id: 'Maths & Science', name: 'Maths & Science', icon: FlaskConical },
+  { id: 'Maths & Science', name: 'Maths & Science', icon: FlaskConical, members: '115k members' },
 ]
 
 export function ChannelChip() {
