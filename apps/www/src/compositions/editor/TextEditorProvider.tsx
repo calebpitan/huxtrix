@@ -1,16 +1,35 @@
 'use client'
 
-import { createContext, use, useMemo, useRef, useState } from 'react'
+import { createContext, use, useMemo, useRef, useState, type RefObject } from 'react'
+
+export type DraftType = 'post' | 'article'
+export type DraftVisibility = 'everyone' | 'channel'
+export type EditorMode = 'edit' | 'preview'
+
+export type Draft = {
+  type: DraftType
+  title: string
+  subtitle: string
+  body: string
+  channelId: string | null
+  tags: string[]
+  coverUrl: string | null
+  visibility: DraftVisibility
+  rewardsEnabled: boolean
+  scheduledAt: string | null
+}
 
 interface EditorState {
-  content: string
-  mode: 'edit' | 'preview'
+  mode: EditorMode
 }
 
 interface TextEditorContextType {
   controller: TextEditorController
   state: EditorState
-  setContent: (content: string) => void
+  draft: Draft
+  draftRef: RefObject<Draft>
+  updateDraft: (partial: Partial<Draft>) => void
+  setContent: (body: string) => void
   toggleMode: () => void
 }
 
@@ -39,6 +58,19 @@ class TextEditorController {
   }
 }
 
+const initialDraft: Draft = {
+  type: 'article',
+  title: '',
+  subtitle: '',
+  body: '',
+  channelId: null,
+  tags: [],
+  coverUrl: null,
+  visibility: 'everyone',
+  rewardsEnabled: true,
+  scheduledAt: null,
+}
+
 export function useTextEditor() {
   const context = use(TextEditorContext)
   if (!context) {
@@ -49,23 +81,34 @@ export function useTextEditor() {
 
 export function TextEditorProvider({ children }: { children: React.ReactNode }) {
   const controller = useRef<TextEditorController>(new TextEditorController())
-  const [state, setState] = useState<EditorState>({ content: '', mode: 'edit' })
+  const [draft, setDraft] = useState<Draft>(initialDraft)
+  const [mode, setMode] = useState<EditorMode>('edit')
+  const draftRef = useRef(draft)
+  draftRef.current = draft
 
   const contextValue = useMemo<TextEditorContextType>(() => {
+    const updateDraft = (partial: Partial<Draft>) => {
+      setDraft((current) => {
+        const next = { ...current, ...partial }
+        draftRef.current = next
+        return next
+      })
+    }
+
     return {
       controller: controller.current,
-      state,
-      setContent(content) {
-        setState((state) => ({ ...state, content }))
+      state: { mode },
+      draft,
+      draftRef,
+      updateDraft,
+      setContent(body) {
+        updateDraft({ body })
       },
       toggleMode() {
-        setState((state) => ({
-          ...state,
-          mode: state.mode === 'edit' ? 'preview' : 'edit',
-        }))
+        setMode((current) => (current === 'edit' ? 'preview' : 'edit'))
       },
     }
-  }, [controller, state])
+  }, [draft, mode])
 
   return <TextEditorContext value={contextValue}>{children}</TextEditorContext>
 }
