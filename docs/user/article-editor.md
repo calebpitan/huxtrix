@@ -8,7 +8,15 @@ Write an article, read it back, and continue to the publish step. You can also s
 
 Open Create. The page uses the same sidebar as the rest of Huxtrix.
 
-The title, the subtitle, and the writing sit in one column. The format bar is the same width as that column. Undo, redo, insert, text style, bold, italic, strikethrough, code, highlight, link, and lists are on the bar. More holds keyboard input, superscript, subscript, and indent. On a narrow screen the format buttons scroll sideways inside the bar.
+The channel, the cover, the title, the subtitle, and the writing sit on one left edge. The format bar is the same width as that column. Undo, redo, insert, text style, bold, italic, strikethrough, code, highlight, link, and lists are on the bar. More holds keyboard input, superscript, subscript, and indent. On a narrow screen the format buttons scroll sideways inside the bar.
+
+While you are writing, two chips sit above the title. Each is about 40px tall. The channel chip reads “Choose a channel” until you pick one. Opening it shows a search box and up to twenty channels. Today those are Tech, Food, DIY, Productivity, Home, Life, and Maths & Science. Tech through Life show a member count. Maths & Science does not. Typing a name finds a channel even when it was not among those twenty. The chip then shows the name you picked, such as Tech.
+
+Add cover picks an image from your computer and shows it on the chip. Choose the image again to replace it, or remove it. Reloading the page clears the image. It is not uploaded.
+
+An empty line reads “Type / to insert a heading, image, code block…”. Typing / opens the insert menu. A code block is a rounded panel with the language and a copy icon. Copy copies the code.
+
+Preview hides the chips and shows the title, the subtitle, and the writing.
 
 On a wide window, a header sits at the top of that column.
 
@@ -34,4 +42,4 @@ Leaving the page with writing in the body asks you to save a draft or discard it
 
 ## Limits
 
-Save draft and Post do not store the article. Choosing Post keeps the article editor. The publish page does not yet choose an audience or a time. Nothing is saved on its own.
+Save draft and Post do not store the article. The cover image is not stored either. Choosing Post keeps the article editor. The publish page does not yet choose an audience or a time. Nothing is saved on its own. The outline and writing guidelines are not on this page yet.
