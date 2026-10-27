@@ -1,9 +1,7 @@
 'use client'
 
-import { CSSProperties, ComponentProps, useCallback, useEffect, useMemo } from 'react'
-import { useRef, useState } from 'react'
+import { ComponentProps, useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { useMotionValueEvent, useScroll } from 'motion/react'
 import { TrailingBlockPlugin, Value } from 'platejs'
 import { Plate, TPlateEditor, usePlateEditor } from 'platejs/react'
 
@@ -20,7 +18,6 @@ import { MathKit } from '@/components/editor/plugins/math-kit'
 import { SlashKit } from '@/components/editor/plugins/slash-kit'
 import { SuggestionKit } from '@/components/editor/plugins/suggestion-kit'
 import { EditorContainer } from '@/components/ui/editor'
-import { useAppBarGeometry } from '@/compositions/appbar'
 import { useBreakpoint } from '@/hooks/use-breakpoint'
 import { cn } from '@/lib/utils'
 
@@ -72,31 +69,18 @@ export const ArticleEditorKit = [
 ]
 
 export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorProps) {
-  const [scrolled, setScrolled] = useState(false)
-
   const isXLarge = useBreakpoint('xl')
 
   const editorContainerRef = useRef<HTMLDivElement>(null)
 
   const ctx = useTextEditor()
   const previewing = ctx.state.mode === 'preview' && ctx.draft.type === 'article'
+  const showToolbar = ctx.draft.type === 'article' && ctx.state.mode !== 'preview'
   const value = useMemo<Value>(() => plateValueFromBody(ctx.draft.body), [ctx.draft.body])
 
   const editor: ArticleEditor = usePlateEditor({
     value,
     plugins: ArticleEditorKit,
-  })
-
-  const appbarGeom = useAppBarGeometry()
-
-  const { scrollY } = useScroll({ container: !isXLarge ? editorContainerRef : undefined })
-
-  useMotionValueEvent(scrollY, 'change', (y) => {
-    if (y > appbarGeom.topbar.height) {
-      setScrolled(true)
-    } else {
-      setScrolled(false)
-    }
   })
 
   const handleChange = useCallback<NonNullable<ComponentProps<typeof Plate>['onChange']>>(
@@ -121,20 +105,18 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
   }, [isXLarge])
 
   return (
-    <div
-      className={cn(
-        'grid h-full grid-flow-row',
-        previewing
-          ? 'grid-rows-[minmax(0,1fr)]'
-          : 'grid-rows-[var(--toolbar-height)_calc(100%_-_var(--toolbar-height))] [--toolbar-height:--spacing(10)]',
-        className,
-      )}
-      {...rest}
-    >
+    <div className={cn('flex h-full min-h-0 flex-col', className)} {...rest}>
       <Plate editor={editor} onChange={handleChange} readOnly={previewing}>
+        {showToolbar ? (
+          <div className="sticky top-[var(--create-header-height,0px)] z-30 w-full shrink-0 bg-background px-2 pt-3.5">
+            <div className="flex w-full max-w-3xl justify-center">
+              <PlainEditorToolbar />
+            </div>
+          </div>
+        ) : null}
         <EditorContainer
           key={previewing ? 'preview' : 'edit'}
-          className="px-2 pt-12 xl:overflow-y-visible"
+          className="h-auto min-h-0 flex-1 px-2 pt-12 xl:overflow-y-visible"
           ref={editorContainerRef}
         >
           <div className="flex w-full max-w-3xl flex-col gap-6">
@@ -185,22 +167,6 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
             />
           </div>
         </EditorContainer>
-
-        {!previewing && (
-          <PlainEditorToolbar
-            style={{ '--topbar-height': appbarGeom.topbar.height + 'px' } as CSSProperties}
-            className={cn(
-              'top-[var(--topbar-height)] z-50 -order-1 overflow-y-scroll rounded-none transition-colors lg:top-2 lg:rounded-lg',
-              {
-                'supports-[backdrop-filter]:bg-muted/60 backdrop-blur-2xl': scrolled,
-                // use shadow instead of border so as to not take out of the available size of the
-                // element which is an exact 40px used up by it's content and padding. an extra 1px
-                // bottom border will reduce available size from 40px to 39px leading to overflow-y
-                'shadow-[0_1px_0_0_var(--color-border)] lg:shadow-none': scrolled,
-              },
-            )}
-          />
-        )}
       </Plate>
     </div>
   )

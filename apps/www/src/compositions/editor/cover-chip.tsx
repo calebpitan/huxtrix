@@ -5,6 +5,7 @@ import { useRef } from 'react'
 import { ImageIcon, X } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 import { useTextEditor } from './TextEditorProvider'
 
@@ -43,7 +44,10 @@ export function CoverChip() {
       <Button
         variant="outline"
         size="lg"
-        className={coverUrl ? 'rounded-full' : 'rounded-full border-dashed'}
+        className={cn(
+          'rounded-full bg-transparent shadow-none dark:bg-transparent',
+          !coverUrl && 'border-dashed',
+        )}
         aria-label={coverUrl ? 'Replace cover' : undefined}
         onClick={() => inputRef.current?.click()}
       >

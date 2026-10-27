@@ -71,6 +71,7 @@ export function TurnIntoToolbarButton(props: DropdownMenuProps) {
         <ToolbarButton
           className="min-w-[125px]"
           pressed={open}
+          size="default"
           tooltip="Turn into"
           isDropdown
         >

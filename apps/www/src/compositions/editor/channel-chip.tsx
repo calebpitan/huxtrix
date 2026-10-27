@@ -73,7 +73,7 @@ export function ChannelChip() {
         <Button
           variant="outline"
           size="lg"
-          className="rounded-full"
+          className="rounded-full bg-transparent shadow-none dark:bg-transparent"
           aria-expanded={open}
           role="combobox"
         >
