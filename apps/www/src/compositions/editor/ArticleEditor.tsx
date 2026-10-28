@@ -106,21 +106,19 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
 
   return (
     <div className={cn('flex h-full min-h-0 flex-col', className)} {...rest}>
-      <Plate editor={editor} onChange={handleChange} readOnly={previewing}>
+      <Plate editor={editor} onChange={handleChange} readOnly={previewing} primary>
         {showToolbar ? (
-          <div className="sticky top-[var(--create-header-height,0px)] z-30 w-full shrink-0 bg-background px-2 pt-3.5">
-            <div className="flex w-full max-w-3xl justify-center">
-              <PlainEditorToolbar className="bg-muted/30" />
-            </div>
+          <div className="sticky top-[var(--create-header-height,0px)] z-30 w-full shrink-0 bg-background px-2 pt-3.5 lg:px-8">
+            <PlainEditorToolbar className="w-full justify-between bg-muted/30" />
           </div>
         ) : null}
         <EditorContainer
           key={previewing ? 'preview' : 'edit'}
-          className="h-auto min-h-0 flex-1 px-2 pt-12 xl:overflow-y-visible"
+          className="h-auto min-h-0 flex-1 px-2 pt-12 lg:px-0 xl:overflow-y-visible"
           ref={editorContainerRef}
         >
-          <div className="flex w-full max-w-3xl flex-col gap-6">
-            <div className="flex flex-col gap-6 ps-6">
+          <div className="flex w-full flex-col gap-6 lg:px-28">
+            <div className="flex flex-col gap-6 ps-6 lg:ps-0">
               {previewing ? null : (
                 <div className="flex items-center gap-2">
                   <ChannelChip />
@@ -159,7 +157,7 @@ export function ArticleEditor({ className, onChange, ...rest }: ArticleEditorPro
 
             <PlainEditor
               variant="none"
-              className="h-fit pb-72 ps-6"
+              className="h-fit pb-72 ps-6 lg:-ms-6 lg:w-[calc(100%+1.5rem)]"
               placeholder={
                 previewing ? undefined : 'Type / to insert a heading, image, code block…'
               }
