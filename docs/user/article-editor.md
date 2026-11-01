@@ -8,7 +8,7 @@ Write an article, read it back, and continue to the publish step. You can also s
 
 Open Create. The page uses the same sidebar as the rest of Huxtrix.
 
-The channel, the cover, the title, the subtitle, and the writing sit on one left edge. The title is large and tight. The subtitle is a medium weight and dimmer than the title. A format pill with a faint fill sits under the header, centered on that column. It holds undo, redo, insert, text style, bold, italic, strikethrough, code, highlight, link, the three lists, and indent. More holds keyboard input, superscript, and subscript. On a narrow screen the controls scroll sideways inside the pill.
+On a wide window the header, the format pill, and the writing share one column. The pill sits just inside the header, and the channel, the cover, the title, the subtitle, and the writing sit further in, on one left edge. The title is large and tight. The subtitle is a medium weight and dimmer than the title. The pill has a faint fill. It holds undo, redo, insert, text style, bold, italic, strikethrough, code, highlight, link, the three lists, and indent. More holds keyboard input, superscript, and subscript, and sits at the pill’s right end. On a narrow screen the controls scroll sideways inside the pill.
 
 While you are writing, two chips sit above the title. Each is about 40px tall, and the page color shows through them. The channel chip has a solid border. Add cover has a dashed border until you pick an image. The channel chip reads “Choose a channel” until you pick one. Opening it shows a search box and up to twenty channels. Today those are Tech, Food, DIY, Productivity, Home, Life, and Maths & Science. Each one shows a member count. Maths & Science shows 115k members. Typing a name finds a channel even when it was not among those twenty. The chip then shows the name you picked, such as Tech.
 
@@ -30,16 +30,23 @@ Choosing Post hides the status line, Preview, and the format pill. Save draft st
 
 On a phone the top bar is Cancel and Next. After you choose Post, that button is Post and asks the same question. The mode choice, the word count, Preview, and Save draft stay on the wide header.
 
-The right side of a wide window is empty of Preview, Save draft, and Next.
+On a wide window, the right side follows the article. That column is wider than the channel list on the home page.
+
+- Posting to names the channel you picked. Tech through Life also show a member count, such as 289k members for Tech. Maths & Science shows the name and no count. Joined sits beside the name and does not ask to join. Change opens the same channel list as the chip above the title. Until you pick a channel, that row is empty.
+- Tech shows three writing guidelines. Any other channel shows “Guidelines for this channel will go here.”
+- Outline lists the headings in the article. A straight line runs beside them. The heading for the section you are writing in is marked in that line, and its words are stronger. Clicking a heading moves the cursor there and brings that heading into view. With no headings it says “No headings yet”.
+- Drafts says “No drafts yet”.
+
+Preview, Save draft, and Next stay in the column header.
 
 Leaving the page with writing in the body asks you to save a draft or discard it. Moving between Create and the publish page keeps the draft and does not ask.
 
 ## Decisions
 
-- On a wide window, the mode choice and the actions sit in the column header with the article. The format pill stays under that header while the writing scrolls.
+- On a wide window, the mode choice and the actions sit on the edges of the column header. The format pill sits just inside those edges and stays under the header while the writing scrolls. The writing sits further in.
 - Preview is the same column. Edit brings the format pill back. Post hides the pill.
 - Next opens the publish page. Post asks first and stays on Create.
 
 ## Limits
 
-Save draft and Post do not store the article. The cover image is not stored either. Choosing Post keeps the article editor. The publish page does not yet choose an audience or a time. Nothing is saved on its own. The outline and writing guidelines are not on this page yet.
+Save draft and Post do not store the article. The cover image is not stored either. Choosing Post keeps the article editor and hides this side panel. The publish page does not yet choose an audience or a time, and it does not show the panel. Nothing is saved on its own. Drafts are not listed. On a narrow window the panel is hidden.

@@ -33,9 +33,9 @@ export function CreateHeader() {
   return (
     <header
       ref={headerRef}
-      className="bg-background sticky top-0 z-40 hidden w-full shrink-0 px-2 lg:block"
+      className="bg-background sticky top-0 z-40 hidden w-full shrink-0 px-2 lg:block lg:px-0"
     >
-      <div className="flex w-full max-w-3xl items-center gap-3 py-2">
+      <div className="flex w-full items-center gap-3 py-2">
         <DraftTypeToggle />
 
         <div className="ms-auto flex min-w-0 items-center justify-end gap-3">

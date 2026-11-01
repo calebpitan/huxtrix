@@ -10,6 +10,7 @@ import { AppSidebar, AppSidebarProps } from '@/compositions/sidebar/AppSidebar'
 
 export interface PageLayoutProps extends HTMLAttributes<HTMLDivElement> {
   SidebarProps?: Partial<Pick<AppSidebarProps, 'items' | 'variant' | 'brand'>>
+  contextClassName?: string
   children: [ReactElement, ReactElement]
 }
 
@@ -23,7 +24,13 @@ const variants = cva('', {
   },
 })
 
-export function PageLayout({ children, className, SidebarProps, ...props }: PageLayoutProps) {
+export function PageLayout({
+  children,
+  className,
+  contextClassName,
+  SidebarProps,
+  ...props
+}: PageLayoutProps) {
   return (
     <div
       data-component="page-layout"
@@ -58,7 +65,12 @@ export function PageLayout({ children, className, SidebarProps, ...props }: Page
           </AppBarPassthrough>
         </div>
 
-        <aside className="sticky top-0 hidden max-h-screen grow xl:block [&>:first-child]:ms-auto [&>:first-child]:w-64">
+        <aside
+          className={cn(
+            'sticky top-0 hidden max-h-screen grow xl:block [&>:first-child]:ms-auto [&>:first-child]:w-64',
+            contextClassName,
+          )}
+        >
           {children[1]}
         </aside>
       </div>

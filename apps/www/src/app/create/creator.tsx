@@ -22,7 +22,7 @@ export function PostCreator() {
   editor.controller.handle('save', saveDraft)
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="mx-auto flex h-full min-h-0 w-full max-w-4xl flex-col">
       <CreateHeader />
       <div className="min-h-0 flex-1">
         <ArticleEditor onChange={(value) => editor.setContent(value)} />
