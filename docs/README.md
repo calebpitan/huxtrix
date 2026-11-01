@@ -10,6 +10,7 @@ other technical work a person using the app never sees belong here.
 
 - [Logger](internal/logger.md)
 - [Article editor](internal/article-editor.md)
+- [Feed preview](internal/feed-preview.md)
 
 ## User
 
