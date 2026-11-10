@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils'
 export interface FeedPreviewCardProps extends HTMLAttributes<HTMLDivElement> {
   author: {
     name: string
+    initials?: string
     avatarUrl?: string
   }
   title: string
@@ -45,7 +46,9 @@ export const FeedPreviewCard = ({
         <div className="flex min-w-0 items-center gap-2">
           <Avatar className="h-8 w-8">
             <AvatarImage src={author.avatarUrl} alt={author.name} />
-            <AvatarFallback>{author.name.slice(0, 2).toUpperCase()}</AvatarFallback>
+            <AvatarFallback>
+              {author.initials ?? author.name.slice(0, 2).toUpperCase()}
+            </AvatarFallback>
           </Avatar>
           <span className="min-w-0 truncate text-sm">
             {authorName ? <span className="font-semibold">{author.name}</span> : null}

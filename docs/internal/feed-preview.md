@@ -2,9 +2,8 @@
 
 ## Purpose
 
-The short-post panel and the publish step will show a compact card in the shape of a feed post. This
-adds that card and the excerpt helper those screens will share. It does not place the card on either
-screen.
+The short-post panel and the publish step share a compact card in the shape of a feed post. The
+short-post aside mounts it. The publish step does not yet.
 
 ## Implementation
 
@@ -30,9 +29,10 @@ alongside the card:
   text of the first Plate `p` that has text, using `platePlainText` from
   [`draft-text.ts`](../../apps/www/src/compositions/editor/draft-text.ts).
 - `previewAuthorName` returns the trimmed first name, then the trimmed username, then `''`.
+- `previewAuthorInitials` returns the first letter of the first name and the first letter of the last name. When one of those is missing, it returns the first two characters of the remaining name, then of the username.
 - `previewChannelLabel` returns `null` when `channelId` is null, and the id otherwise.
 
-The preview card does not read the session. Callers pass `author.name` from `previewAuthorName`.
+The preview card does not read the session. Callers pass `author.name` from `previewAuthorName`. An empty avatar uses `author.initials` when the caller passes it, and otherwise the first two characters of `author.name`.
 
 ## Decisions
 
@@ -55,6 +55,6 @@ The preview card does not read the session. Callers pass `author.name` from `pre
 
 ## Limits
 
-The card is not mounted in the short-post aside or on the publish step. Nothing here removes the
+The card is mounted in the short-post aside. It is not mounted on the publish step. Nothing here removes the
 lorem paragraph from the home feed. The overflow menu does not share, copy, report, or open a post.
 Counts are not live.

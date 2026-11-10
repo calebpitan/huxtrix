@@ -11,6 +11,7 @@ other technical work a person using the app never sees belong here.
 - [Logger](internal/logger.md)
 - [Article editor](internal/article-editor.md)
 - [Feed preview](internal/feed-preview.md)
+- [Short post](internal/short-post.md)
 
 ## User
 
@@ -18,6 +19,7 @@ other technical work a person using the app never sees belong here.
 something that person can see or do. A technical development feature does not get a user doc.
 
 - [Article editor](user/article-editor.md)
+- [Short post](user/short-post.md)
 
 One file per feature: `docs/internal/<feature>.md` and, when the feature is app-facing,
 `docs/user/<feature>.md`. Use a directory only when a single file stops being readable. When a

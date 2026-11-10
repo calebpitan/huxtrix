@@ -20,7 +20,7 @@ Preview hides the chips and shows the title, the subtitle, and the writing.
 
 On a wide window, a header sits at the top of that column.
 
-- Post and Article sit in a light capsule with a thin border. Article is selected when you open the page. Choosing Post changes the header to Save draft and Post, and the column stays the article editor.
+- Post and Article sit in a light capsule with a thin border. Article is selected when you open the page. Choosing Post changes the header to Save draft and Post and opens the short post composer.
 - The status line counts words in the title, the subtitle, and the writing. With at least one word it also shows a read time, such as `168 words · 1 min read`. At zero words it shows `0 words`.
 - Preview shows an eye beside the word and has no fill of its own. It hides the format pill and shows the title, the subtitle, and the writing as they read. The button changes to Edit. Save draft and Next stay.
 - Save draft has no fill until you point at it. It shows Saved, with a green dot, until you change the draft.
@@ -49,4 +49,4 @@ Leaving the page with writing in the body asks you to save a draft or discard it
 
 ## Limits
 
-Save draft and Post do not store the article. The cover image is not stored either. Choosing Post keeps the article editor and hides this side panel. The publish page does not yet choose an audience or a time, and it does not show the panel. Nothing is saved on its own. Drafts are not listed. On a narrow window the panel is hidden.
+Save draft and Post do not store the article. The cover image is not stored either. Choosing Post opens the short post composer. This side panel is replaced by the short post panel on a wide window. The publish page does not yet choose an audience or a time, and it does not show the panel. Nothing is saved on its own. Drafts are not listed. On a narrow window the panel is hidden.
