@@ -44,9 +44,9 @@ is only for the piece that still has no match, such as the inset track around tw
 
 ## Split the design
 
-Each distinct piece of the design is its own component. The screen composes them. One component does
-not hold markup for unrelated pieces, such as a mode control, a status line, and several actions in
-the same file.
+Each distinct piece of the design is its own component, in its own file. A component file exports one
+component. The screen composes them. One component does not hold markup for unrelated pieces, such
+as a mode control, a status line, and several actions in the same file.
 
 ## Create header
 

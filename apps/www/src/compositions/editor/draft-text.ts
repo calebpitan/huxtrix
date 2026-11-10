@@ -24,6 +24,14 @@ export function plainTextFromPlateBody(body: string): string {
   }
 }
 
+export const POST_GRAPHEME_LIMIT = 280
+
+export function graphemeCount(text: string): number {
+  if (!text) return 0
+  const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+  return [...segmenter.segment(text)].length
+}
+
 export function countWords(text: string): number {
   const trimmed = text.trim()
   if (!trimmed) return 0

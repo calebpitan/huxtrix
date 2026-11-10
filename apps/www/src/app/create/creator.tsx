@@ -6,6 +6,7 @@ import { useTextEditor } from '@/compositions/editor'
 import { ArticleEditor } from '@/compositions/editor/ArticleEditor'
 
 import { CreateHeader } from './create-header'
+import { PostComposer } from './post-composer/composer'
 
 export function PostCreator() {
   const editor = useTextEditor()
@@ -25,7 +26,11 @@ export function PostCreator() {
     <div className="mx-auto flex h-full min-h-0 w-full max-w-4xl flex-col">
       <CreateHeader />
       <div className="min-h-0 flex-1">
-        <ArticleEditor onChange={(value) => editor.setContent(value)} />
+        {editor.draft.type === 'post' ? (
+          <PostComposer />
+        ) : (
+          <ArticleEditor onChange={(value) => editor.setContent(value)} />
+        )}
       </div>
     </div>
   )
