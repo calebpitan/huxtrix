@@ -3,7 +3,7 @@
 ## Purpose
 
 The short-post panel and the publish step share a compact card in the shape of a feed post. The
-short-post aside mounts it. The publish step does not yet.
+short-post aside mounts it. The publish aside mounts it too. See [Publish](publish.md).
 
 ## Implementation
 
@@ -55,6 +55,6 @@ The preview card does not read the session. Callers pass `author.name` from `pre
 
 ## Limits
 
-The card is mounted in the short-post aside. It is not mounted on the publish step. Nothing here removes the
+The card is mounted in the short-post aside and on the publish step. Nothing here removes the
 lorem paragraph from the home feed. The overflow menu does not share, copy, report, or open a post.
 Counts are not live.

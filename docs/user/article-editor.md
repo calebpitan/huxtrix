@@ -24,11 +24,11 @@ On a wide window, a header sits at the top of that column.
 - The status line counts words in the title, the subtitle, and the writing. With at least one word it also shows a read time, such as `168 words · 1 min read`. At zero words it shows `0 words`.
 - Preview shows an eye beside the word and has no fill of its own. It hides the format pill and shows the title, the subtitle, and the writing as they read. The button changes to Edit. Save draft and Next stay.
 - Save draft has no fill until you point at it. It shows Saved, with a green dot, until you change the draft.
-- Next is a filled button with an arrow after the word. It opens the publish page. Coming back still shows what you typed. That page is a heading for now.
+- Next is a filled button with an arrow after the word. It opens the publish page. Coming back still shows what you typed. That page is described in [Publish](publish.md).
 
 Choosing Post hides the status line, Preview, and the format pill. Save draft still marks the draft saved. Post asks “Post this?”. Confirming posts and leaves you on Create. Cancel leaves the draft as it is.
 
-On a phone the top bar is Cancel and Next. After you choose Post, that button is Post and asks the same question. The mode choice, the word count, Preview, and Save draft stay on the wide header.
+On a phone the top bar is Cancel and Next. After you choose Post, that button is Post and asks the same question. On the publish page that bar is Back and Publish. The mode choice, the word count, Preview, and Save draft stay on the wide header.
 
 On a wide window, the right side follows the article. That column is wider than the channel list on the home page.
 
@@ -49,4 +49,4 @@ Leaving the page with writing in the body asks you to save a draft or discard it
 
 ## Limits
 
-Save draft and Post do not store the article. The cover image is not stored either. Choosing Post opens the short post composer. This side panel is replaced by the short post panel on a wide window. The publish page does not yet choose an audience or a time, and it does not show the panel. Nothing is saved on its own. Drafts are not listed. On a narrow window the panel is hidden.
+Save draft and Post do not store the article. The cover image is not stored either. Choosing Post opens the short post composer. This side panel is replaced by the short post panel on a wide window. The publish page is described in [Publish](publish.md). Nothing is saved on its own. Drafts are not listed. On a narrow window the panel is hidden.

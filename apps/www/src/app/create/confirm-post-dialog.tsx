@@ -11,9 +11,15 @@ import { cn } from '@/lib/utils'
 export function ConfirmPostDialog({
   open,
   onOpenChange,
+  title = 'Post this?',
+  description = 'Cancel leaves the draft as it is.',
+  confirmLabel = 'Post',
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
+  title?: string
+  description?: string
+  confirmLabel?: string
 }) {
   const editor = useTextEditor()
   const breakpoint = useCurrentBreakpoint()
@@ -34,8 +40,8 @@ export function ConfirmPostDialog({
     <AppDialog.Root
       type={dialogType}
       open={open}
-      title="Post this?"
-      description="Cancel leaves the draft as it is."
+      title={title}
+      description={description}
       onOpenChange={onOpenChange}
       SwipeContentProps={{ className: 'rounded-t-4xl' }}
       activeDetent={0.5}
@@ -45,7 +51,7 @@ export function ConfirmPostDialog({
           Cancel
         </Button>
         <Button size="lg" onClick={confirm}>
-          Post
+          {confirmLabel}
         </Button>
       </div>
     </AppDialog.Root>
