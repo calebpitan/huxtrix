@@ -1,3 +1,12 @@
+import type { Metadata } from 'next'
+
+import { PublishStep } from './step'
+
+export const metadata: Metadata = {
+  title: 'Publish — Huxtrix',
+  description: 'Choose where your article appears',
+}
+
 export default function CreatePublishPage() {
-  return <h1 className="px-page py-8 text-4xl font-extrabold">Publish</h1>
+  return <PublishStep />
 }
